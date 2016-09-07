@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="maths">
+      <UniqueIdentifier>{be753e83-d2d9-412b-87e8-d74b72b303c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="animation">
+      <UniqueIdentifier>{57c35436-cf45-49a9-a1fd-3b03f4f4a657}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{69fa9ef8-0149-4d92-a7e7-34944b1ae50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{e05f03c7-99f3-4b3b-84c6-855a640f305d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{3621eb5a-0c8a-47f2-89e3-bdc6818240f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{d7378381-f6e0-470f-bdf2-f56977a99982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="graphics">
+      <UniqueIdentifier>{9b6936e4-a34e-45b8-9857-f372e4b3d465}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\maths\aabb.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\frustum.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\matrix33.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\matrix44.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\plane.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\quaternion.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\sphere.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\transform.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\vector2.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\vector3.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\maths\vector4.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\animation\animation.cpp">
+      <Filter>animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\animation\joint.cpp">
+      <Filter>animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\animation\skeleton.cpp">
+      <Filter>animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\assets\obj_loader.cpp">
+      <Filter>assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\assets\png_loader.cpp">
+      <Filter>assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\application.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\crc.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\file.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\memory_stream_buffer.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\platform.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\system\string_id.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\input\sony_controller_input_manager.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\input\touch_input_manager.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\audio\audio_manager.cpp">
+      <Filter>audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\colour.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\default_3d_shader.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\default_3d_shader_data.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\default_sprite_shader.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\depth_buffer.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\font.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\image_data.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\index_buffer.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\material.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\mesh.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\mesh_data.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\mesh_instance.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\model.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\primitive.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\render_target.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\renderer_3d.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\scene.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\shader.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\shader_interface.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\skinned_mesh_shader_data.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\sprite.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\sprite_renderer.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\texture.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\vertex_buffer.cpp">
+      <Filter>graphics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\maths\aabb.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\frustum.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\math_utils.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\matrix22.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\matrix33.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\matrix44.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\plane.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\quaternion.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\sphere.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\transform.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\vector2.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\vector3.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\maths\vector4.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\animation\animation.h">
+      <Filter>animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\animation\joint.h">
+      <Filter>animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\animation\skeleton.h">
+      <Filter>animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\assets\obj_loader.h">
+      <Filter>assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\assets\png_loader.h">
+      <Filter>assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\application.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\crc.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\debug_log.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\file.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\memory_stream_buffer.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\platform.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\system\string_id.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\sony_controller_input_manager.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\touch_input_manager.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\audio\audio_manager.h">
+      <Filter>audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\colour.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\default_3d_shader.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\default_3d_shader_data.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\default_sprite_shader.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\depth_buffer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\font.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\image_data.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\index_buffer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\material.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\mesh.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\mesh_data.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\mesh_instance.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\model.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\point_light.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\primitive.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\render_target.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\renderer_3d.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\scene.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\shader.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\shader_interface.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\skinned_mesh_shader_data.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\sprite.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\sprite_renderer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\texture.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\vertex_buffer.h">
+      <Filter>graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\maths\quaternion.inl">
+      <Filter>maths</Filter>
+    </None>
+    <None Include="..\..\maths\vector2.inl">
+      <Filter>maths</Filter>
+    </None>
+    <None Include="..\..\maths\vector3.inl">
+      <Filter>maths</Filter>
+    </None>
+    <None Include="..\..\maths\vector4.inl">
+      <Filter>maths</Filter>
+    </None>
+  </ItemGroup>
+</Project>
