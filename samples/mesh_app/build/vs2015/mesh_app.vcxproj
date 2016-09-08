@@ -106,7 +106,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gef.lib;libpng.lib;zlib.lib;gef_d3d11.lib;gef_win32.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../build/vs2015/$(Platform)/$(Configuration)/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -142,7 +143,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gef.lib;libpng.lib;zlib.lib;gef_d3d11.lib;gef_win32.lib;d3d11.lib;d3dcompiler.lib;dxgi.lib;dxguid.lib;dinput8.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../build/vs2015/$(Platform)/$(Configuration)/</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -151,23 +153,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\mesh_app.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\build\vs2015\gef.vcxproj">
-      <Project>{7e80be21-1726-40d7-850d-8dd6cd306182}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\external\libpng\build\vs2015\libpng.vcxproj">
-      <Project>{a8f60d7f-3e3b-422a-a429-0ab3b613f798}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\external\zlib\build\vs2015\zlib.vcxproj">
-      <Project>{e905a078-8226-4257-ad6d-89b3049a3558}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\platform\d3d11\build\vs2015\gef_d3d11.vcxproj">
-      <Project>{a9022622-5754-4cde-ae61-b30e59af0222}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\platform\win32\build\vs2015\gef_win32.vcxproj">
-      <Project>{e00ef4bf-28fd-49cd-a3f2-b1fbc4ec9b65}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,0 +1,106 @@
+#include <platform/win32/system/platform_win32_null_renderer.h>
+#include "fbx_loader.h"
+#include <graphics/scene.h>
+#include <iostream>
+
+
+int main(int argc, char* argv[])
+{
+	gef::PlatformWin32NullRenderer platform;
+
+	char* output_filename = "output.scn";
+	char* input_filename = "";
+	bool animation_only = false;
+
+
+	gef::FBXLoader fbx_loader;
+
+
+	for(int arg_num=0; arg_num < argc; ++arg_num)
+	{
+		if(arg_num == argc-1)
+		{
+			input_filename = argv[arg_num];
+		}
+		else if(argv[arg_num][0] == '-' && (strlen(argv[arg_num]) > 1))
+		{
+			switch(argv[arg_num][1])
+			{
+			case 'o':
+				{
+					if(arg_num < argc - 2)
+					{
+						output_filename = argv[arg_num+1];
+					}
+				}
+				break;
+
+
+			case 'a':
+				if(stricmp(&argv[arg_num][1], "animation-only") == 0)
+				{
+					animation_only = true;
+				}
+				break;
+
+			case 'i':
+				if(stricmp(&argv[arg_num][1], "ignore-skinning") == 0)
+				{
+					fbx_loader.set_ignore_skinning(true);
+				}
+				break;
+
+			case 's':
+				if(stricmp(&argv[arg_num][1], "strip-texture-path") == 0)
+				{
+					fbx_loader.set_strip_texture_path(true);
+				}
+				else if (stricmp(&argv[arg_num][1], "scaling-factor") == 0)
+				{
+					float scaling_factor = atof(argv[arg_num + 1]);
+					if (scaling_factor != 0.0f)
+						fbx_loader.set_scaling_factor(scaling_factor);
+				}
+				break;
+
+			case 't':
+				if(stricmp(&argv[arg_num][1], "texture-extension") == 0)
+				{
+					if(arg_num < argc - 2)
+					{
+						fbx_loader.set_texture_filename_ext(&argv[arg_num+1][0]);
+					}
+				}
+				break;
+
+			}
+		}
+	}
+
+	gef::Scene scene;
+
+	std::cout << std::endl << "FBX to Abertay Framework Scene Builder v0.01" << std::endl << std::endl;;
+
+	std::cout << "input file: " << input_filename << std::endl;
+	std::cout << "output file: " << output_filename << std::endl << std::endl;;
+
+
+	std::cout << "Loading file: " << input_filename << std::endl;
+	bool success = fbx_loader.Load(input_filename, platform, scene, animation_only);
+
+	if(success)
+	{
+		std::cout << "file: " << input_filename << " loaded." << std::endl << std::endl;
+		std::cout << "Writing output file: " << output_filename << std::endl;
+		success = scene.WriteSceneToFile(platform, output_filename);
+		if(success)
+			std::cout << "Success." << std::endl;
+		else
+			std::cout << "ERROR: failed to write output file: " << output_filename << std::endl;
+	}
+	else
+		std::cout << "ERROR: failed to load input file: " << input_filename << std::endl;
+
+
+	return success == false ? -1 : 0;
+}

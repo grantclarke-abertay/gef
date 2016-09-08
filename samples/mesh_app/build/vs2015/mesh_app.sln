@@ -9,14 +9,26 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mesh_app", "mesh_app.vcxpro
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gef", "..\..\..\..\build\vs2015\gef.vcxproj", "{7E80BE21-1726-40D7-850D-8DD6CD306182}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A8F60D7F-3E3B-422A-A429-0AB3B613F798} = {A8F60D7F-3E3B-422A-A429-0AB3B613F798}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "..\..\..\..\external\libpng\build\vs2015\libpng.vcxproj", "{A8F60D7F-3E3B-422A-A429-0AB3B613F798}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E905A078-8226-4257-AD6D-89B3049A3558} = {E905A078-8226-4257-AD6D-89B3049A3558}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "..\..\..\..\external\zlib\build\vs2015\zlib.vcxproj", "{E905A078-8226-4257-AD6D-89B3049A3558}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gef_d3d11", "..\..\..\..\platform\d3d11\build\vs2015\gef_d3d11.vcxproj", "{A9022622-5754-4CDE-AE61-B30E59AF0222}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E80BE21-1726-40D7-850D-8DD6CD306182} = {7E80BE21-1726-40D7-850D-8DD6CD306182}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gef_win32", "..\..\..\..\platform\win32\build\vs2015\gef_win32.vcxproj", "{E00EF4BF-28FD-49CD-A3F2-B1FBC4EC9B65}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E80BE21-1726-40D7-850D-8DD6CD306182} = {7E80BE21-1726-40D7-850D-8DD6CD306182}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

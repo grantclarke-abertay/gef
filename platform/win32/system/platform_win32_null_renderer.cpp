@@ -155,4 +155,9 @@ namespace gef
 		return NULL;
 	}
 
+	DepthBuffer* PlatformWin32NullRenderer::CreateDepthBuffer(UInt32 width, UInt32 height) const
+	{
+		return NULL;
+	}
+
 }

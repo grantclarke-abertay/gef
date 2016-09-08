@@ -104,14 +104,14 @@ gef::Mesh* MeshApp::CreateCubeMesh()
 	const float half_size = 0.5f;
 
 	const gef::Mesh::Vertex vertices[] = {
-		{gef::Vector3( half_size, -half_size, -half_size), gef::Vector3(0.577f, -0.577f, -0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3( half_size,  half_size, -half_size), gef::Vector3(0.577f, 0.577f, -0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3(-half_size,  half_size, -half_size), gef::Vector3(-0.577f, 0.577f, -0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3(-half_size, -half_size, -half_size), gef::Vector3(-0.577f, -0.577f, -0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3( half_size, -half_size,  half_size), gef::Vector3(0.577f, -0.577f, 0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3( half_size,  half_size,  half_size), gef::Vector3(0.577f, 0.577f, 0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3(-half_size,  half_size,  half_size), gef::Vector3(-0.577f, 0.577f, 0.577f), gef::Vector2(0.0f, 0.0f)},
-		{gef::Vector3(-half_size, -half_size,  half_size), gef::Vector3(-0.577f, -0.577f, 0.577f), gef::Vector2(0.0f, 0.0f)}	};
+		{ half_size, -half_size, -half_size,  0.577f, -0.577f, -0.577f, 0.0f, 0.0f},
+		{ half_size,  half_size, -half_size,  0.577f,  0.577f, -0.577f, 0.0f, 0.0f},
+		{-half_size,  half_size, -half_size, -0.577f,  0.577f, -0.577f, 0.0f, 0.0f},
+		{-half_size, -half_size, -half_size, -0.577f, -0.577f, -0.577f, 0.0f, 0.0f},
+		{ half_size, -half_size,  half_size,  0.577f, -0.577f,  0.577f, 0.0f, 0.0f},
+		{ half_size,  half_size,  half_size,  0.577f,  0.577f,  0.577f, 0.0f, 0.0f},
+		{-half_size,  half_size,  half_size, -0.577f,  0.577f,  0.577f, 0.0f, 0.0f},
+		{-half_size, -half_size,  half_size, -0.577f, -0.577f,  0.577f, 0.0f, 0.0f}	};
 
 	mesh->InitVertexBuffer(platform_, static_cast<const void*>(vertices), sizeof(vertices)/sizeof(gef::Mesh::Vertex), sizeof(gef::Mesh::Vertex));
 

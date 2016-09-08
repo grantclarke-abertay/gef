@@ -14,6 +14,7 @@ namespace gef
 		values_[0] = new_x;
 		values_[1] = new_y;
 		values_[2] = new_z;
+		values_[3] = 0.0f;
 	}
 
 	inline const Vector3 Vector3::operator-(const Vector3& _vec) const
@@ -60,9 +61,9 @@ namespace gef
 	{
 		Vector3 result;
 
-		result.set_x(values_[0]*_scalar);
-		result.set_y(values_[1]*_scalar);
-		result.set_z(values_[2]*_scalar);
+		result.set_x(values_[0] * _scalar);
+		result.set_y(values_[1] * _scalar);
+		result.set_z(values_[2] * _scalar);
 
 		return result;
 	}
@@ -71,9 +72,9 @@ namespace gef
 	{
 		Vector3 result;
 
-		result.set_x(values_[0]/_scalar);
-		result.set_y(values_[1]/_scalar);
-		result.set_z(values_[2]/_scalar);
+		result.set_x(values_[0] / _scalar);
+		result.set_y(values_[1] / _scalar);
+		result.set_z(values_[2] / _scalar);
 
 		return result;
 	}
@@ -105,7 +106,7 @@ namespace gef
 	{
 		return values_[0];
 	}
-	
+
 	inline float Vector3::y() const
 	{
 		return values_[1];
@@ -129,5 +130,13 @@ namespace gef
 	inline void Vector3::set_z(float z)
 	{
 		values_[2] = z;
+	}
+
+	inline void Vector3::set_value(float x, float y, float z)
+	{
+		values_[0] = x;
+		values_[1] = y;
+		values_[2] = z;
+		values_[3] = 0.0f;
 	}
 }

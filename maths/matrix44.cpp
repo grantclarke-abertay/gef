@@ -4,10 +4,6 @@
 #include <maths/quaternion.h>
 #include <math.h>
 
-gef::Vector4 test  =
-{
-	0.0f, 0.0f, 0.0f, 0.0f
-};
 
 namespace gef
 {

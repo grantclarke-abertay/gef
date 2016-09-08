@@ -39,6 +39,7 @@ public:
 	void set_x(float x);
 	void set_y(float y);
 	void set_z(float z);
+	void set_value(float x, float y, float z);
 protected:
 	// store values as an array of floats so the implementation
 	// can be changed at a later date to support use SIMD instructions

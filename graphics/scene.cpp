@@ -56,16 +56,21 @@ namespace gef
 			primitive->set_type((*prim_iter)->type);
 			primitive->InitIndexBuffer(platform, (*prim_iter)->indices, (*prim_iter)->num_indices, (*prim_iter)->index_byte_size, read_only);
 
-			if((*prim_iter)->material)
+			if ((*prim_iter)->material_name_id != 0)
 			{
-				if((*prim_iter)->material->diffuse_texture != "")
-				{
-					gef::StringId texture_name_id = gef::GetStringId((*prim_iter)->material->diffuse_texture);
-					Texture* texture = textures_map[texture_name_id];
-					if(texture)
-						primitive->set_material(materials_map[(*prim_iter)->material->name_id]);
-				}
+				primitive->set_material(materials_map[(*prim_iter)->material_name_id]);
 			}
+
+			//if((*prim_iter)->material)
+			//{
+			//	if((*prim_iter)->material->diffuse_texture != "")
+			//	{
+			//		gef::StringId texture_name_id = gef::GetStringId((*prim_iter)->material->diffuse_texture);
+			//		Texture* texture = textures_map[texture_name_id];
+			//		if(texture)
+			//			primitive->set_material(materials_map[(*prim_iter)->material->name_id]);
+			//	}
+			//}
 		}
 
 		return mesh;
@@ -220,14 +225,14 @@ namespace gef
 			mesh.Read(stream);
 
 			// go through all primitives and try and find material to use
-			for(std::vector<PrimitiveData*>::iterator prim_iter =mesh.primitives.begin(); prim_iter != mesh.primitives.end(); ++prim_iter)
-			{
-				gef::StringId material_name_id = (gef::StringId)((*prim_iter)->material->name_id);
+			//for(std::vector<PrimitiveData*>::iterator prim_iter =mesh.primitives.begin(); prim_iter != mesh.primitives.end(); ++prim_iter)
+			//{
+			//	gef::StringId material_name_id = (gef::StringId)((*prim_iter)->material->name_id);
 
-				std::map<gef::StringId, MaterialData*>::const_iterator material_iter = material_data_map.find(material_name_id);
-				if(material_iter != material_data_map.end())
-					(*prim_iter)->material = material_iter->second;
-			}
+			//	std::map<gef::StringId, MaterialData*>::const_iterator material_iter = material_data_map.find(material_name_id);
+			//	if(material_iter != material_data_map.end())
+			//		(*prim_iter)->material = material_iter->second;
+			//}
 		}
 
 		// skeletons

@@ -3,6 +3,7 @@
 
 #include <gef.h>
 #include <vector>
+#include <maths/vector4.h>
 #include <maths/vector3.h>
 #include <maths/vector2.h>
 #include <maths/aabb.h>
@@ -18,10 +19,18 @@ namespace gef
 	public:
 		struct Vertex
 		{
-			Vector3 position;
-			Vector3 normal;
-			Vector2 uv;
-		}; 
+			//Vector4 position;
+			//Vector4 normal;
+			//Vector2 uv;
+			float px;
+			float py;
+			float pz;
+			float nx;
+			float ny;
+			float nz;
+			float u;
+			float v;
+		};
 
 		struct SkinnedVertex
 		{

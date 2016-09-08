@@ -45,6 +45,7 @@ namespace gef
 		const char* GetShaderDirectory() const;
 		const char* GetShaderFileExtension() const;
 
+		virtual DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
 
 
 

@@ -104,7 +104,7 @@ namespace gef
 
 	PrimitiveData::PrimitiveData() :
 		indices(NULL),
-		material(NULL)
+		material_name_id(0)
 	{
 	}
 
@@ -120,7 +120,7 @@ namespace gef
 
 //		gef::StringId material_name_id = 0;
 		// store material name id in material and fix up after whole mesh is loaded
-		stream.read((char*)&material, sizeof(gef::StringId));
+		stream.read((char*)&material_name_id, sizeof(gef::StringId));
 		stream.read((char*)&num_indices, sizeof(Int32));
 		stream.read((char*)&index_byte_size, sizeof(Int32));
 		stream.read((char*)&type, sizeof(PrimitiveType));
@@ -138,9 +138,9 @@ namespace gef
 	{
 		bool success = true;
 
-		gef::StringId material_name_id = 0;
-		if(material)
-			material_name_id = material->name_id;
+		//gef::StringId material_name_id = 0;
+		//if(material)
+		//	material_name_id = material->name_id;
 
 		stream.write((char*)&material_name_id, sizeof(gef::StringId));
 		stream.write((char*)&num_indices, sizeof(Int32));

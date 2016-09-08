@@ -177,10 +177,19 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 			gef::Vector3 position = positions[face_indices[vertex_num*3]-1];
 			gef::Vector2 uv = uvs[face_indices[vertex_num*3+1]-1];
 			gef::Vector3 normal = normals[face_indices[vertex_num*3+2]-1];
-			vertex->position = position;
-			vertex->normal = normal;
-			vertex->uv.x = uv.x;
-			vertex->uv.y = -uv.y;
+			//vertex->position = gef::Vector4(position.x(), position.y(), position.z(), 1.0f);
+			//vertex->normal = gef::Vector4(normal.x(), normal.y(), normal.z(), 0.0f);
+			//vertex->uv.x = uv.x;
+			//vertex->uv.y = -uv.y;
+
+			vertex->px = position.x();
+			vertex->py = position.y();
+			vertex->pz = position.z();
+			vertex->nx = normal.x();
+			vertex->ny = normal.y();
+			vertex->nz = normal.z();
+			vertex->u = uv.x;
+			vertex->v = -uv.y;
 		}
 
 		Mesh* mesh = platform.CreateMesh();

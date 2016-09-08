@@ -245,7 +245,7 @@ namespace gef
 		element.Format = GetVertexAttributeFormat(shader_parameter.type);
 		element.InputSlot = 0;
 //		element.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-		element.AlignedByteOffset = 0;
+		element.AlignedByteOffset = shader_parameter.byte_offset;
 		element.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 		element.InstanceDataStepRate = 0;
 	}

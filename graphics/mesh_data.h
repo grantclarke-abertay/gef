@@ -31,7 +31,8 @@ namespace gef
 		bool Write(std::ostream& stream) const;
 
 		void* indices;
-		MaterialData* material;
+		//MaterialData* material;
+		gef::StringId material_name_id;
 		Int32 num_indices;
 		Int32 index_byte_size;
 		PrimitiveType type;
