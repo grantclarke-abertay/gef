@@ -171,6 +171,12 @@
     <ClCompile Include="..\..\graphics\vertex_buffer.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\input\keyboard.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\input\input_manager.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\maths\aabb.h">
@@ -331,6 +337,12 @@
     </ClInclude>
     <ClInclude Include="..\..\graphics\vertex_buffer.h">
       <Filter>graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\keyboard.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\input_manager.h">
+      <Filter>input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

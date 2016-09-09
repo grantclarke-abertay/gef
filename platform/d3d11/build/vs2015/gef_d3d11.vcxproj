@@ -27,6 +27,8 @@
     <ClCompile Include="..\..\graphics\sprite_renderer_d3d11.cpp" />
     <ClCompile Include="..\..\graphics\texture_d3d11.cpp" />
     <ClCompile Include="..\..\graphics\vertex_buffer_d3d11.cpp" />
+    <ClCompile Include="..\..\input\input_manager_d3d11.cpp" />
+    <ClCompile Include="..\..\input\keyboard_d3d11.cpp" />
     <ClCompile Include="..\..\input\sony_controller_input_manager_d3d11.cpp" />
     <ClCompile Include="..\..\input\touch_input_manager_d3d11.cpp" />
     <ClCompile Include="..\..\system\platform_d3d11.cpp" />
@@ -40,6 +42,8 @@
     <ClInclude Include="..\..\graphics\sprite_renderer_d3d11.h" />
     <ClInclude Include="..\..\graphics\texture_d3d11.h" />
     <ClInclude Include="..\..\graphics\vertex_buffer_d3d11.h" />
+    <ClInclude Include="..\..\input\input_manager_d3d11.h" />
+    <ClInclude Include="..\..\input\keyboard_d3d11.h" />
     <ClInclude Include="..\..\input\sony_controller_input_manager_d3d11.h" />
     <ClInclude Include="..\..\input\touch_input_manager_d3d11.h" />
     <ClInclude Include="..\..\system\platform_d3d11.h" />

@@ -17,7 +17,7 @@ namespace gef
 	class Texture;
 	class ImageData;
 	class Mesh;
-	class SonyControllerInputManager;
+	class InputManager;
 	class Renderer3D;
 	class RenderTarget;
 	class Shader;
@@ -44,12 +44,13 @@ namespace gef
 		virtual SpriteRenderer* CreateSpriteRenderer() = 0;
 		virtual File* CreateFile() const = 0;
 		virtual AudioManager* CreateAudioManager() const = 0;
+		virtual InputManager* CreateInputManager() = 0;
 //		virtual TouchInputManager* CreateTouchInputManager() const = 0;
-		virtual void InitTouchInputManager() = 0;
-		virtual void ReleaseTouchInputManager() = 0;
+//		virtual void InitTouchInputManager() = 0;
+//		virtual void ReleaseTouchInputManager() = 0;
 		virtual Texture* CreateTexture(const ImageData& image_data) const = 0;
 		virtual Mesh* CreateMesh() = 0;
-		virtual SonyControllerInputManager* CreateSonyControllerInputManager() const = 0;
+//		virtual SonyControllerInputManager* CreateSonyControllerInputManager() const = 0;
 		virtual Renderer3D* CreateRenderer3D() = 0;
 		virtual VertexBuffer* CreateVertexBuffer() const = 0;
 		virtual IndexBuffer* CreateIndexBuffer() const = 0;
@@ -100,6 +101,7 @@ namespace gef
 		inline void set_stencil_clear_value(const UInt32 value) { stencil_clear_value_ = value; }
 		inline void set_render_target(RenderTarget* render_target) { render_target_ = render_target; }
 		inline RenderTarget* render_target() const { return render_target_; }
+		inline void set_touch_input_manager(TouchInputManager* touch_input_manager) { touch_input_manager_ = touch_input_manager; }
 		inline TouchInputManager* touch_input_manager() const { return touch_input_manager_; }
 		inline const Texture* default_texture() const { return default_texture_; }
 		inline void set_depth_buffer(DepthBuffer* depth_buffer) { depth_buffer_ = depth_buffer; }

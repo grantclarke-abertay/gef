@@ -37,27 +37,21 @@ namespace gef
 		return DIENUM_CONTINUE;
 	}
 
-	SonyControllerInputManagerD3D11::SonyControllerInputManagerD3D11(const PlatformD3D11& platform) :
+	SonyControllerInputManagerD3D11::SonyControllerInputManagerD3D11(const PlatformD3D11& platform, LPDIRECTINPUT8 direct_input) :
 		SonyControllerInputManager(platform),
-		direct_input_(NULL),
+		direct_input_(direct_input),
 		joystick_(NULL)
 	{
 		HRESULT hresult = S_OK;
 
-		// Setup DirectInput
-		hresult = DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&direct_input_, NULL);
+		// Find a Joystick Device
+		IDirectInputJoyConfig8* joystick_config = NULL;
+		hresult = direct_input_->QueryInterface(IID_IDirectInputJoyConfig8, (void**)&joystick_config);
 
-		if(SUCCEEDED(hresult))
+		if (joystick_config)
 		{
-			// Find a Joystick Device
-			IDirectInputJoyConfig8* joystick_config = NULL;
-			hresult = direct_input_->QueryInterface(IID_IDirectInputJoyConfig8, (void**)&joystick_config);
-
-			if (joystick_config)
-			{
-				joystick_config->Release();
-				joystick_config = NULL;
-			}
+			joystick_config->Release();
+			joystick_config = NULL;
 		}
 
 		hresult =  direct_input_->EnumDevices(DI8DEVCLASS_GAMECTRL, enumJoysticksCallback, this, DIEDFL_ATTACHEDONLY);
@@ -84,7 +78,6 @@ namespace gef
 	void SonyControllerInputManagerD3D11::CleanUp()
 	{
 		ReleaseNull(joystick_);
-		ReleaseNull(direct_input_);
 	}
 
 

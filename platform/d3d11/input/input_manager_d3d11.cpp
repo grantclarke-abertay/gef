@@ -17,10 +17,12 @@ namespace gef
 
 		if (hresult == S_OK)
 		{
-			touch_manager_ = new TouchInputManagerD3D11(&reinterpret_cast<const PlatformD3D11&>(platform), direct_input_);
+			PlatformD3D11& platform_d3d11 = reinterpret_cast<PlatformD3D11&>(platform);
+
+			touch_manager_ = new TouchInputManagerD3D11(&platform_d3d11, direct_input_);
 			platform.set_touch_input_manager(touch_manager_);
-			keyboard_ = new KeyboardD3D11(direct_input_);
-			controller_manager_ = new SonyControllerInputManagerD3D11(reinterpret_cast<const PlatformD3D11&>(platform), direct_input_);
+			keyboard_ = new KeyboardD3D11(platform_d3d11, direct_input_);
+			controller_manager_ = new SonyControllerInputManagerD3D11(platform_d3d11, direct_input_);
 		}
 	}
 
@@ -36,8 +38,4 @@ namespace gef
 			direct_input_->Release();
 	}
 
-	void InputManagerD3D11::Update()
-	{
-		InputManager::Update();
-	}
 }

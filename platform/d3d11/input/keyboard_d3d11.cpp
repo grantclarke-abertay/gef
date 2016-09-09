@@ -1,11 +1,10 @@
 #include "keyboard_d3d11.h"
 #include <gef.h>
-
-
+#include <platform/d3d11/system/platform_d3d11.h>
 
 namespace gef
 {
-	static unsigned char dik_codes[NUM_KEY_CODES]=
+	static unsigned char dik_codes[Keyboard::NUM_KEY_CODES]=
 	{
 		DIK_0, //KC_0 = 0,
 		DIK_1,	   //	KC_1,
@@ -104,11 +103,13 @@ namespace gef
 		DIK_PERIOD,   //	KC_PERIOD,
 		DIK_SLASH };   //	KC_SLASH,	};
 
-	KeyboardD3D11::KeyboardD3D11(LPDIRECTINPUT8 direct_input)
+	KeyboardD3D11::KeyboardD3D11(const PlatformD3D11& platform, LPDIRECTINPUT8 direct_input)
 		: direct_input_(direct_input)
 		, keyboard_(NULL)
 	{
 		HRESULT result = S_OK;
+
+		ResetKeyboardStates();
 
 		// Initialize the direct input interface for the keyboard.
 		result = direct_input_->CreateDevice(GUID_SysKeyboard, &keyboard_, NULL);
@@ -116,11 +117,19 @@ namespace gef
 		{
 			// Set the data format.  In this case since it is a keyboard we can use the predefined data format.
 			result = keyboard_->SetDataFormat(&c_dfDIKeyboard);
-			if (FAILED(result))
-			{
-				CleanUp();
-			}
 		}
+
+		// Set the cooperative level of the keyboard to not share with other programs.
+		if (SUCCEEDED(result))
+		{
+			result = keyboard_->SetCooperativeLevel(platform.top_level_hwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+
+			// Now acquire the keyboard.
+			result = keyboard_->Acquire();
+		}
+
+		if (FAILED(result))
+			CleanUp();
 	}
 
 	KeyboardD3D11::~KeyboardD3D11()
@@ -140,8 +149,9 @@ namespace gef
 
 	void KeyboardD3D11::ResetKeyboardStates()
 	{
-		memset(keyboard_state_, 0, 256);
-		memset(previous_keyboard_state_, 0, 256);
+		memset(live_keyboard_state_, 0, 256);
+//		memset(current_update_keyboard_state_, 0, 256);
+		memset(previous_update_keyboard_state_, 0, 256);
 	}
 
 
@@ -151,10 +161,10 @@ namespace gef
 		{
 			HRESULT result = S_OK;
 
-			memcpy_s(previous_keyboard_state_, sizeof(previous_keyboard_state_), keyboard_state_, sizeof(keyboard_state_));
+			memcpy_s(previous_update_keyboard_state_, sizeof(previous_update_keyboard_state_), live_keyboard_state_, sizeof(live_keyboard_state_));
 
 			// Read the keyboard device.
-			result = keyboard_->GetDeviceState(sizeof(keyboard_state_), (LPVOID)&keyboard_state_);
+			result = keyboard_->GetDeviceState(sizeof(live_keyboard_state_), (LPVOID)&live_keyboard_state_);
 			if (FAILED(result))
 			{
 				// If the keyboard lost focus or was not acquired then try to get control back.
@@ -163,35 +173,37 @@ namespace gef
 					keyboard_->Acquire();
 					ResetKeyboardStates();
 				}
-			}
-			else
-			{
+
 				// something has gone wrong, reset keyboard states so no false inputs are read
 				ResetKeyboardStates();
 			}
+//			else
+//			{
+//				memcpy_s(current_update_keyboard_state_, sizeof(current_update_keyboard_state_), live_keyboard_state_, sizeof(live_keyboard_state_));
+//			}
 		}
 	}
 
 	bool KeyboardD3D11::IsKeyDown(KeyCode key) const
 	{
 		int dik_code = dik_codes[key];
-		bool key_down = (keyboard_state_[dik_code] & 0x80) ? true : false;
+		bool key_down = (live_keyboard_state_[dik_code] & 0x80) ? true : false;
 		return key_down;
 	}
 
 	bool KeyboardD3D11::IsKeyPressed(KeyCode key) const
 	{
 		int dik_code = dik_codes[key];
-		bool previous_key_down = (previous_keyboard_state_[dik_code] & 0x80) ? true : false;
-		bool key_down = (keyboard_state_[dik_code] & 0x80) ? true : false;
+		bool previous_key_down = (previous_update_keyboard_state_[dik_code] & 0x80) ? true : false;
+		bool key_down = (live_keyboard_state_[dik_code] & 0x80) ? true : false;
 		return !previous_key_down && key_down;
 	}
 
 	bool KeyboardD3D11::IsKeyReleased(KeyCode key) const
 	{
 		int dik_code = dik_codes[key];
-		bool previous_key_down = (previous_keyboard_state_[dik_code] & 0x80) ? true : false;
-		bool key_down = (keyboard_state_[dik_code] & 0x80) ? true : false;
+		bool previous_key_down = (previous_update_keyboard_state_[dik_code] & 0x80) ? true : false;
+		bool key_down = (live_keyboard_state_[dik_code] & 0x80) ? true : false;
 		return previous_key_down && !key_down;
 	}
 }

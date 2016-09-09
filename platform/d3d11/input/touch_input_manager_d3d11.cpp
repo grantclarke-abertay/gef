@@ -8,17 +8,13 @@ namespace gef
 #define INVALID_TOUCH_ID		(-1)
 
 
-	TouchInputManagerD3D11::TouchInputManagerD3D11(const PlatformD3D11* platform) :
-		direct_input_(NULL),
+	TouchInputManagerD3D11::TouchInputManagerD3D11(const PlatformD3D11* platform, LPDIRECTINPUT8 direct_input) :
+		direct_input_(direct_input),
 		mouse_(NULL),
 		platform_(platform)
 	{
 		HRESULT hresult = S_OK;
-		// Setup DirectInput
-		hresult = DirectInput8Create( GetModuleHandle( NULL ), DIRECTINPUT_VERSION, IID_IDirectInput8, ( VOID** )&direct_input_, NULL );
-
-		if(SUCCEEDED(hresult))
-			hresult = direct_input_->CreateDevice(GUID_SysMouse, &mouse_, NULL);
+		hresult = direct_input_->CreateDevice(GUID_SysMouse, &mouse_, NULL);
 
 		if(SUCCEEDED(hresult))
 			hresult = mouse_->SetDataFormat(&c_dfDIMouse);
@@ -68,8 +64,12 @@ namespace gef
 
 	void TouchInputManagerD3D11::CleanUp()
 	{
-		ReleaseNull(mouse_);
-		ReleaseNull(direct_input_);
+		if (mouse_)
+		{
+			mouse_->Unacquire();
+			mouse_->Release();
+			mouse_ = NULL;
+		}
 	}
 
 	void TouchInputManagerD3D11::Update()

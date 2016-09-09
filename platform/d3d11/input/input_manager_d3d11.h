@@ -14,7 +14,6 @@ namespace gef
 	public:
 		InputManagerD3D11(Platform& platform);
 		~InputManagerD3D11();
-		void Update();
 	protected:
 		Platform& platform_;
 		LPDIRECTINPUT8 direct_input_;

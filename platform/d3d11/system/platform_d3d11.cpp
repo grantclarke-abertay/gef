@@ -4,7 +4,7 @@
 #include <platform/d3d11/graphics/texture_d3d11.h>
 #include <platform/d3d11/graphics/sprite_renderer_d3d11.h>
 #include <platform/d3d11/input/touch_input_manager_d3d11.h>
-#include <platform/d3d11/input/sony_controller_input_manager_d3d11.h>
+#include <platform/d3d11/input/input_manager_d3d11.h>
 #include <graphics/mesh.h>
 #include <platform/d3d11/graphics/renderer_3d_d3d11.h>
 #include <platform/d3d11/graphics/render_target_d3d11.h>
@@ -564,21 +564,21 @@ namespace gef
 		return NULL;
 	}
 
-	void PlatformD3D11::InitTouchInputManager()
-	{
-		assert(touch_input_manager_ == false);
-		touch_input_manager_ = new TouchInputManagerD3D11(this);
-	}
+	//void PlatformD3D11::InitTouchInputManager()
+	//{
+	//	assert(touch_input_manager_ == false);
+	//	touch_input_manager_ = new TouchInputManagerD3D11(this);
+	//}
 
-	void PlatformD3D11::ReleaseTouchInputManager()
-	{
-		DeleteNull(touch_input_manager_);
-	}
+	//void PlatformD3D11::ReleaseTouchInputManager()
+	//{
+	//	DeleteNull(touch_input_manager_);
+	//}
 
 
-	SonyControllerInputManager* PlatformD3D11::CreateSonyControllerInputManager() const
+	InputManager* PlatformD3D11::CreateInputManager()
 	{
-		return new SonyControllerInputManagerD3D11(*this);
+		return new InputManagerD3D11(*this);
 	}
 
 	Renderer3D* PlatformD3D11::CreateRenderer3D()

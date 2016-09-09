@@ -78,7 +78,7 @@ namespace gef
 //		return NULL;
 //	}
 
-	SonyControllerInputManager* PlatformWin32NullRenderer::CreateSonyControllerInputManager() const
+	InputManager* PlatformWin32NullRenderer::CreateInputManager()
 	{
 		return NULL;
 	}

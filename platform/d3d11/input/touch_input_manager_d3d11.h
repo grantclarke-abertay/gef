@@ -13,7 +13,7 @@ namespace gef
 	class TouchInputManagerD3D11 : public TouchInputManager
 	{
 	public:
-		TouchInputManagerD3D11(const PlatformD3D11* platform);
+		TouchInputManagerD3D11(const PlatformD3D11* platform, LPDIRECTINPUT8 direct_input);
 		~TouchInputManagerD3D11();
 
 		void Update();

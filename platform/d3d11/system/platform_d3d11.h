@@ -27,7 +27,7 @@ namespace gef
 		class SpriteRenderer* CreateSpriteRenderer();
 		Mesh* CreateMesh();
 		class Texture* CreateTexture(const ImageData& image_data) const;
-		SonyControllerInputManager* CreateSonyControllerInputManager() const;
+		InputManager* CreateInputManager();
 		VertexBuffer* CreateVertexBuffer() const;
 		IndexBuffer* CreateIndexBuffer() const;
 //		class Texture* CreateCheckerTexture(UInt32 size, UInt32 num_checkers) ;
@@ -52,8 +52,8 @@ namespace gef
 		std::string FormatFilename(const char* filename) const;
 		File* CreateFile() const;
 		AudioManager* CreateAudioManager() const;
-		void InitTouchInputManager();
-		void ReleaseTouchInputManager();
+		//void InitTouchInputManager();
+		//void ReleaseTouchInputManager();
 
 		ShaderInterface* PlatformD3D11::CreateShaderInterface() const;
 		const char* GetShaderDirectory() const;

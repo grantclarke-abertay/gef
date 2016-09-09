@@ -14,7 +14,7 @@ namespace gef
 	class SonyControllerInputManagerD3D11 : public SonyControllerInputManager
 	{
 	public:
-		SonyControllerInputManagerD3D11(const PlatformD3D11& platform);
+		SonyControllerInputManagerD3D11(const PlatformD3D11& platform, LPDIRECTINPUT8 direct_input);
 		~SonyControllerInputManagerD3D11();
 
 		static BOOL CALLBACK enumJoysticksCallback( const DIDEVICEINSTANCE* pdidInstance, VOID* pContext );

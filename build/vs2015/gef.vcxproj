@@ -160,6 +160,8 @@
     <ClCompile Include="..\..\graphics\sprite_renderer.cpp" />
     <ClCompile Include="..\..\graphics\texture.cpp" />
     <ClCompile Include="..\..\graphics\vertex_buffer.cpp" />
+    <ClCompile Include="..\..\input\input_manager.cpp" />
+    <ClCompile Include="..\..\input\keyboard.cpp" />
     <ClCompile Include="..\..\input\sony_controller_input_manager.cpp" />
     <ClCompile Include="..\..\input\touch_input_manager.cpp" />
     <ClCompile Include="..\..\maths\aabb.cpp" />
@@ -212,6 +214,8 @@
     <ClInclude Include="..\..\graphics\sprite_renderer.h" />
     <ClInclude Include="..\..\graphics\texture.h" />
     <ClInclude Include="..\..\graphics\vertex_buffer.h" />
+    <ClInclude Include="..\..\input\input_manager.h" />
+    <ClInclude Include="..\..\input\keyboard.h" />
     <ClInclude Include="..\..\input\sony_controller_input_manager.h" />
     <ClInclude Include="..\..\input\touch_input_manager.h" />
     <ClInclude Include="..\..\maths\aabb.h" />

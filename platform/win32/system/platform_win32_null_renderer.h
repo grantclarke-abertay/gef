@@ -27,7 +27,7 @@ namespace gef
 		void ReleaseTouchInputManager();
 		class Texture* CreateTexture(const ImageData& image_data) const;
 		Mesh* CreateMesh();
-		SonyControllerInputManager* CreateSonyControllerInputManager() const;
+		InputManager* CreateInputManager();
 		class Renderer3D* CreateRenderer3D();
 		class VertexBuffer* CreateVertexBuffer() const;
 		class IndexBuffer* CreateIndexBuffer() const;

@@ -45,6 +45,12 @@
     <ClCompile Include="..\..\system\platform_d3d11.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\input\keyboard_d3d11.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\input\input_manager_d3d11.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\graphics\depth_buffer_d3d11.h">
@@ -79,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="..\..\system\platform_d3d11.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\keyboard_d3d11.h">
+      <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\input\input_manager_d3d11.h">
+      <Filter>input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
