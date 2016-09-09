@@ -4,6 +4,8 @@
 #include <iostream>
 
 
+
+
 int main(int argc, char* argv[])
 {
 	gef::PlatformWin32NullRenderer platform;
@@ -40,6 +42,88 @@ int main(int argc, char* argv[])
 				if(stricmp(&argv[arg_num][1], "animation-only") == 0)
 				{
 					animation_only = true;
+				}
+				else if (stricmp(&argv[arg_num][1], "axis") == 0)
+				{
+					fbxsdk::FbxAxisSystem::EUpVector up_vector = fbxsdk::FbxAxisSystem::eYAxis;
+					fbxsdk::FbxAxisSystem::EFrontVector front_vector = fbxsdk::FbxAxisSystem::eParityOdd;
+					fbxsdk::FbxAxisSystem::ECoordSystem coord_system = fbxsdk::FbxAxisSystem::eRightHanded;
+
+
+					if ((arg_num + 3) < (argc - 1))
+					{
+						// up axis
+						{
+							int argument_start = 0;
+							int sign = 1;
+							if (argv[arg_num + 1][0] == '-')
+							{
+								argument_start = 1;
+								sign = -1;
+							}
+
+							switch (argv[arg_num + 1][argument_start])
+							{
+							case 'x':
+								up_vector = (fbxsdk::FbxAxisSystem::EUpVector)(sign*fbxsdk::FbxAxisSystem::eXAxis);
+								break;
+							case 'y':
+								up_vector = (fbxsdk::FbxAxisSystem::EUpVector)(sign*fbxsdk::FbxAxisSystem::eYAxis);
+								break;
+							case 'z':
+								up_vector = (fbxsdk::FbxAxisSystem::EUpVector)(sign*fbxsdk::FbxAxisSystem::eZAxis);
+								break;
+							}
+						}
+
+						// parity
+						{
+							int argument_start = 0;
+							int sign = 1;
+							if (argv[arg_num + 2][0] == '-')
+							{
+								argument_start = 1;
+								sign = -1;
+							}
+
+							if (stricmp(&argv[arg_num + 2][argument_start], "odd") == 0)
+								front_vector = (fbxsdk::FbxAxisSystem::EFrontVector)(sign*fbxsdk::FbxAxisSystem::eParityOdd);
+							else if (stricmp(&argv[arg_num + 2][argument_start], "even") == 0)
+								front_vector = (fbxsdk::FbxAxisSystem::EFrontVector)(sign*fbxsdk::FbxAxisSystem::eParityEven);
+						}
+						// handed
+						if (stricmp(&argv[arg_num + 3][0], "left") == 0)
+							coord_system = fbxsdk::FbxAxisSystem::eLeftHanded;
+						else if (stricmp(&argv[arg_num + 3][0], "right") == 0)
+							coord_system = fbxsdk::FbxAxisSystem::eRightHanded;
+
+						fbxsdk::FbxAxisSystem axis_system(up_vector, front_vector, coord_system);
+						fbx_loader.SetAxisSystem(axis_system);
+					}
+				}
+				else if (stricmp(&argv[arg_num][1], "axis-preset") == 0)
+				{
+					fbxsdk::FbxAxisSystem::EPreDefinedAxisSystem predefined_axis_system = fbxsdk::FbxAxisSystem::eMayaYUp;
+					if ((arg_num + 1) < (argc - 1))
+					{
+						if (stricmp(&argv[arg_num + 1][0], "mayaZup") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eMayaZUp;
+						else if (stricmp(&argv[arg_num + 1][0], "mayaYup") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eMayaYUp;
+						else if (stricmp(&argv[arg_num + 1][0], "max") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eMax;
+						else if (stricmp(&argv[arg_num + 1][0], "motionbuilder") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eMotionBuilder;
+						else if (stricmp(&argv[arg_num + 1][0], "opengl") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eOpenGL;
+						else if (stricmp(&argv[arg_num + 1][0], "directx") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eDirectX;
+						else if (stricmp(&argv[arg_num + 1][0], "lightwave") == 0)
+							predefined_axis_system = fbxsdk::FbxAxisSystem::eLightwave;
+
+						fbxsdk::FbxAxisSystem axis_system(predefined_axis_system);
+						fbx_loader.SetAxisSystem(axis_system);
+					}
 				}
 				break;
 

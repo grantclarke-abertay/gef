@@ -204,6 +204,8 @@ static float fbx_scaling_factor_ = 1.f;
 static const char* fbx_texture_filename_ext_ = NULL;
 static bool fbx_ignore_skinning_ = false;
 static bool fbx_strip_texture_path_ = false;
+static FbxAMatrix fbx_axis_conversion_matrix_;
+static FbxAxisSystem fbx_user_axis_system_;
 
 static FbxManager* sdk_manager = NULL;
 static FbxImporter* lImporter = NULL;
@@ -214,7 +216,8 @@ FBXLoader::FBXLoader() :
 		scaling_factor_(1.0f),
 		texture_filename_ext_(NULL),
 		strip_texture_path_(false),
-		ignore_skinning_(false)
+		ignore_skinning_(false),
+		axis_system_set_(false)
 
 {
 }
@@ -222,6 +225,13 @@ FBXLoader::FBXLoader() :
 FBXLoader::~FBXLoader()
 {
 }
+
+void FBXLoader::SetAxisSystem(const fbxsdk::FbxAxisSystem& axis_system)
+{
+	axis_system_set_ = true;
+	fbx_user_axis_system_ = axis_system;
+}
+
 
 bool FBXLoader::IsFileFormatSupported()
 {
@@ -260,6 +270,43 @@ bool FBXLoader::Load(const char* const filename, Platform& platform, Scene& scen
 			FbxSystemUnit::cm.ConvertScene(fbx_scene);
 		}
 
+
+		FbxAxisSystem file_axis_system = fbx_scene->GetGlobalSettings().GetAxisSystem();
+
+		int up_vector_sign, front_vector_sign;
+		FbxAxisSystem::EUpVector up_vector;
+		FbxAxisSystem::EFrontVector front_vector;
+		FbxAxisSystem::ECoordSystem coord_system;
+
+		up_vector = file_axis_system.GetUpVector(up_vector_sign);
+		front_vector = file_axis_system.GetFrontVector(front_vector_sign);
+		coord_system = file_axis_system.GetCoorSystem();
+
+		// check to see if the user has overwritten the file axis system
+		if(axis_system_set_)
+			file_axis_system = fbx_user_axis_system_;
+
+		up_vector = file_axis_system.GetUpVector(up_vector_sign);
+		front_vector = file_axis_system.GetFrontVector(front_vector_sign);
+		coord_system = file_axis_system.GetCoorSystem();
+
+		// get matrix defined by file axis system
+		FbxAMatrix file_axis_matrix, inv_file_axis_matrix;
+		file_axis_system.GetMatrix(file_axis_matrix);
+		inv_file_axis_matrix = file_axis_matrix.Inverse();
+
+		// create axis system for used by gef
+		FbxAxisSystem gefAxisSystem(
+			FbxAxisSystem::EUpVector::eYAxis,
+			FbxAxisSystem::EFrontVector::eParityOdd,
+			FbxAxisSystem::eRightHanded);
+
+		// get matrix for gef axis system
+		FbxAMatrix gef_axis_matrix;
+		gefAxisSystem.GetMatrix(file_axis_matrix);
+
+		// calculate the matrix to transfer file axis system to gef axis system
+		fbx_axis_conversion_matrix_ = inv_file_axis_matrix * gef_axis_matrix;
 
 		if(success)
 		{
@@ -564,6 +611,7 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 		cp.position;
 
 		FbxVector4 position = fbx_mesh->GetControlPointAt(cp_num);
+		position = fbx_axis_conversion_matrix_.MultT(position);
 
 		cp.position.set_x(position[0] * fbx_scaling_factor_);
 		cp.position.set_y(position[1] * fbx_scaling_factor_);

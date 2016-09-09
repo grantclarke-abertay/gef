@@ -5,7 +5,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LocalDebuggerCommandArguments>-ignore-skinning -texture-extension .png -o D:\Development\gef\samples\scene_app\bin\triceratops.scn D:\Development\gef\samples\scene_app\assets\Triceratop.FBX</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-axis z -odd right -ignore-skinning -strip-texture-path -texture-extension .png -o D:\Development\gef\samples\load_skinned_scene\bin\triceratop.scn D:\Development\gef\samples\load_skinned_scene\assets\triceratop.FBX</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
