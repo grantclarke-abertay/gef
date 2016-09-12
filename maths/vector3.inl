@@ -19,24 +19,12 @@ namespace gef
 
 	inline const Vector3 Vector3::operator-(const Vector3& _vec) const
 	{
-		Vector3 result;
-
-		result.set_x(values_[0] - _vec.x());
-		result.set_y(values_[1] - _vec.y());
-		result.set_z(values_[2] - _vec.z());
-
-		return result;
+		return Vector3(values_[0] - _vec.x(), values_[1] - _vec.y(), values_[2] - _vec.z());
 	}
 
 	inline const Vector3 Vector3::operator+(const Vector3& _vec) const
 	{
-		Vector3 result;
-
-		result.set_x(values_[0] + _vec.x());
-		result.set_y(values_[1] + _vec.y());
-		result.set_z(values_[2] + _vec.z());
-
-		return result;
+		return Vector3(values_[0] + _vec.x(), values_[1] + _vec.y(), values_[2] + _vec.z());
 	}
 
 	inline Vector3& Vector3::operator+=(const Vector3& _vec)
@@ -59,25 +47,14 @@ namespace gef
 
 	inline const Vector3 Vector3::operator*(const float _scalar) const
 	{
-		Vector3 result;
-
-		result.set_x(values_[0] * _scalar);
-		result.set_y(values_[1] * _scalar);
-		result.set_z(values_[2] * _scalar);
-
-		return result;
+		return Vector3(values_[0] * _scalar, values_[1] * _scalar, values_[2] * _scalar);
 	}
 
 	inline const Vector3 Vector3::operator/(const float _scalar) const
 	{
-		Vector3 result;
-
-		result.set_x(values_[0] / _scalar);
-		result.set_y(values_[1] / _scalar);
-		result.set_z(values_[2] / _scalar);
-
-		return result;
+		return Vector3(values_[0] / _scalar, values_[1] / _scalar, values_[2] / _scalar);
 	}
+	
 
 	inline Vector3& Vector3::operator*=(const float _scalar)
 	{
