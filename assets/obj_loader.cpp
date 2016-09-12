@@ -171,6 +171,10 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 
 		// create vertex buffer
 		gef::Mesh::Vertex* vertices = new gef::Mesh::Vertex[num_vertices];
+
+		// need to record min and max position values for mesh bounds
+		gef::Vector3 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
 		for(Int32 vertex_num = 0; vertex_num < num_vertices; ++vertex_num)
 		{
 			gef::Mesh::Vertex* vertex = &vertices[vertex_num];
@@ -190,17 +194,40 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 			vertex->nz = normal.z();
 			vertex->u = uv.x;
 			vertex->v = -uv.y;
+
+			// update min and max positions for bounds
+			if (position.x() < pos_min.x())
+				pos_min.set_x(position.x());
+			if (position.y() < pos_min.y())
+				pos_min.set_y(position.y());
+			if (position.z() < pos_min.z())
+				pos_min.set_z(position.z());
+			if (position.x() > pos_max.x())
+				pos_max.set_x(position.x());
+			if (position.y() > pos_max.y())
+				pos_max.set_y(position.y());
+			if (position.z() > pos_max.z())
+				pos_max.set_z(position.z());
 		}
+
 
 		Mesh* mesh = platform.CreateMesh();
 		model.set_mesh(mesh);
 		model.set_textures(textures);
+
+		// set bounds
+		gef::Aabb aabb(pos_min, pos_max);
+		gef::Sphere sphere(aabb);
+		mesh->set_aabb(aabb);
+		mesh->set_bounding_sphere(sphere);
+
 
 		// create materials for each texture
 		for(std::vector<Texture*>::iterator texture=textures.begin(); texture != textures.end(); ++texture)
 		{
 			Material* material = new Material();
 			material->set_texture(*texture);
+			model.AddMaterial(material);
 		}
 
 		mesh->InitVertexBuffer(platform, vertices, num_vertices, sizeof(gef::Mesh::Vertex));

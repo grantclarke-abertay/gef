@@ -605,6 +605,10 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
     Int32 control_points_count = fbx_mesh->GetControlPointsCount();
 	std::vector<ControlPoint> cp_data;
 
+	// need to record min and max position values for mesh bounds
+	gef::Vector3 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+
 	for (int cp_num = 0; cp_num < control_points_count; ++cp_num)
 	{
 		ControlPoint cp;
@@ -617,8 +621,25 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 		cp.position.set_y(position[1] * fbx_scaling_factor_);
 		cp.position.set_z(position[2] * fbx_scaling_factor_);
 
+		// update min and max positions for bounds
+		if (cp.position.x() < pos_min.x())
+			pos_min.set_x(cp.position.x());
+		if (cp.position.y() < pos_min.y())
+			pos_min.set_y(cp.position.y());
+		if (cp.position.z() < pos_min.z())
+			pos_min.set_z(cp.position.z());
+		if (cp.position.x() > pos_max.x())
+			pos_max.set_x(cp.position.x());
+		if (cp.position.y() > pos_max.y())
+			pos_max.set_y(cp.position.y());
+		if (cp.position.z() > pos_max.z())
+			pos_max.set_z(cp.position.z());
+
 		cp_data.push_back(cp);
 	}
+
+	// set mesh data bounds
+	mesh.aabb = gef::Aabb(pos_min, pos_max);
 
 	std::vector<PolyVertData> vb_data;
 
