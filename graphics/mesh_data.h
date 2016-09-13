@@ -2,7 +2,7 @@
 #define _GEF_MESH_DATA_H
 
 #include <vector>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <graphics/primitive.h>
 #include <string>
 #include <system/string_id.h>

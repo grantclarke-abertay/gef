@@ -30,16 +30,21 @@ void SceneApp::Init()
 
 	InitFont();
 
-
+	// create a new scene object and read in the data from the file
+	// no meshes or materials are created yet
+	// we're not making any assumptions about what the data may be loaded in for
 	model_scene_ = new gef::Scene();
-	model_scene_->ReadSceneFromFile(platform_, "triceratops.scn");
+	model_scene_->ReadSceneFromFile(platform_, "triceratop.scn");
+
+	// we do want to render the data stored in the scene file so lets create the materials from the material data present in the scene file
 	model_scene_->CreateMaterials(platform_);
 
-	// grab the first mesh from the scene
+	// now check to see if there is any mesh data in the file, if so lets create a mesh from it
 	if (model_scene_->meshes.size() > 0)
 		mesh_ = model_scene_->CreateMesh(platform_, model_scene_->meshes.front());
 
-	cube_player_.set_mesh(mesh_);
+	// get the player mesh instance to use this mesh for drawing
+	player_.set_mesh(mesh_);
 
 	SetupCamera();
 	SetupLights();
@@ -80,7 +85,7 @@ void SceneApp::Render()
 
 	// draw meshes here
 	renderer_3d_->Begin();
-	renderer_3d_->DrawMesh(cube_player_);
+	renderer_3d_->DrawMesh(player_);
 	renderer_3d_->End();
 
 	// setup the sprite renderer, but don't clear the frame buffer
@@ -106,7 +111,7 @@ void SceneApp::DrawHUD()
 	if(font_)
 	{
 		// display frame rate
-		font_->RenderText(sprite_renderer_, gef::Vector3(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
+		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
 	}
 }
 
@@ -114,7 +119,7 @@ void SceneApp::SetupLights()
 {
 	gef::PointLight default_point_light;
 	default_point_light.set_colour(gef::Colour(0.7f, 0.7f, 1.0f, 1.0f));
-	default_point_light.set_position(gef::Vector3(300.0f, -500.0f, 100.0f));
+	default_point_light.set_position(gef::Vector4(300.0f, -500.0f, 100.0f));
 
 	gef::Default3DShaderData& default_shader_data = renderer_3d_->default_shader_data();
 	default_shader_data.set_ambient_light_colour(gef::Colour(0.5f, 0.5f, 0.5f, 1.0f));
@@ -124,9 +129,9 @@ void SceneApp::SetupLights()
 void SceneApp::SetupCamera()
 {
 	// initialise the camera settings
-	camera_eye = gef::Vector3(300.0f, -500.0f, 100.0f);
-	camera_lookat = gef::Vector3(0.0f, 0.0f, 0.0f);
-	camera_up = gef::Vector3(0.0f, 0.0f, 1.0f);
+	camera_eye = gef::Vector4(300.0f, 100.0f, 500.0f);
+	camera_lookat = gef::Vector4(0.0f, 0.0f, 0.0f);
+	camera_up = gef::Vector4(0.0f, 1.0f, 0.0f);
 	camera_fov = gef::DegToRad(45.0f);
 	near_plane = 0.01f;
 	far_plane = 1000.f;

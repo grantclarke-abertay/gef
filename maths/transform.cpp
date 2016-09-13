@@ -34,7 +34,7 @@ namespace gef
 
 	void Transform::Linear2TransformBlend(const gef::Transform& start, const gef::Transform& end, const float time)
 	{
-		Vector3 scale(1.0f, 1.0f, 1.0f), translation;
+		Vector4 scale(1.0f, 1.0f, 1.0f), translation;
 		Quaternion rotation;
 		scale.Lerp(start.scale(), end.scale(), time);
 		translation.Lerp(start.translation(), end.translation(), time);

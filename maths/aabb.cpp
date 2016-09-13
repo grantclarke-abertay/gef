@@ -8,14 +8,14 @@ namespace gef
 	{
 	}
 
-	Aabb::Aabb(const Vector3& min_vtx, const Vector3& max_vtx)
+	Aabb::Aabb(const Vector4& min_vtx, const Vector4& max_vtx)
 	{
 		min_vtx_ = min_vtx;
 		max_vtx_ = max_vtx;
 		initialised_ = true;
 	}
 
-	void Aabb::Update(const Vector3& point)
+	void Aabb::Update(const Vector4& point)
 	{
 		if(!initialised_)
 		{
@@ -45,7 +45,7 @@ namespace gef
 		// This can be optimised
 		Aabb result;
 
-		gef::Vector3 vertices[8];
+		gef::Vector4 vertices[8];
 
 		vertices[0].set_x(min_vtx_.x());
 		vertices[0].set_y(min_vtx_.y());

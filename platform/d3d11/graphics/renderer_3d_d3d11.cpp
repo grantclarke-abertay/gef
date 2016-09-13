@@ -323,7 +323,7 @@ namespace gef
 	{
 		PointLight default_point_light;
 		default_point_light.set_colour(Colour(0.7f, 0.7f, 1.0f, 1.0f));
-		default_point_light.set_position(Vector3(-500.0f, 400.0f, 700.0f));
+		default_point_light.set_position(Vector4(-500.0f, 400.0f, 700.0f));
 		default_shader_data_.set_ambient_light_colour(Colour(0.5f, 0.5f, 0.5f, 1.0f));
 		default_shader_data_.AddPointLight(default_point_light);
 

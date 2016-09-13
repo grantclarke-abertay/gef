@@ -69,14 +69,14 @@ namespace gef
 	}
 
 /*
-	void Mesh::CalculateBounds(const Vector3* vertex_positions, const UInt32 num_vertices, const UInt32 vertex_byte_size)
+	void Mesh::CalculateBounds(const Vector4* vertex_positions, const UInt32 num_vertices, const UInt32 vertex_byte_size)
 	{
 		// go through all the vertex positions and set up the axis aligned bounding box that encapsulates the mesh
-		const Vector3* position = vertex_positions;
+		const Vector4* position = vertex_positions;
 		for(Int32 vertex_num = 0; vertex_num < num_vertices; ++vertex_num)
 		{
 			aabb_.Update(*position);
-			position = reinterpret_cast<const Vector3*>(reinterpret_cast<const UInt8*>(position)+vertex_byte_size);
+			position = reinterpret_cast<const Vector4*>(reinterpret_cast<const UInt8*>(position)+vertex_byte_size);
 		}
 
 		// now the aabb is setup, it can be used to initialise the bounding sphere

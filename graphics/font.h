@@ -10,7 +10,7 @@ namespace gef
 	class SpriteRenderer;
 	class Texture;
 	class Platform;
-	class Vector3;
+	class Vector4;
 
 	enum TextJustification
 	{
@@ -25,7 +25,7 @@ namespace gef
 		Font(Platform& platform);
 		~Font();
 		bool Load(const char* font_name);
-		void RenderText(SpriteRenderer* renderer, const Vector3& pos, const float scale, const UInt32 colour, const TextJustification justification, const char * text, ...) const;
+		void RenderText(SpriteRenderer* renderer, const Vector4& pos, const float scale, const UInt32 colour, const TextJustification justification, const char * text, ...) const;
 		float GetStringLength(const char * text) const;
 
 		inline Texture* font_texture() { return font_texture_; }

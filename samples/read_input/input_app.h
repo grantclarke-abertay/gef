@@ -2,6 +2,8 @@
 #define _INPUT_APP_H
 
 #include <system/application.h>
+#include <maths/vector2.h>
+#include <input/touch_input_manager.h>
 
 // FRAMEWORK FORWARD DECLARATIONS
 namespace gef
@@ -24,10 +26,16 @@ private:
 	void InitFont();
 	void CleanUpFont();
 	void DrawHUD();
+	void ProcessKeyboardInput();
+	void ProcessControllerInput();
+	void ProcessTouchInput();
 
 	gef::SpriteRenderer* sprite_renderer_;
 	gef::Font* font_;
 	gef::InputManager* input_manager_;
+
+	Int32 active_touch_id_;
+	gef::Vector2 touch_position_;
 
 	float fps_;
 };

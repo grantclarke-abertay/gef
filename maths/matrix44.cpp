@@ -1,5 +1,5 @@
 #include <maths/matrix44.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/vector4.h>
 #include <maths/quaternion.h>
 #include <math.h>
@@ -38,17 +38,17 @@ namespace gef
 		return result; 
 	}
 
-	void Matrix44::LookAt(const Vector3& eye, const Vector3& lookat, const Vector3& up)
+	void Matrix44::LookAt(const Vector4& eye, const Vector4& lookat, const Vector4& up)
 	{
 		SetIdentity();
-		Vector3 forward = eye - lookat;
+		Vector4 forward = eye - lookat;
 		forward.Normalise();
 
-		Vector3 side;
+		Vector4 side;
 		side = up.CrossProduct(forward);
 		side.Normalise();
 
-		Vector3 calculated_up;
+		Vector4 calculated_up;
 		calculated_up = forward.CrossProduct(side);
 
 		values_[0].set_x(side.x());
@@ -268,7 +268,7 @@ namespace gef
 		values_[3].set_w(1.0f);
 	}
 
-	void Matrix44::Scale(const Vector3& scale)
+	void Matrix44::Scale(const Vector4& scale)
 	{
 		SetIdentity();
 		values_[0].set_x(scale.x());
@@ -276,16 +276,16 @@ namespace gef
 		values_[2].set_z(scale.z());
 	}
 
-	Vector3 Matrix44::GetScale() const
+	Vector4 Matrix44::GetScale() const
 	{
-		Vector3 scale_x(values_[0].x(), values_[0].y(), values_[0].z());
-		Vector3 scale_y(values_[1].x(), values_[1].y(), values_[1].z());
-		Vector3 scale_z(values_[2].x(), values_[2].y(), values_[2].z());
+		Vector4 scale_x(values_[0].x(), values_[0].y(), values_[0].z());
+		Vector4 scale_y(values_[1].x(), values_[1].y(), values_[1].z());
+		Vector4 scale_z(values_[2].x(), values_[2].y(), values_[2].z());
 
-		return Vector3(scale_x.Length(), scale_y.Length(), scale_z.Length());
+		return Vector4(scale_x.Length(), scale_y.Length(), scale_z.Length());
 	}
 
-	void Matrix44::SetTranslation(const Vector3& _trans)
+	void Matrix44::SetTranslation(const Vector4& _trans)
 	{
 		values_[3].set_x(_trans.x());
 		values_[3].set_y(_trans.y());
@@ -293,9 +293,9 @@ namespace gef
 	}
 
 
-	const Vector3 Matrix44::GetTranslation() const
+	const Vector4 Matrix44::GetTranslation() const
 	{
-		return Vector3(values_[3].x(), values_[3].y(), values_[3].z());
+		return Vector4(values_[3].x(), values_[3].y(), values_[3].z());
 	}
 
 	void Matrix44::Transpose(const Matrix44& matrix)
@@ -314,7 +314,7 @@ namespace gef
 		values_[1].set_w(0.0f);
 		values_[2].set_w(0.0f);
 
-		Vector3 pos, invTrans;
+		Vector4 pos, invTrans;
 
 		pos = matrix.GetTranslation();
 		pos = pos * -1.0f;
@@ -328,7 +328,7 @@ namespace gef
 	{
 		gef::Quaternion rotation;
 		rotation.SetFromMatrix(*this);
-		gef::Vector3 translation = GetTranslation();
+		gef::Vector4 translation = GetTranslation();
 
 		rotation.Normalise();
 		Rotation(rotation);
@@ -377,7 +377,7 @@ namespace gef
 					}
 				}
 
-				v = vec[0].CrossProduct(vec[1], vec[2]);
+				v = vec[0].CrossProduct3(vec[1], vec[2]);
 
 
 				float temp = powf(-1.0f, (float)i) / det;

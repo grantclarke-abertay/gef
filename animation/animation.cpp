@@ -44,12 +44,12 @@ namespace gef
 	{
 	}
 
-	const Vector3 TransformAnimNode::GetTranslation(const float _time) const
+	const Vector4 TransformAnimNode::GetTranslation(const float _time) const
 	{
 		return GetVector(_time, this->translation_keys_);
 	}
 
-	const Vector3 TransformAnimNode::GetScale(const float _time) const
+	const Vector4 TransformAnimNode::GetScale(const float _time) const
 	{
 		return GetVector(_time, this->scale_keys_);
 	}
@@ -97,9 +97,9 @@ namespace gef
 		return result;
 	}
 
-	const Vector3 TransformAnimNode::GetVector(float _time, const std::vector<Vector3Key>& _keys) const
+	const Vector4 TransformAnimNode::GetVector(float _time, const std::vector<Vector3Key>& _keys) const
 	{
-		Vector3 result(0.f, 0.f, 0.f);
+		Vector4 result(0.f, 0.f, 0.f);
 
 		const Vector3Key* pPrevKey = NULL;
 		const Vector3Key* pNextKey = NULL;

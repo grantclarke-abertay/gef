@@ -3,7 +3,7 @@
 
 #include <gef.h>
 #include <maths/vector2.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 
 namespace gef
 {
@@ -16,10 +16,10 @@ public:
 	Sprite();
 
 	/// @param[in] the position of the sprite
-	inline void set_position(const Vector3& position) { position_ = position; }
-	inline void set_position(const float x, const float y, const float z) { position_ = Vector3(x, y, z); }
+	inline void set_position(const Vector4& position) { position_ = position; }
+	inline void set_position(const float x, const float y, const float z) { position_ = Vector4(x, y, z); }
 	/// @return the position of the sprite
-	inline const Vector3& position() const {return position_; }
+	inline const Vector4& position() const {return position_; }
 	/// @param[in] the width of the sprite
 	inline void set_width(const float width) { width_ = width; }
 	/// @return the width of the sprite
@@ -46,7 +46,7 @@ public:
 	inline void set_uv_height(const float uv_height) { uv_height_ = uv_height; }
 	inline const float uv_height() const {return uv_height_; }
 protected:
-	Vector3 position_;				// position on screen (z value used for depth sorting sprites)
+	Vector4 position_;				// position on screen (z value used for depth sorting sprites)
 	float width_;					// width of the sprite
 	float height_;					// height of the sprite
 	UInt32 colour_;					// colour of the sprite

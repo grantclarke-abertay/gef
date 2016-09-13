@@ -7,7 +7,7 @@ namespace gef
 	{
 	}
 
-	Sphere::Sphere(const Vector3& position, const float radius) :
+	Sphere::Sphere(const Vector4& position, const float radius) :
 		position_(position),
 		radius_(radius)
 	{
@@ -24,7 +24,7 @@ namespace gef
 	{
 		Sphere result;
 
-		Vector3 point_on_sphere(1.0f, 1.0f, 1.0f);
+		Vector4 point_on_sphere(1.0f, 1.0f, 1.0f);
 		point_on_sphere.Normalise();
 
 		point_on_sphere *= radius_;

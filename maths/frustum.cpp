@@ -11,7 +11,7 @@ namespace gef
 	//
 	FrustumIntersect Frustum::Intersects(const Sphere& sphere) const
 	{
-		const Vector3& sphere_centre = sphere.position();
+		const Vector4& sphere_centre = sphere.position();
 		float sphere_radius = sphere.radius();
 
 			// calculate our distances to each of the planes
@@ -36,7 +36,7 @@ namespace gef
 
 	FrustumIntersect Frustum::Intersects(const Aabb& aabb) const
 	{
-		Vector3 corner[8];
+		Vector4 corner[8];
 		int total_in = 0;
 
 		// get the corners of the box into the vCorner array

@@ -149,7 +149,7 @@ namespace gef
 						joint_pose.set_scale(transform_node->GetScale(time));
 					else
 						joint_pose.set_scale(bind_pose.local_pose()[joint_index].scale());
-					joint_pose.set_scale(gef::Vector3(1.f, 1.f, 1.f));
+					joint_pose.set_scale(gef::Vector4(1.f, 1.f, 1.f));
 
 					// rotation
 					if(transform_node->rotation_keys().size() > 0.f)
@@ -177,7 +177,7 @@ namespace gef
 #ifdef REMOVE_BIND_POSE
 			gef::Matrix44 inv_local_joint_orient;
 			inv_local_joint_orient.AffineInverse(bind_pose.local_pose()[joint_index].GetMatrix());
-			inv_local_joint_orient.SetTranslation(gef::Vector3(0.f, 0.f, 0.f));
+			inv_local_joint_orient.SetTranslation(gef::Vector4(0.f, 0.f, 0.f));
 			joint_pose.Set(inv_local_joint_orient * joint_pose.GetMatrix());
 #endif
 		}
@@ -229,7 +229,7 @@ namespace gef
 					joint_pose.set_scale(transform_node->GetScale(time));
 				else
 					joint_pose.set_scale(bind_pose.local_pose()[joint_index].scale());
-				joint_pose.set_scale(gef::Vector3(1.f, 1.f, 1.f));
+				joint_pose.set_scale(gef::Vector4(1.f, 1.f, 1.f));
 
 				// rotation
 				if(transform_node->rotation_keys().size() > 0.f)
@@ -252,7 +252,7 @@ namespace gef
 #ifdef REMOVE_BIND_POSE
 		gef::Matrix44 inv_local_joint_orient;
 		inv_local_joint_orient.AffineInverse(bind_pose.local_pose()[joint_index].GetMatrix());
-		inv_local_joint_orient.SetTranslation(gef::Vector3(0.f, 0.f, 0.f));
+		inv_local_joint_orient.SetTranslation(gef::Vector4(0.f, 0.f, 0.f));
 
 		joint_pose.Set(inv_local_joint_orient * joint_pose.GetMatrix());
 #endif
@@ -284,7 +284,7 @@ namespace gef
 					joint_pose.set_scale(transform_node->GetScale(time));
 				else
 					joint_pose.set_scale(bind_pose.local_pose()[joint_index].scale());
-				joint_pose.set_scale(gef::Vector3(1.f, 1.f, 1.f));
+				joint_pose.set_scale(gef::Vector4(1.f, 1.f, 1.f));
 
 				// rotation
 				if(transform_node->rotation_keys().size() > 0.f)

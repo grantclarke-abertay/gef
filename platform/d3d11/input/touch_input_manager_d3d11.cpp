@@ -121,6 +121,15 @@ namespace gef
 		{
 			if(panel_enabled_[panel_index])
 			{
+				// go through existing touches and remove any that were released last update
+				for (TouchIterator touch = panels_[panel_index].begin(); touch != panels_[panel_index].end();)
+				{
+					if (touch->type == TT_RELEASED)
+						touch = panels_[panel_index].erase(touch);
+					else
+						++touch;
+				}
+
 				// get the touch data for this panel
 				// check to see if we have any data to update existing touches
 				for(Int32 touch_index=0;touch_index<2;++touch_index)

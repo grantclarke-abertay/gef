@@ -18,13 +18,13 @@ namespace gef
 		bool success = true;
 
 		Int32 primitive_count;
-		gef::Vector3 aabb_min, aabb_max;
+		gef::Vector4 aabb_min, aabb_max;
 
 
 		stream.read((char*)&name_id, sizeof(StringId));
 		stream.read((char*)&primitive_count, sizeof(Int32));
-		stream.read((char*)&aabb_min, sizeof(gef::Vector3));
-		stream.read((char*)&aabb_max, sizeof(gef::Vector3));
+		stream.read((char*)&aabb_min, sizeof(gef::Vector4));
+		stream.read((char*)&aabb_max, sizeof(gef::Vector4));
 
 		vertex_data.Read(stream);
 
@@ -50,8 +50,8 @@ namespace gef
 
 		stream.write((char*)&name_id, sizeof(StringId));
 		stream.write((char*)&primitive_count, sizeof(Int32));
-		stream.write((char*)&aabb.min_vtx(), sizeof(gef::Vector3));
-		stream.write((char*)&aabb.max_vtx(), sizeof(gef::Vector3));
+		stream.write((char*)&aabb.min_vtx(), sizeof(gef::Vector4));
+		stream.write((char*)&aabb.max_vtx(), sizeof(gef::Vector4));
 
 		vertex_data.Write(stream);
 

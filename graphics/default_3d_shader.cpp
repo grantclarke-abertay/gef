@@ -84,7 +84,7 @@ namespace gef
 
 		for (Int32 light_num = 0; light_num < MAX_NUM_POINT_LIGHTS; ++light_num)
 		{
-			Vector3 light_position;
+			Vector4 light_position;
 			Colour light_colour;
 			if (light_num < shader_data.GetNumPointLights())
 			{
@@ -96,7 +96,7 @@ namespace gef
 			{
 				// no light data
 				// set this light to a light with no colour
-				light_position = Vector3(0.0f, 0.0f, 0.0f);
+				light_position = Vector4(0.0f, 0.0f, 0.0f);
 				light_colour = Colour(0.0f, 0.0f, 0.0f);
 			}
 			light_positions[light_num] = Vector4(light_position.x(), light_position.y(), light_position.z(), 1.f);

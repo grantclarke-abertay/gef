@@ -1,6 +1,6 @@
 #include <graphics/model.h>
 #include <vector>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/vector2.h>
 #include <graphics/mesh.h>
 #include <graphics/primitive.h>

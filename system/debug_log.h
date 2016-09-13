@@ -4,10 +4,10 @@
 namespace gef
 {
 	class Matrix44;
-	class Vector3;
+	class Vector4;
 
 	void DebugOut(const char* label, const Matrix44& matrix);
-	void DebugOut(const char* label, const Vector3& vector);
+	void DebugOut(const char* label, const Vector4& vector);
 	void DebugOut(const char * text, ...);
 }
 

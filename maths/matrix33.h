@@ -5,7 +5,7 @@
 
 namespace gef
 {
-	class Vector3;
+	class Vector4;
 	class Quaternion;
 	class Vector4;
 

@@ -51,9 +51,6 @@
     <ClCompile Include="..\..\maths\vector2.cpp">
       <Filter>maths</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\maths\vector3.cpp">
-      <Filter>maths</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\maths\vector4.cpp">
       <Filter>maths</Filter>
     </ClCompile>
@@ -212,9 +209,6 @@
     <ClInclude Include="..\..\maths\vector2.h">
       <Filter>maths</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\maths\vector3.h">
-      <Filter>maths</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\maths\vector4.h">
       <Filter>maths</Filter>
     </ClInclude>
@@ -350,9 +344,6 @@
       <Filter>maths</Filter>
     </None>
     <None Include="..\..\maths\vector2.inl">
-      <Filter>maths</Filter>
-    </None>
-    <None Include="..\..\maths\vector3.inl">
       <Filter>maths</Filter>
     </None>
     <None Include="..\..\maths\vector4.inl">

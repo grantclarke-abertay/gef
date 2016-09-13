@@ -4,7 +4,7 @@
 #include <gef.h>
 #include <vector>
 #include <maths/vector4.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/vector2.h>
 #include <maths/aabb.h>
 #include <maths/sphere.h>
@@ -34,8 +34,8 @@ namespace gef
 
 		struct SkinnedVertex
 		{
-			Vector3 position;
-			Vector3 normal;
+			Vector4 position;
+			Vector4 normal;
 			UInt8 bone_indices[4]; 
 			float bone_weights[4];
 			Vector2 uv;
@@ -66,7 +66,7 @@ namespace gef
 	protected:
 		virtual class Primitive* AllocatePrimitive(); // move to platform class?
 		void ReleasePrimitives();
-		void CalculateBounds(const Vector3* vertex_positions, const UInt32 num_vertices, const UInt32 vertex_byte_size);
+		void CalculateBounds(const Vector4* vertex_positions, const UInt32 num_vertices, const UInt32 vertex_byte_size);
 
 		UInt32 num_primitives_;
 		class Primitive ** primitives_;

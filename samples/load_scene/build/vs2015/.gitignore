@@ -2,3 +2,4 @@
 *.sdf
 /.vs/
 *.VC.opendb
+/Win32/

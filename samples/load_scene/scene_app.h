@@ -4,7 +4,7 @@
 #include <system/application.h>
 #include <graphics/sprite.h>
 #include <maths/vector2.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <vector>
 #include <graphics/mesh_instance.h>
 
@@ -41,13 +41,13 @@ private:
 
 	class gef::Renderer3D* renderer_3d_;
 	class gef::Mesh* mesh_;
-	gef::MeshInstance cube_player_;
+	gef::MeshInstance player_;
 
 	gef::Scene* model_scene_;
 
-	gef::Vector3 camera_eye;
-	gef::Vector3 camera_lookat;
-	gef::Vector3 camera_up;
+	gef::Vector4 camera_eye;
+	gef::Vector4 camera_lookat;
+	gef::Vector4 camera_up;
 	float camera_fov;
 	float near_plane;
 	float far_plane;

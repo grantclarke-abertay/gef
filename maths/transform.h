@@ -3,7 +3,7 @@
 
 #include <maths/matrix44.h>
 #include <maths/quaternion.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 
 namespace gef
 {
@@ -18,14 +18,14 @@ namespace gef
 
 		inline void set_rotation(const Quaternion& rot) { rotation_ = rot; }
 		inline const Quaternion& rotation() const { return rotation_; }
-		inline void set_scale(const Vector3& scale) { scale_ = scale; }
-		inline const Vector3& scale() const { return scale_; }
-		inline void set_translation(const Vector3& trans) { translation_ = trans; }
-		inline const Vector3& translation() const { return translation_; }
+		inline void set_scale(const Vector4& scale) { scale_ = scale; }
+		inline const Vector4& scale() const { return scale_; }
+		inline void set_translation(const Vector4& trans) { translation_ = trans; }
+		inline const Vector4& translation() const { return translation_; }
 	private:
 		Quaternion rotation_;
-		Vector3 translation_;
-		Vector3 scale_;
+		Vector4 translation_;
+		Vector4 scale_;
 	};
 }
 

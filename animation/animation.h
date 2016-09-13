@@ -2,7 +2,7 @@
 #define _GEF_ANIM_H
 
 #include <system/string_id.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/quaternion.h>
 #include <vector>
 #include <map>
@@ -40,7 +40,7 @@ namespace gef
 
 	struct Vector3Key
 	{
-		Vector3 value;
+		Vector4 value;
 		float time;
 	};
 
@@ -62,8 +62,8 @@ namespace gef
 		TransformAnimNode();
 		~TransformAnimNode();
 
-		const Vector3 GetTranslation(const float time) const;
-		const Vector3 GetScale(const float time) const;
+		const Vector4 GetTranslation(const float time) const;
+		const Vector4 GetScale(const float time) const;
 		const Quaternion GetRotation(const float time) const;
 
 		inline const std::vector<Vector3Key>& scale_keys() const {return scale_keys_;}
@@ -79,7 +79,7 @@ namespace gef
 		bool Write(std::ostream& stream) const;
 
 	private:
-		const Vector3 GetVector(const float _time, const std::vector<Vector3Key>& keys) const;
+		const Vector4 GetVector(const float _time, const std::vector<Vector3Key>& keys) const;
 
 		std::vector<Vector3Key> scale_keys_;
 		std::vector<QuaternionKey> rotation_keys_;

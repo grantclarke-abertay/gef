@@ -173,7 +173,7 @@ bool Font::ParseFont( std::istream& Stream, Font::Charset& CharsetDesc )
 	return true;
 }
 
-void Font::RenderText(SpriteRenderer* renderer, const class Vector3& pos, const float scale, const UInt32 colour, const TextJustification justification, const char* text, ...) const
+void Font::RenderText(SpriteRenderer* renderer, const class Vector4& pos, const float scale, const UInt32 colour, const TextJustification justification, const char* text, ...) const
 {
 	if(!text)
 		return;
@@ -215,7 +215,7 @@ void Font::RenderText(SpriteRenderer* renderer, const class Vector3& pos, const 
 		Vector2 uv_pos((float) CharX / (float) character_set.Width,  ((float) (CharY) / (float) character_set.Height));
 		Vector2 uv_size((float) (Width) / (float) character_set.Width, (float)(Height) / (float) character_set.Height);
 		Vector2 size(((float)Width)*scale, ((float)Height)*scale);
-		Vector3 sprite_position = Vector3(cursor.x+((float)OffsetX*scale)+size.x*0.5f, cursor.y + scale*((float)Height*0.5f +  (float)OffsetY), pos.z());
+		Vector4 sprite_position = Vector4(cursor.x+((float)OffsetX*scale)+size.x*0.5f, cursor.y + scale*((float)Height*0.5f +  (float)OffsetY), pos.z());
 
 		sprite.set_position(sprite_position);
 		sprite.set_width(size.x);

@@ -188,12 +188,12 @@ namespace gef
 
 		SpriteVertex sprite_vertices[] =
 		{
-			{Vector3(-0.5f,-0.5f, 0.0f)},
-			{Vector3(0.5f,-0.5f, 0.0f)},
-			{Vector3(0.5f,0.5f, 0.0f)},
-			{Vector3(-0.5f,-0.5f, 0.0f)},
-			{Vector3(0.5f,0.5f, 0.0f)},
-			{Vector3(-0.5f,0.5f, 0.0f)},
+			{Vector4(-0.5f,-0.5f, 0.0f)},
+			{Vector4(0.5f,-0.5f, 0.0f)},
+			{Vector4(0.5f,0.5f, 0.0f)},
+			{Vector4(-0.5f,-0.5f, 0.0f)},
+			{Vector4(0.5f,0.5f, 0.0f)},
+			{Vector4(-0.5f,0.5f, 0.0f)},
 		};
 
 		D3D11_BUFFER_DESC bd;

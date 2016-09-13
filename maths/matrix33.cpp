@@ -1,7 +1,7 @@
 #include <maths/matrix33.h>
 
 #include <maths/matrix44.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/vector4.h>
 #include <maths/quaternion.h>
 #include <maths/matrix22.h>

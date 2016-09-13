@@ -1,6 +1,6 @@
 #include <assets/obj_loader.h>
 #include <vector>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/vector2.h>
 #include <graphics/mesh.h>
 #include <graphics/primitive.h>
@@ -28,8 +28,8 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 //	textures_[0] = NULL;
 	std::vector<Texture*> textures;
 
-	std::vector<gef::Vector3> positions;
-	std::vector<gef::Vector3> normals;
+	std::vector<gef::Vector4> positions;
+	std::vector<gef::Vector4> normals;
 	std::vector<gef::Vector2> uvs;
 	std::vector<Int32> face_indices;
 	std::vector<Int32> primitive_indices;
@@ -94,7 +94,7 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 				stream >> x;
 				stream >> y;
 				stream >> z;
-				positions.push_back(gef::Vector3(x, y, z));
+				positions.push_back(gef::Vector4(x, y, z));
 			}
 
 			// normals
@@ -104,7 +104,7 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 				stream >> nx;
 				stream >> ny;
 				stream >> nz;
-				normals.push_back(gef::Vector3(nx, ny, nz));
+				normals.push_back(gef::Vector4(nx, ny, nz));
 			}
 
 			// uvs
@@ -173,14 +173,14 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 		gef::Mesh::Vertex* vertices = new gef::Mesh::Vertex[num_vertices];
 
 		// need to record min and max position values for mesh bounds
-		gef::Vector3 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+		gef::Vector4 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 		for(Int32 vertex_num = 0; vertex_num < num_vertices; ++vertex_num)
 		{
 			gef::Mesh::Vertex* vertex = &vertices[vertex_num];
-			gef::Vector3 position = positions[face_indices[vertex_num*3]-1];
+			gef::Vector4 position = positions[face_indices[vertex_num*3]-1];
 			gef::Vector2 uv = uvs[face_indices[vertex_num*3+1]-1];
-			gef::Vector3 normal = normals[face_indices[vertex_num*3+2]-1];
+			gef::Vector4 normal = normals[face_indices[vertex_num*3+2]-1];
 			//vertex->position = gef::Vector4(position.x(), position.y(), position.z(), 1.0f);
 			//vertex->normal = gef::Vector4(normal.x(), normal.y(), normal.z(), 0.0f);
 			//vertex->uv.x = uv.x;

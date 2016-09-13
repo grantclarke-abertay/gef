@@ -7,7 +7,7 @@
 
 namespace gef
 {
-	class Vector3;
+	class Vector4;
 	class Quaternion;
 
 
@@ -16,7 +16,7 @@ namespace gef
 	public:
 		void SetIdentity();
 		void SetZero();
-		void LookAt(const gef::Vector3& eye, const gef::Vector3& lookat, const gef::Vector3& up);
+		void LookAt(const gef::Vector4& eye, const gef::Vector4& lookat, const gef::Vector4& up);
 		void PerspectiveFrustumGL(const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist);
 		void PerspectiveFovGL(const float fov, const float aspect_ratio, const float near_dist, const float far_dist);
 		void OrthographicFrustumGL(const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist);
@@ -58,10 +58,10 @@ namespace gef
 		void RotationY(float radiansRot);
 		void RotationZ(float radiansRot);
 		void Rotation(const gef::Quaternion& quat);
-		void Scale(const gef::Vector3& scale);
-		Vector3 GetScale() const;
-		void SetTranslation(const gef::Vector3& trans);
-		const Vector3 GetTranslation() const;
+		void Scale(const gef::Vector4& scale);
+		Vector4 GetScale() const;
+		void SetTranslation(const gef::Vector4& trans);
+		const Vector4 GetTranslation() const;
 		void Transpose(const Matrix44& matrix);
 		void AffineInverse(const Matrix44& matrix);
 		void NormaliseRotation();

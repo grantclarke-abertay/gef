@@ -93,7 +93,7 @@ void MeshApp::DrawHUD()
 	if(font_)
 	{
 		// display frame rate
-		font_->RenderText(sprite_renderer_, gef::Vector3(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
+		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
 	}
 }
 
@@ -101,8 +101,8 @@ gef::Mesh* MeshApp::CreateCubeMesh()
 {
 	gef::Mesh* mesh = platform_.CreateMesh();
 
+	// initialise the vertex data to create a 1, 1, 1 cube
 	const float half_size = 0.5f;
-
 	const gef::Mesh::Vertex vertices[] = {
 		{ half_size, -half_size, -half_size,  0.577f, -0.577f, -0.577f, 0.0f, 0.0f},
 		{ half_size,  half_size, -half_size,  0.577f,  0.577f, -0.577f, 0.0f, 0.0f},
@@ -111,10 +111,12 @@ gef::Mesh* MeshApp::CreateCubeMesh()
 		{ half_size, -half_size,  half_size,  0.577f, -0.577f,  0.577f, 0.0f, 0.0f},
 		{ half_size,  half_size,  half_size,  0.577f,  0.577f,  0.577f, 0.0f, 0.0f},
 		{-half_size,  half_size,  half_size, -0.577f,  0.577f,  0.577f, 0.0f, 0.0f},
-		{-half_size, -half_size,  half_size, -0.577f, -0.577f,  0.577f, 0.0f, 0.0f}	};
+		{-half_size, -half_size,  half_size, -0.577f, -0.577f,  0.577f, 0.0f, 0.0f}	
+	};
 
 	mesh->InitVertexBuffer(platform_, static_cast<const void*>(vertices), sizeof(vertices)/sizeof(gef::Mesh::Vertex), sizeof(gef::Mesh::Vertex));
 
+	// we will create a single triangle list primitive to draw the triangles that make up the cube
 	mesh->AllocatePrimitives(1);
 	gef::Primitive* primitive = mesh->GetPrimitive(0);
 
@@ -134,7 +136,6 @@ gef::Mesh* MeshApp::CreateCubeMesh()
     // Top
     6, 2, 1, 
 	5, 6, 1,
-
 	// Bottom
     0, 3, 7,
     0, 7, 4 
@@ -143,8 +144,8 @@ gef::Mesh* MeshApp::CreateCubeMesh()
 	primitive->InitIndexBuffer(platform_, static_cast<const void*>(indices), sizeof(indices)/sizeof(UInt32),sizeof(UInt32));
 	primitive->set_type(gef::TRIANGLE_LIST);
 
-	// set size of bounds
-	gef::Aabb aabb(gef::Vector3(-0.5f, -0.5f, -0.5f), gef::Vector3(0.5f, 0.5f, 0.5f));
+	// set size of bounds, we need this for collision detection routines
+	gef::Aabb aabb(gef::Vector4(-half_size, -half_size, -half_size), gef::Vector4(half_size, half_size, half_size));
 	gef::Sphere sphere(aabb);
 
 	mesh->set_aabb(aabb);
@@ -157,7 +158,7 @@ void MeshApp::SetupLights()
 {
 	gef::PointLight default_point_light;
 	default_point_light.set_colour(gef::Colour(0.7f, 0.7f, 1.0f, 1.0f));
-	default_point_light.set_position(gef::Vector3(-500.0f, 400.0f, 700.0f));
+	default_point_light.set_position(gef::Vector4(-500.0f, 400.0f, 700.0f));
 
 	gef::Default3DShaderData& default_shader_data = renderer_3d_->default_shader_data();
 	default_shader_data.set_ambient_light_colour(gef::Colour(0.5f, 0.5f, 0.5f, 1.0f));
@@ -167,9 +168,9 @@ void MeshApp::SetupLights()
 void MeshApp::SetupCamera()
 {
 	// initialise the camera settings
-	camera_eye = gef::Vector3(5.0f, 5.0f, 5.0f);
-	camera_lookat = gef::Vector3(0.0f, 0.0f, 0.0f);
-	camera_up = gef::Vector3(0.0f, 1.0f, 0.0f);
+	camera_eye = gef::Vector4(5.0f, 5.0f, 5.0f);
+	camera_lookat = gef::Vector4(0.0f, 0.0f, 0.0f);
+	camera_up = gef::Vector4(0.0f, 1.0f, 0.0f);
 	camera_fov = gef::DegToRad(45.0f);
 	near_plane = 0.01f;
 	far_plane = 1000.f;

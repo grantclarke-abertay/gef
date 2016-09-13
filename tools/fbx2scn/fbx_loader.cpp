@@ -57,14 +57,14 @@ namespace gef
 	class ControlPoint
 	{
 	public:
-		std::vector<gef::Vector3> normals;
+		std::vector<gef::Vector4> normals;
 		std::vector<gef::Vector2> uvs;
 		std::vector<MeshVertexData> vertex_data;
-		gef::Vector3 position;
+		gef::Vector4 position;
 		int count;
 		int control_point_index;
 
-		bool AddNormal(const gef::Vector3& new_normal, int& index)
+		bool AddNormal(const gef::Vector4& new_normal, int& index)
 		{
 			bool value_found = false;
 			index = 0;
@@ -116,7 +116,7 @@ namespace gef
 			return new_value;
 		}
 
-		bool AddVertexData(const Vector3& normal, const Vector2 uv, int& vertex_index)
+		bool AddVertexData(const Vector4& normal, const Vector2 uv, int& vertex_index)
 		{
 			vertex_index = 0;
 
@@ -180,8 +180,8 @@ namespace gef
 	void AddMeshConnections(FbxGeometry* geometry, const std::vector<std::list<Int32>>& control_point_vertices, MeshData& mesh, Scene& scene);
 	void AddSkeleton(FbxNode& node, FbxScene& fbx_scene, Scene& scene, Skeleton* skeleton, std::vector<JointPose>& local_joint_transforms, FbxNode* parent_node = NULL);
 	UInt32 GetMeshVertexCount(FbxMesh* fbx_mesh);
-	Vector3 GetMeshVertexPosition(const FbxMesh* const fbx_mesh, const Int32 control_point_index);
-	bool GetMeshVertexNormal(Vector3& normal, FbxMesh* const fbx_mesh, const Int32 control_point_index, const Int32 vertex_index);
+	Vector4 GetMeshVertexPosition(const FbxMesh* const fbx_mesh, const Int32 control_point_index);
+	bool GetMeshVertexNormal(Vector4& normal, FbxMesh* const fbx_mesh, const Int32 control_point_index, const Int32 vertex_index);
 	bool GetMeshVertexUV(Vector2& uv, FbxMesh* const fbx_mesh, const Int32 poly_index, const Int32 poly_vert_index, const Int32 control_point_index);
 	Int32 GetMeshVertexUVIndex(FbxMesh* const fbx_mesh, const Int32 poly_index, const Int32 poly_vert_index, const Int32 control_point_index);
 	Int32 GetMeshVertexUVCount(FbxMesh* const fbx_mesh);
@@ -197,7 +197,7 @@ namespace gef
 	bool TranslationKeysExist(FbxNode& fbx_node, FbxAnimLayer& fbx_anim_layer);
 //		bool BlendShapeChannelKeysExist(FbxNode& fbx_node, FbxAnimLayer& fbx_anim_layer);
 //		void AddBlendShapeChannelKeys(FbxNode& fbx_node, FbxAnimLayer& fbx_anim_layer, class Animation& anim);
-	Vector3 GetVector3AnimCurveValue(const float time_in_secs, FbxPropertyT<FbxDouble3>& node_property, FbxAnimLayer& fbx_anim_layer);
+	Vector4 GetVector3AnimCurveValue(const float time_in_secs, FbxPropertyT<FbxDouble3>& node_property, FbxAnimLayer& fbx_anim_layer);
 //		void AddBlendShapes(FbxGeometry* geometry, class Mesh& mesh, Scene& scene);
 
 static float fbx_scaling_factor_ = 1.f;
@@ -606,7 +606,7 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 	std::vector<ControlPoint> cp_data;
 
 	// need to record min and max position values for mesh bounds
-	gef::Vector3 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	gef::Vector4 pos_min(FLT_MAX, FLT_MAX, FLT_MAX), pos_max(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
 
 	for (int cp_num = 0; cp_num < control_points_count; ++cp_num)
@@ -677,7 +677,7 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 			}
 
 			// Get Normal
-			Vector3 normal(0.0f, 0.0f, 0.0f);
+			Vector4 normal(0.0f, 0.0f, 0.0f);
 			GetMeshVertexNormal(normal, fbx_mesh, control_point_index, mesh_vertex_index);
 
 			// add the UV and Normal to this control point
@@ -863,18 +863,18 @@ UInt32 GetMeshVertexCount(FbxMesh* fbx_mesh)
 }
 
 
-Vector3 GetMeshVertexPosition(const FbxMesh* const mesh, const Int32 control_point_index)
+Vector4 GetMeshVertexPosition(const FbxMesh* const mesh, const Int32 control_point_index)
 {
     FbxVector4* control_points = mesh->GetControlPoints();
 
-	return Vector3(
+	return Vector4(
 		(float)control_points[control_point_index][0],
 		(float)control_points[control_point_index][1],
 		(float)control_points[control_point_index][2]
 		);
 }
 
-bool GetMeshVertexNormal(Vector3& normal, FbxMesh* const fbx_mesh, const Int32 control_point_index, const Int32 vertex_index)
+bool GetMeshVertexNormal(Vector4& normal, FbxMesh* const fbx_mesh, const Int32 control_point_index, const Int32 vertex_index)
 {
 	bool normal_set = false;
 	FbxVector4 fbx_normal(0.0f, 0.0f, 0.0f);
@@ -1343,12 +1343,12 @@ void AddSkeleton(FbxNode& node, FbxScene& fbx_scene, Scene& scene, Skeleton* ske
 	FbxVector4 fbx_translation = fbx_local_matrix.GetT();
 
 	JointPose joint_pose;
-	joint_pose.set_translation(Vector3((float)fbx_translation[0]*fbx_scaling_factor_, (float)fbx_translation[1]*fbx_scaling_factor_, (float)fbx_translation[2]*fbx_scaling_factor_));
-//	joint_pose.set_scale(Vector3((float)fbx_scale[0], (float)fbx_scale[1], (float)fbx_scale[2]));
+	joint_pose.set_translation(Vector4((float)fbx_translation[0]*fbx_scaling_factor_, (float)fbx_translation[1]*fbx_scaling_factor_, (float)fbx_translation[2]*fbx_scaling_factor_));
+//	joint_pose.set_scale(Vector4((float)fbx_scale[0], (float)fbx_scale[1], (float)fbx_scale[2]));
 
 
 	// assuming scale of 1.f for skeleton joint
-	joint_pose.set_scale(Vector3(1.0f, 1.0f, 1.0f));
+	joint_pose.set_scale(Vector4(1.0f, 1.0f, 1.0f));
 
 	// get rotation as a quaternion
 	FbxVector4 joint_orient = node.GetPreRotation(FbxNode::eSourcePivot);
@@ -1561,7 +1561,7 @@ void AddAnimation(FbxNode& fbx_node, FbxAnimLayer& fbx_anim_layer, class Animati
 
 			for(std::vector<QuaternionKey>::iterator key_iter = anim_node->rotation_keys().begin(); key_iter != anim_node->rotation_keys().end();++key_iter)
 			{
-				Vector3 euler_rotation = GetVector3AnimCurveValue(key_iter->time, fbx_node.LclRotation, fbx_anim_layer);
+				Vector4 euler_rotation = GetVector3AnimCurveValue(key_iter->time, fbx_node.LclRotation, fbx_anim_layer);
 
 			    FbxVector4 joint_rotation = fbx_node.GetPreRotation(FbxNode::eSourcePivot);
 
@@ -1724,9 +1724,9 @@ void AddBlendShapeChannelKeys(FbxNode& fbx_node, FbxAnimLayer& fbx_anim_layer, c
 */
 
 
-Vector3 GetVector3AnimCurveValue(const float time_in_secs, FbxPropertyT<FbxDouble3>& node_property, FbxAnimLayer& fbx_anim_layer)
+Vector4 GetVector3AnimCurveValue(const float time_in_secs, FbxPropertyT<FbxDouble3>& node_property, FbxAnimLayer& fbx_anim_layer)
 {
-	Vector3 result;
+	Vector4 result;
 	FbxTime time;
 //	time.SetMilliSeconds(FbxLongLong(time_in_secs*1000.0f));
 	time.SetFramePrecise(time_in_secs*60.0f, FbxTime::eFrames60);
@@ -1822,7 +1822,7 @@ void AddBlendShapes(FbxGeometry* geometry, class Mesh& mesh, Scene& scene)
 					FbxVector4 lControlPoint = lControlPoints[j];
 					FbxVector4 lOriginalControlPoint = lOriginalControlPoints[j];
 					//BlendShapeDeformer::TargetVertex vertex;
-					Vector3 position_delta;
+					Vector4 position_delta;
 					position_delta.x = static_cast<float>(lControlPoint[0]) - static_cast<float>(lOriginalControlPoint[0]));
 					position_delta.y = static_cast<float>(lControlPoint[1]) - static_cast<float>(lOriginalControlPoint[1]));
 					position_delta.z = static_cast<float>(lControlPoint[2]) - static_cast<float>(lOriginalControlPoint[2]));
@@ -1840,7 +1840,7 @@ void AddBlendShapes(FbxGeometry* geometry, class Mesh& mesh, Scene& scene)
 //						char buffer[256];
 //						sprintf(buffer, "%d: nx: %f ny: %f nz: %f\n%d: ox: %f oy: %f oz: %f\n", j, lNormal[0], lNormal[1], lNormal[2], j, lOriginalNormal[0], lOriginalNormal[1], lOriginalNormal[2]);
 //						OutputDebugStringA(buffer);
-						Vector3 normal_delta;
+						Vector4 normal_delta;
 						normal_delta.x = static_cast<float>(lNormal[0]) - static_cast<float>(lOriginalNormal[0]));
 						normal_delta.y = static_cast<float>(lNormal[1]) - static_cast<float>(lOriginalNormal[1]));
 						normal_delta.z = static_cast<float>(lNormal[2]) - static_cast<float>(lOriginalNormal[2]));

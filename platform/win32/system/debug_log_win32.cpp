@@ -6,7 +6,7 @@
 #include <windows.h>
 
 #include <maths/matrix44.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 
 namespace gef
 {
@@ -34,7 +34,7 @@ namespace gef
 		}
 	}
 
-	void DebugOut(const char* label, const Vector3& vector)
+	void DebugOut(const char* label, const Vector4& vector)
 	{
 		DebugOut("%s: %f %f %f \n", label, vector.x(), vector.y(), vector.z());
 	}

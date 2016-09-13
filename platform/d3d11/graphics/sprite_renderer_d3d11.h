@@ -35,7 +35,7 @@ namespace gef
 	};
 }
 #if 0
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 #include <maths/matrix44.h>
 #include <d3d11.h>
 
@@ -48,7 +48,7 @@ namespace gef
 
 	struct SpriteVertex
 	{
-		Vector3 position;
+		Vector4 position;
 	};
 
 	class SpriteRendererD3D11 : public SpriteRenderer

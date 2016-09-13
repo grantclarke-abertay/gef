@@ -2,7 +2,7 @@
 #define _GEF_MATHS_PLANE_H
 
 #include <maths/vector4.h>
-#include <maths/vector3.h>
+#include <maths/vector4.h>
 
 namespace gef
 {
@@ -30,9 +30,9 @@ namespace gef
 		inline float c() const { return z(); }
 		inline float d() const { return w(); }
 
-		inline float DistanceFromPoint(const Vector3& point) const { return a()*point.x() + b()*point.y() + c()*point.z() + d(); }
+		inline float DistanceFromPoint(const Vector4& point) const { return a()*point.x() + b()*point.y() + c()*point.z() + d(); }
 
-		inline PlanePoint ClassifyPoint(const Vector3& point) const
+		inline PlanePoint ClassifyPoint(const Vector4& point) const
 		{
 			float distance = DistanceFromPoint(point);
 			if (distance < 0.0f)
