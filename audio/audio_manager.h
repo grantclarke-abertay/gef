@@ -22,6 +22,10 @@ namespace gef
 		virtual Int32 StopMusic() = 0;
 		virtual Int32 PlaySample(const Int32 sample_index, const bool looping = false) = 0;
 		virtual Int32 StopPlayingSampleVoice(const Int32 voice_index) = 0;
+
+		static AudioManager* Create();
+	protected:
+		AudioManager();
 	};
 }
 

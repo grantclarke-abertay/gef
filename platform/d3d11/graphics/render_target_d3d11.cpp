@@ -5,6 +5,11 @@
 
 namespace gef
 {
+	RenderTarget* RenderTarget::Create(const Platform& platform, const Int32 width, const Int32 height)
+	{
+		return new RenderTargetD3D11(platform, width, height);
+	}
+
 	RenderTargetD3D11::RenderTargetD3D11(const Platform& platform, const Int32 width, const Int32 height) :
 		RenderTarget(platform, width, height),
 		render_target_view_(NULL)

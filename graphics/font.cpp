@@ -43,7 +43,7 @@ bool Font::Load(const char* font_name)
 	font_config_filename += ".fnt";
 	void* font_file_data = NULL;
 	Int32 file_size = 0;
-	gef::File* file = platform_.CreateFile();
+	gef::File* file = gef::File::Create();
 	
 	bool success = true;
 	success = file->Open(font_config_filename.c_str());
@@ -87,7 +87,7 @@ bool Font::Load(const char* font_name)
 		PNGLoader png_loader;
 		gef::ImageData image_data;
 		png_loader.Load(font_texture_filename.c_str(), platform_, image_data);
-		font_texture_ = platform_.CreateTexture(image_data);
+		font_texture_ = gef::Texture::Create(platform_, image_data);
 		platform_.AddTexture(font_texture_);
 	}
 

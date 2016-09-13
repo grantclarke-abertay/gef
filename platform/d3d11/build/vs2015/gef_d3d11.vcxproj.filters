@@ -10,6 +10,9 @@
     <Filter Include="graphics">
       <UniqueIdentifier>{9b6936e4-a34e-45b8-9857-f372e4b3d465}</UniqueIdentifier>
     </Filter>
+    <Filter Include="audio">
+      <UniqueIdentifier>{20f99c38-03eb-4002-b37e-327d7befe9c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\graphics\depth_buffer_d3d11.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="..\..\input\input_manager_d3d11.cpp">
       <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\audio\audio_manager_d3d11.cpp">
+      <Filter>audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

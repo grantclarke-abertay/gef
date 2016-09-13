@@ -6,6 +6,11 @@
 
 namespace gef
 {
+	InputManager* InputManager::Create(Platform& platform)
+	{
+		return new InputManagerD3D11(platform);
+	}
+
 	InputManagerD3D11::InputManagerD3D11(Platform& platform)
 		: InputManager(platform)
 		, platform_(platform)

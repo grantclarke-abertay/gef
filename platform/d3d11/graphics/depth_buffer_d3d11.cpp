@@ -1,7 +1,13 @@
 #include <platform/d3d11/graphics/depth_buffer_d3d11.h>
+#include <platform/d3d11/system/platform_d3d11.h>
 
 namespace gef
 {
+	DepthBuffer* DepthBuffer::Create(const Platform& platform, UInt32 width, UInt32 height)
+	{
+		return new DepthBufferD3D11(reinterpret_cast<const PlatformD3D11&>(platform).device(), width, height);
+	}
+
 	DepthBufferD3D11::DepthBufferD3D11(ID3D11Device* device, UInt32 width, UInt32 height) :
 		DepthBuffer(width, height),
 		device_(device),

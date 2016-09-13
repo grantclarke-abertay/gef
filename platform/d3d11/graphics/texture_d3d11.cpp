@@ -5,6 +5,10 @@
 
 namespace gef
 {
+	Texture* Texture::Create(const Platform& platform, const ImageData& image_data)
+	{
+		return new TextureD3D11(platform, image_data);
+	}
 
 	TextureD3D11::TextureD3D11(ID3D11DeviceContext* device_context) :
 	texture_(NULL),
@@ -15,7 +19,7 @@ namespace gef
 }
 
 
-TextureD3D11::TextureD3D11(const class Platform& platform, const ImageData& image_data) :
+TextureD3D11::TextureD3D11(const Platform& platform, const ImageData& image_data) :
 	texture_(NULL),
 	shader_resource_view_(NULL),
 	image_data_buffer_(NULL),

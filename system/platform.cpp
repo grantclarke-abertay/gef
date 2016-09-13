@@ -1,5 +1,6 @@
 #include <system/platform.h>
 #include <input/touch_input_manager.h>
+#include <graphics/render_target.h>
 
 namespace gef
 {
@@ -24,7 +25,7 @@ namespace gef
 
 	RenderTarget* Platform::CreateRenderTarget() const
 	{
-		return CreateRenderTarget(width(), height());
+		return gef::RenderTarget::Create(*this, width(), height());
 	}
 
 	bool Platform::ReadyToRender() const

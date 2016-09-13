@@ -41,7 +41,7 @@ namespace gef
 
 	Mesh* Scene::CreateMesh(Platform& platform, const MeshData& mesh_data, const bool read_only)
 	{
-		Mesh* mesh = platform.CreateMesh();
+		Mesh* mesh = new Mesh(platform);
 		mesh->set_aabb(mesh_data.aabb);
 		mesh->set_bounding_sphere(gef::Sphere(mesh->aabb()));
 
@@ -98,7 +98,7 @@ namespace gef
 					png_loader.Load(materialIter->diffuse_texture.c_str(), platform, image_data);
 					if(image_data.image() != NULL)
 					{
-						Texture* texture = platform.CreateTexture(image_data);
+						Texture* texture = Texture::Create(platform, image_data);
 						textures.push_back(texture);
 						textures_map[texture_name_id] = texture;
 						material->set_texture(texture);
@@ -132,7 +132,7 @@ namespace gef
 	{
 		bool success = true;
 		void* file_data = NULL;
-		File* file = platform.CreateFile();
+		File* file = gef::File::Create();
 		Int32 file_size;
 
 		success = file->Open(filename);

@@ -25,8 +25,8 @@ SceneApp::SceneApp(gef::Platform& platform) :
 
 void SceneApp::Init()
 {
-	sprite_renderer_ = platform_.CreateSpriteRenderer();
-	renderer_3d_ = platform_.CreateRenderer3D();
+	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
+	renderer_3d_ = gef::Renderer3D::Create(platform_);
 
 	InitFont();
 

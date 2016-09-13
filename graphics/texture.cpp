@@ -47,7 +47,7 @@ namespace gef
 		image_data.set_image(reinterpret_cast<UInt8*>(checker_texture));
 		image_data.set_width(size);
 		image_data.set_height(size);
-		Texture* texture = platform.CreateTexture(image_data);
+		Texture* texture = gef::Texture::Create(platform, image_data);
 
 		// checker_texture will get freed up when
 		// image_data goes out of scope

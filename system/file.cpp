@@ -4,6 +4,10 @@
 
 namespace gef
 {
+	File::File()
+	{
+
+	}
 
 	File::~File()
 	{

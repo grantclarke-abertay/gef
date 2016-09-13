@@ -46,7 +46,7 @@ namespace gef
 
     void PNGLoader::Load(const char* filename, const Platform& platform, ImageData& image_data)
     {
-        File* png_file   = platform.CreateFile();
+        File* png_file   = gef::File::Create();
 
         bool success = png_file->Open(filename);
         if(success)

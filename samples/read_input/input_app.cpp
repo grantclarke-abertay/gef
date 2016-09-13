@@ -120,8 +120,8 @@ InputApp::InputApp(gef::Platform& platform) :
 
 void InputApp::Init()
 {
-	sprite_renderer_ = platform_.CreateSpriteRenderer();
-	input_manager_ = platform_.CreateInputManager();
+	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
+	input_manager_ = gef::InputManager::Create(platform_);
 
 	// make sure if there is a panel to detect touch input, then activate it
 	if (input_manager_ && input_manager_->touch_manager() && (input_manager_->touch_manager()->max_num_panels() > 0))

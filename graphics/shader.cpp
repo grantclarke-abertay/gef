@@ -13,7 +13,7 @@ namespace gef
 	Shader::Shader(const Platform& platform)
 		:device_interface_(NULL)
 	{
-		device_interface_ = platform.CreateShaderInterface();
+		device_interface_ = gef::ShaderInterface::Create(platform);
 	}
 
 	Shader::Shader() :
@@ -47,7 +47,7 @@ namespace gef
 
 	bool Shader::LoadShader(const char* filename, const char* base_filepath, char** shader_source, Int32& shader_source_length, const Platform& platform)
 	{
-		File* vs_file = platform.CreateFile();
+		File* vs_file = gef::File::Create();
 		void* buffer = NULL;
 		Int32 buffer_size = 0;
 

@@ -10,14 +10,18 @@ namespace gef
 	class DepthBuffer
 	{
 	public:
-		DepthBuffer(UInt32 width, UInt32 height);
 		virtual ~DepthBuffer();
-	protected:
-		UInt32 width_;
-		UInt32 height_;
 
 		inline UInt32 width() const { return width_; }
 		inline UInt32 height() const { return height_; }
+
+		static DepthBuffer* Create(const Platform& platform, UInt32 width, UInt32 height);
+	protected:
+		DepthBuffer(UInt32 width, UInt32 height);
+
+		UInt32 width_;
+		UInt32 height_;
+
 	};
 }
 

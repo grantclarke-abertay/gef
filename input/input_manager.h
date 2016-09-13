@@ -11,7 +11,6 @@ namespace gef
 	class InputManager
 	{
 	public:
-		InputManager(Platform& platform);
 		virtual ~InputManager();
 		virtual void Update();
 
@@ -19,7 +18,11 @@ namespace gef
 		inline Keyboard* keyboard() const { return keyboard_; }
 		inline SonyControllerInputManager* controller_input() const { return controller_manager_; }
 
+		static InputManager* Create(Platform& platform);
+
 	protected:
+		InputManager(Platform& platform);
+
 		TouchInputManager* touch_manager_;
 		Keyboard* keyboard_;
 		SonyControllerInputManager* controller_manager_;

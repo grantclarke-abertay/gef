@@ -26,6 +26,10 @@ namespace gef
 		virtual bool Close() = 0;
 		virtual bool GetSize(Int32 &size) = 0;
 		bool Load(const char* const filename, void** buffer, Int32& buffer_size);
+
+		static File* Create();
+	protected:
+		File();
 	};
 }
 

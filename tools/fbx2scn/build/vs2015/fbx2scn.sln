@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "..\..\..\..\externa
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gef_win32", "..\..\..\..\platform\win32\build\vs2015\gef_win32.vcxproj", "{E00EF4BF-28FD-49CD-A3F2-B1FBC4EC9B65}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gef_null_platform", "..\..\..\..\platform\null\build\vs2015\gef_null_platform.vcxproj", "{CABBECFC-FD55-4087-9C6E-721C98C25697}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -61,6 +63,14 @@ Global
 		{E00EF4BF-28FD-49CD-A3F2-B1FBC4EC9B65}.Release|Win32.Build.0 = Release|Win32
 		{E00EF4BF-28FD-49CD-A3F2-B1FBC4EC9B65}.Release|x64.ActiveCfg = Release|x64
 		{E00EF4BF-28FD-49CD-A3F2-B1FBC4EC9B65}.Release|x64.Build.0 = Release|x64
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Debug|Win32.Build.0 = Debug|Win32
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Debug|x64.ActiveCfg = Debug|x64
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Debug|x64.Build.0 = Debug|x64
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Release|Win32.ActiveCfg = Release|Win32
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Release|Win32.Build.0 = Release|Win32
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Release|x64.ActiveCfg = Release|x64
+		{CABBECFC-FD55-4087-9C6E-721C98C25697}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

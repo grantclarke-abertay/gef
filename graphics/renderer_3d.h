@@ -33,7 +33,6 @@ namespace gef
 			kAlways
 		};
 
-		Renderer3D(Platform& platform);
 		virtual ~Renderer3D();
 	//	virtual void ClearZBuffer() = 0;
 		virtual void Begin(bool clear = true) = 0;
@@ -60,7 +59,10 @@ namespace gef
 		inline Default3DShaderData& default_shader_data() { return default_shader_data_; }
 		inline void set_override_material(const Material* material) { override_material_ = material; }
 		inline const Material* override_material() const { return override_material_; }
+
+		static Renderer3D* Create(Platform& platform);
 	protected:
+		Renderer3D(Platform& platform);
 		void CalculateInverseWorldTransposeMatrix();
 		inline void set_shader( Shader* shader) { shader_ = shader; }
 

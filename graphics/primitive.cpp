@@ -18,7 +18,7 @@ namespace gef
 	bool Primitive::InitIndexBuffer(Platform& platform, const void* indices, const UInt32 num_indices, const UInt32 index_byte_size,const bool read_only)
 	{
 		assert(index_buffer_ == NULL);
-		index_buffer_ = platform_.CreateIndexBuffer();
+		index_buffer_ = gef::IndexBuffer::Create(platform);
 		platform_.AddIndexBuffer(index_buffer_);
 		return index_buffer_->Init(platform, indices, num_indices, index_byte_size, read_only);
 	}

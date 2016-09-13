@@ -23,6 +23,7 @@ namespace gef
 		PlatformD3D11(HINSTANCE hinstance, UInt32 width, UInt32 height, bool fullscreen, bool vsync_enabled, HWND hwnd = NULL);
 		~PlatformD3D11();
 		void Resize(UInt32 width, UInt32 height);
+#if 0
 		class Renderer3D* CreateRenderer3D();
 		class SpriteRenderer* CreateSpriteRenderer();
 		Mesh* CreateMesh();
@@ -30,6 +31,13 @@ namespace gef
 		InputManager* CreateInputManager();
 		VertexBuffer* CreateVertexBuffer() const;
 		IndexBuffer* CreateIndexBuffer() const;
+		File* CreateFile() const;
+		AudioManager* CreateAudioManager() const;
+
+		ShaderInterface* PlatformD3D11::CreateShaderInterface() const;
+		RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const;
+		DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
+#endif
 //		class Texture* CreateCheckerTexture(UInt32 size, UInt32 num_checkers) ;
 		Matrix44 PerspectiveProjectionFov(const float fov, const float aspect_ratio, const float near_distance, const float far_distance) const;
 		Matrix44 PerspectiveProjectionFrustum(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance) const;
@@ -50,17 +58,8 @@ namespace gef
 		float GetFrameTime();
 		std::string FormatFilename(const std::string& filename) const;
 		std::string FormatFilename(const char* filename) const;
-		File* CreateFile() const;
-		AudioManager* CreateAudioManager() const;
-		//void InitTouchInputManager();
-		//void ReleaseTouchInputManager();
-
-		ShaderInterface* PlatformD3D11::CreateShaderInterface() const;
 		const char* GetShaderDirectory() const;
 		const char* GetShaderFileExtension() const;
-
-		DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
-
 
 		inline ID3D11Device* device() const { return device_; } 
 		inline ID3D11DeviceContext* device_context() const { return device_context_; }
@@ -69,7 +68,6 @@ namespace gef
 		inline void set_top_level_hwnd(HWND parent_hwnd) {top_level_hwnd_ = parent_hwnd;}
 		inline HWND top_level_hwnd() const { return top_level_hwnd_; }
 	private:
-		RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const;
 		ID3D11RenderTargetView* GetRenderTargetView() const;
 		ID3D11DepthStencilView* GetDepthStencilView() const;
 

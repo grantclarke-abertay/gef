@@ -129,6 +129,9 @@
     <ProjectReference Include="..\..\..\..\external\zlib\build\vs2015\zlib.vcxproj">
       <Project>{e905a078-8226-4257-ad6d-89b3049a3558}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\platform\null\build\vs2015\gef_null_platform.vcxproj">
+      <Project>{cabbecfc-fd55-4087-9c6e-721c98c25697}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\platform\win32\build\vs2015\gef_win32.vcxproj">
       <Project>{e00ef4bf-28fd-49cd-a3f2-b1fbc4ec9b65}</Project>
     </ProjectReference>

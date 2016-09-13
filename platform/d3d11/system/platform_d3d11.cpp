@@ -325,58 +325,6 @@ namespace gef
 		}
 	}
 
-
-	/*
-	void PlatformD3D11::Run(class Application& application)
-	{
-		//
-		// Windows Message Loop
-		//
-
-		// Initialize the message structure.
-		MSG msg;
-		ZeroMemory(&msg, sizeof(MSG));
-
-		// Loop until there is a quit message from the window or the user.
-		bool done = false;
-		while(!done)
-		{
-			// Handle the windows messages.
-			if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-
-			// If windows signals to end the application then exit out.
-			if(msg.message == WM_QUIT)
-				done = true;
-			else
-			{
-				// calculate the time between updates
-				UInt64 clock, clock_frequency;
-				if(clock_last_frame_ == 0)
-					QueryPerformanceCounter((LARGE_INTEGER*)&clock_last_frame_);
-
-				QueryPerformanceCounter((LARGE_INTEGER*)&clock);
-				QueryPerformanceFrequency((LARGE_INTEGER*)&clock_frequency);
-				UInt32 cycles = (UInt32)(clock - clock_last_frame_);
-				float ticks = (float)cycles / (float)clock_frequency;
-
-				clock_last_frame_ = clock;
-
-				// Otherwise do the frame processing.
-				bool application_running = application.Update(ticks);
-				PreRender();
-				application.Render();
-				PostRender();
-				if(!application_running)
-					done = true;
-			}
-		}
-	}
-	*/
-
 	void PlatformD3D11::Resize(UInt32 width, UInt32 height)
 	{
 		HRESULT hr = S_OK;
@@ -423,50 +371,6 @@ namespace gef
 		}
 	}
 
-	/*
-	class Renderer3D* PlatformD3D11::CreateRenderer3D()
-	{
-		return new Renderer3DD3D(this);
-	}
-	*/
-	class SpriteRenderer* PlatformD3D11::CreateSpriteRenderer()
-	{
-		return new SpriteRendererD3D11(*this);
-//		return NULL;
-	}
-
-	class Mesh* PlatformD3D11::CreateMesh()
-	{
-		return new Mesh(*this);
-	}
-
-	class Texture* PlatformD3D11::CreateTexture(const ImageData& image_data) const
-	{
-		return new TextureD3D11(*this, image_data);
-	}
-
-	/*
-	class Texture* PlatformD3D11::CreateCheckerTexture(UInt32 size, UInt32 num_checkers)
-	{
-		return NULL;
-	}
-	*/
-	/*
-	void PlatformD3D11::PerspectiveFovRH(Matrix44& projection_matrix, const float fov, const float aspect_ratio, const float near_distance, const float far_distance)
-	{
-		projection_matrix.PerspectiveFovRHD3D(fov, aspect_ratio, near_distance, far_distance);
-	}
-
-	void PlatformD3D11::PerspectiveFrustumRH(Matrix44& projection_matrix, const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance)
-	{
-		projection_matrix.PerspectiveFrustumRHD3D(left, right, top, bottom, near_distance, far_distance);
-	}
-
-	void PlatformD3D11::OrthographicFrustumLH(Matrix44& projection_matrix, const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance)
-	{
-		projection_matrix.OrthographicFrustumLHD3D(left, right, top, bottom, near_distance, far_distance);
-	}
-	*/
 
 	void PlatformD3D11::PreRender()
 	{
@@ -554,42 +458,6 @@ namespace gef
 		return std::string(filename);
 	}
 
-	File* PlatformD3D11::CreateFile() const
-	{
-		return new gef::FileWin32();
-	}
-
-	AudioManager* PlatformD3D11::CreateAudioManager() const
-	{
-		return NULL;
-	}
-
-	//void PlatformD3D11::InitTouchInputManager()
-	//{
-	//	assert(touch_input_manager_ == false);
-	//	touch_input_manager_ = new TouchInputManagerD3D11(this);
-	//}
-
-	//void PlatformD3D11::ReleaseTouchInputManager()
-	//{
-	//	DeleteNull(touch_input_manager_);
-	//}
-
-
-	InputManager* PlatformD3D11::CreateInputManager()
-	{
-		return new InputManagerD3D11(*this);
-	}
-
-	Renderer3D* PlatformD3D11::CreateRenderer3D()
-	{
-		return new Renderer3DD3D11(*this);
-	}
-
-	RenderTarget* PlatformD3D11::CreateRenderTarget(const Int32 width, const Int32 height) const
-	{
-		return new RenderTargetD3D11(*this, width, height);
-	}
 
 	Matrix44 PlatformD3D11::PerspectiveProjectionFov(const float fov, const float aspect_ratio, const float near_distance, const float far_distance) const
 	{
@@ -618,9 +486,6 @@ namespace gef
 		ID3D11DepthStencilView* depth_stencil_view = GetDepthStencilView();
 		device_context_->OMSetRenderTargets(1, &render_target_view, depth_stencil_view);
 		SetupViewport();
-
-
-
 	}
 
 	void PlatformD3D11::EndScene() const
@@ -653,20 +518,7 @@ namespace gef
 		}
 	}
 
-	VertexBuffer* PlatformD3D11::CreateVertexBuffer() const
-	{
-		return new VertexBufferD3D11();
-	}
 
-	IndexBuffer* PlatformD3D11::CreateIndexBuffer() const
-	{
-		return new IndexBufferD3D11();
-	}
-
-	ShaderInterface* PlatformD3D11::CreateShaderInterface() const
-	{
-		return new ShaderInterfaceD3D11(device_, device_context_);
-	}
 	const char* PlatformD3D11::GetShaderDirectory() const
 	{
 		return "d3d11";
@@ -676,9 +528,66 @@ namespace gef
 	{
 		return "hlsl";
 	}
-
-	DepthBuffer* PlatformD3D11::CreateDepthBuffer(UInt32 width, UInt32 height) const
-	{
-		return new DepthBufferD3D11(device_, width, height);
-	}
 }
+
+#if 0
+class SpriteRenderer* PlatformD3D11::CreateSpriteRenderer()
+{
+	return new SpriteRendererD3D11(*this);
+}
+
+class Mesh* PlatformD3D11::CreateMesh()
+{
+	return new Mesh(*this);
+}
+
+class Texture* PlatformD3D11::CreateTexture(const ImageData& image_data) const
+{
+	return new TextureD3D11(*this, image_data);
+}
+
+File* PlatformD3D11::CreateFile() const
+{
+	return new gef::FileWin32();
+}
+
+AudioManager* PlatformD3D11::CreateAudioManager() const
+{
+	return NULL;
+}
+
+InputManager* PlatformD3D11::CreateInputManager()
+{
+	return new InputManagerD3D11(*this);
+}
+
+Renderer3D* PlatformD3D11::CreateRenderer3D()
+{
+	return new Renderer3DD3D11(*this);
+}
+
+RenderTarget* PlatformD3D11::CreateRenderTarget(const Int32 width, const Int32 height) const
+{
+	return new RenderTargetD3D11(*this, width, height);
+}
+
+VertexBuffer* PlatformD3D11::CreateVertexBuffer() const
+{
+	return new VertexBufferD3D11();
+}
+
+IndexBuffer* PlatformD3D11::CreateIndexBuffer() const
+{
+	return new IndexBufferD3D11();
+}
+
+ShaderInterface* PlatformD3D11::CreateShaderInterface() const
+{
+	return new ShaderInterfaceD3D11(device_, device_context_);
+}
+
+DepthBuffer* PlatformD3D11::CreateDepthBuffer(UInt32 width, UInt32 height) const
+{
+	return new DepthBufferD3D11(device_, width, height);
+}
+#endif

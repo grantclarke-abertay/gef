@@ -1,10 +1,16 @@
 #include <platform/d3d11/graphics/shader_interface_d3d11.h>
 #include <d3dcompiler.h>
 #include <graphics/texture.h>
-#include <system/platform.h>
+#include <platform/d3d11/system/platform_d3d11.h>
 
 namespace gef
 {
+	ShaderInterface* ShaderInterface::Create(const Platform& platform)
+	{
+		const PlatformD3D11& platform_d3d11 = reinterpret_cast<const PlatformD3D11&>(platform);
+		return new ShaderInterfaceD3D11(platform_d3d11.device(), platform_d3d11.device_context());
+	}
+
 	ShaderInterfaceD3D11::ShaderInterfaceD3D11(ID3D11Device* device, ID3D11DeviceContext* device_context)
 		: device_(device)
 		, device_context_(device_context)

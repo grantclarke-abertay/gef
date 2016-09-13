@@ -9,6 +9,11 @@
 
 namespace gef
 {
+	SpriteRenderer* SpriteRenderer::Create(Platform& platform)
+	{
+		return new SpriteRendererD3D11(platform);
+	}
+
 	SpriteRendererD3D11::SpriteRendererD3D11(Platform& platform)
 		:SpriteRenderer(platform)
 		,vertex_buffer_(NULL)
@@ -18,7 +23,7 @@ namespace gef
 		,default_depth_stencil_state_(NULL)
 
 	{
-		vertex_buffer_ = platform_.CreateVertexBuffer();
+		vertex_buffer_ = gef::VertexBuffer::Create(platform);
 
 		float vertices[] = {-0.5f,-0.5f,0.0f, 0.5f,-0.5f,0.0f, 0.5f,0.5f,0.0f,    // triangle 1
 			-0.5f,-0.5f,0.0f, 0.5f,0.5f,0.0f, -0.5f,0.5f,0.0f};   // triangle 2

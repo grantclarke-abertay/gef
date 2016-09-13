@@ -11,7 +11,6 @@ namespace gef
 	class IndexBuffer
 	{
 	public:
-		IndexBuffer();
 		virtual ~IndexBuffer();
 
 		virtual bool Init(const Platform& platform, const void* indices, const UInt32 num_indices, const UInt32 index_byte_size,const bool read_only = true) = 0;
@@ -23,7 +22,10 @@ namespace gef
 		inline UInt32 index_byte_size() const { return index_byte_size_; }
 		inline void* index_data() { return index_data_; }
 
+		static IndexBuffer* Create(Platform& platform);
+
 	protected:
+		IndexBuffer();
 		Int32 num_indices_;
 		Int32 index_byte_size_;
 		void* index_data_;

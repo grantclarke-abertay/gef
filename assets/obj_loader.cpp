@@ -7,6 +7,7 @@
 #include <system/platform.h>
 #include <graphics/model.h>
 #include <assets/png_loader.h>
+#include <graphics/texture.h>
 #include <graphics/image_data.h>
 #include <system/file.h>
 #include <system/memory_stream_buffer.h>
@@ -23,11 +24,8 @@ namespace gef
 bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 {
 	bool success = true;
-//	num_textures_ = 1;
-//	textures_ = new Texture*[num_textures_];
-//	textures_[0] = NULL;
-	std::vector<Texture*> textures;
 
+	std::vector<Texture*> textures;
 	std::vector<gef::Vector4> positions;
 	std::vector<gef::Vector4> normals;
 	std::vector<gef::Vector2> uvs;
@@ -40,9 +38,8 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 	std::string obj_filename(filename);
 	void* obj_file_data = NULL;
 	Int32 file_size = 0;
-	gef::File* file = platform.CreateFile();
+	gef::File* file = gef::File::Create();
 
-	//bool success = true;
 	success = file->Open(obj_filename.c_str());
 	if(success)
 	{
@@ -82,8 +79,7 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 			{
 				char material_filename[256];
 				stream >> material_filename;
-//				fscanf(file, "%s\n", material_filename );
-//				LoadMaterials(material_filename, materials);
+
 				LoadMaterials(platform, material_filename, materials, textures);
 			}
 
@@ -181,10 +177,6 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 			gef::Vector4 position = positions[face_indices[vertex_num*3]-1];
 			gef::Vector2 uv = uvs[face_indices[vertex_num*3+1]-1];
 			gef::Vector4 normal = normals[face_indices[vertex_num*3+2]-1];
-			//vertex->position = gef::Vector4(position.x(), position.y(), position.z(), 1.0f);
-			//vertex->normal = gef::Vector4(normal.x(), normal.y(), normal.z(), 0.0f);
-			//vertex->uv.x = uv.x;
-			//vertex->uv.y = -uv.y;
 
 			vertex->px = position.x();
 			vertex->py = position.y();
@@ -211,7 +203,7 @@ bool OBJLoader::Load(const char* filename, Platform& platform, Model& model)
 		}
 
 
-		Mesh* mesh = platform.CreateMesh();
+		Mesh* mesh = new Mesh(platform);
 		model.set_mesh(mesh);
 		model.set_textures(textures);
 
@@ -287,7 +279,7 @@ bool OBJLoader::LoadMaterials(Platform& platform, const char* filename, std::map
 	std::string mtl_filename(filename);
 	void* mtl_file_data = NULL;
 	Int32 file_size = 0;
-	gef::File* file = platform.CreateFile();
+	gef::File* file = gef::File::Create();
 	success = file->Open(mtl_filename.c_str());
 	if(success)
 	{
@@ -349,7 +341,7 @@ bool OBJLoader::LoadMaterials(Platform& platform, const char* filename, std::map
 			{
 				gef::ImageData image_data;
 				png_loader.Load(iter->second.c_str(), platform, image_data);
-				Texture* texture = platform.CreateTexture(image_data);
+				Texture* texture = gef::Texture::Create(platform, image_data);
 				textures.push_back(texture);
 				materials[iter->first] = (Int32)textures.size()-1;
 			}

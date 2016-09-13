@@ -14,7 +14,6 @@ namespace gef
 	class SpriteRenderer
 	{
 	public:
-		SpriteRenderer(Platform& platform);
 		virtual ~SpriteRenderer();
 		void SetShader( Shader* shader);
 
@@ -25,8 +24,9 @@ namespace gef
 		inline const Matrix44& projection_matrix() const { return projection_matrix_; }
 		inline void set_projection_matrix(const  Matrix44& matrix) {projection_matrix_ = matrix;}
 
-
+		static SpriteRenderer* Create(Platform& platform);
 	protected:
+		SpriteRenderer(Platform& platform);
 		void BuildSpriteShaderData(const Sprite& sprite, Matrix44& sprite_data);
 
 		inline void set_shader( Shader* shader) { shader_ = shader; }

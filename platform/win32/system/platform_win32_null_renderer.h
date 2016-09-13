@@ -19,12 +19,10 @@ namespace gef
 
 		std::string FormatFilename(const std::string& filename) const;
 		std::string FormatFilename(const char* filename) const;
+#if 0
 		class SpriteRenderer* CreateSpriteRenderer();
 		File* CreateFile() const;
 		AudioManager* CreateAudioManager() const;
-//		TouchInputManager* CreateTouchInputManager() const;
-		void InitTouchInputManager();
-		void ReleaseTouchInputManager();
 		class Texture* CreateTexture(const ImageData& image_data) const;
 		Mesh* CreateMesh();
 		InputManager* CreateInputManager();
@@ -32,6 +30,9 @@ namespace gef
 		class VertexBuffer* CreateVertexBuffer() const;
 		class IndexBuffer* CreateIndexBuffer() const;
 		class ShaderInterface* CreateShaderInterface() const;
+		virtual DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
+		RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const;
+#endif
 
 		Matrix44 PerspectiveProjectionFov(const float fov, const float aspect_ratio, const float near_distance, const float far_distance) const;
 		Matrix44 PerspectiveProjectionFrustum(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance) const;
@@ -45,12 +46,10 @@ namespace gef
 		const char* GetShaderDirectory() const;
 		const char* GetShaderFileExtension() const;
 
-		virtual DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
 
 
 
 	private:
-		RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const;
 
 
 	};

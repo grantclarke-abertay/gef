@@ -23,15 +23,11 @@
 
 namespace gef
 {
-	/*
-	const GLenum Renderer3DD3D11::primitive_types[NUM_PRIMITIVE_TYPES] =
+	Renderer3D* Renderer3D::Create(Platform& platform)
 	{
-		GL_TRIANGLES,
-		GL_TRIANGLE_STRIP,
-		GL_LINES,
+		return new Renderer3DD3D11(platform);
+	}
 
-	};
-*/
 	const D3D11_PRIMITIVE_TOPOLOGY Renderer3DD3D11::primitive_types[NUM_PRIMITIVE_TYPES] =
 	{
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,

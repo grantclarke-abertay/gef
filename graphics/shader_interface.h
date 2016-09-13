@@ -53,7 +53,6 @@ namespace gef
 			const Texture* texture;
 		};
 
-		ShaderInterface();
 		virtual ~ShaderInterface();
 
 		void SetVertexShaderSource(const char* vs_shader_source, Int32 vs_shader_source_size);
@@ -83,7 +82,11 @@ namespace gef
 		virtual void BindTextureResources(const Platform& platform) const = 0;
 		virtual void UnbindTextureResources(const Platform& platform) const = 0;
 
+		static ShaderInterface* Create(const Platform& platform);
+
 	protected:
+		ShaderInterface();
+
 		static Int32 GetTypeSize(VariableType type);
 
 		Int32 AddVariable(std::vector<ShaderVariable>& variables, const char* variable_name, VariableType variable_type, Int32 variable_count);

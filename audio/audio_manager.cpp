@@ -2,6 +2,11 @@
 
 namespace gef
 {
+	AudioManager::AudioManager()
+	{
+
+	}
+
 	AudioManager::~AudioManager()
 	{
 	}

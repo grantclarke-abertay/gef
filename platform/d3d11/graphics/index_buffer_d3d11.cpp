@@ -3,6 +3,11 @@
 
 namespace gef
 {
+	IndexBuffer* IndexBuffer::Create(Platform& platform)
+	{
+		return new IndexBufferD3D11();
+	}
+
 	IndexBufferD3D11::IndexBufferD3D11() :
 		index_buffer_(NULL),
 		format_(DXGI_FORMAT_UNKNOWN)

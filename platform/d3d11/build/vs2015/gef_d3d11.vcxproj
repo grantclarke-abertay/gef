@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\audio\audio_manager_d3d11.cpp" />
     <ClCompile Include="..\..\graphics\depth_buffer_d3d11.cpp" />
     <ClCompile Include="..\..\graphics\index_buffer_d3d11.cpp" />
     <ClCompile Include="..\..\graphics\renderer_3d_d3d11.cpp" />

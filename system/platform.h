@@ -41,20 +41,25 @@ namespace gef
 
 		std::string FormatFilename(const std::string& filename) const;
 		virtual std::string FormatFilename(const char* filename) const = 0;
+
+		/// all these create functions are deprecated
+		/// each class will have it's own Create method instead
+		/// for better encapsulation
+#if 0
 		virtual SpriteRenderer* CreateSpriteRenderer() = 0;
 		virtual File* CreateFile() const = 0;
 		virtual AudioManager* CreateAudioManager() const = 0;
 		virtual InputManager* CreateInputManager() = 0;
-//		virtual TouchInputManager* CreateTouchInputManager() const = 0;
-//		virtual void InitTouchInputManager() = 0;
-//		virtual void ReleaseTouchInputManager() = 0;
 		virtual Texture* CreateTexture(const ImageData& image_data) const = 0;
 		virtual Mesh* CreateMesh() = 0;
-//		virtual SonyControllerInputManager* CreateSonyControllerInputManager() const = 0;
 		virtual Renderer3D* CreateRenderer3D() = 0;
 		virtual VertexBuffer* CreateVertexBuffer() const = 0;
 		virtual IndexBuffer* CreateIndexBuffer() const = 0;
 		virtual ShaderInterface* CreateShaderInterface() const = 0;
+		/// going to test different sized render target
+		/// could just be the fact the depth buffer size has to be equal or bigger
+		virtual RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const = 0;
+#endif
 
 		void AddShader(Shader* shader);
 		void RemoveShader(Shader* shader);
@@ -65,15 +70,9 @@ namespace gef
 		void AddIndexBuffer(IndexBuffer* index_buffer);
 		void RemoveIndexBuffer(IndexBuffer* index_buffer);
 
-
 		/// Can only create render targets that are the same size as the screen at the moment
 		/// so we can use the same depth buffer for all render targets
 		RenderTarget* CreateRenderTarget() const;
-		
-		
-		// going to test different sized render target
-		// could just be the fact the depth buffer size has to be equal or bigger
-		virtual RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const = 0;
 
 		virtual Matrix44 PerspectiveProjectionFov(const float fov, const float aspect_ratio, const float near_distance, const float far_distance) const = 0;
 		virtual Matrix44 PerspectiveProjectionFrustum(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance) const = 0;
@@ -89,7 +88,6 @@ namespace gef
 		// e.g. android devices (phones, tablets, etc.)
 		virtual bool ReadyToRender() const;
 
-		virtual DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const = 0;
 
 		inline Int32 width() const { return width_; }
 		inline Int32 height() const { return height_; }
@@ -110,9 +108,6 @@ namespace gef
 	protected:
 		inline void set_width(const Int32 width) { width_ = width; }
 		inline void set_height(const Int32 height) { height_ = height; }
-
-
-
 
 		Int32 width_;
 		Int32 height_;

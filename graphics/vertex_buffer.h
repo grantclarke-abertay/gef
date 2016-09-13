@@ -10,7 +10,6 @@ namespace gef
 	class VertexBuffer
 	{
 	public:
-		VertexBuffer();
 		virtual ~VertexBuffer();
 		virtual bool Init(const Platform& platform, const void* vertices, const UInt32 num_vertices, const UInt32 vertex_byte_size, const bool read_only = true) = 0;
 		virtual bool Update(const Platform& platform) = 0;
@@ -23,7 +22,10 @@ namespace gef
 
 		void* vertex_data() {return vertex_data_; }
 
+		static VertexBuffer* Create(Platform& platform);
+
 	protected:
+		VertexBuffer();
 		UInt32 num_vertices_;
 		UInt32 vertex_byte_size_;
 		void* vertex_data_;
