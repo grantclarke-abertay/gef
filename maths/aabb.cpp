@@ -1,10 +1,12 @@
 #include <maths/aabb.h>
 #include <gef.h>
+#include <cfloat>
 
 namespace gef
 {
 	Aabb::Aabb() :
-		initialised_(false)
+		min_vtx_(FLT_MAX, FLT_MAX, FLT_MAX),
+		max_vtx_(-FLT_MAX, -FLT_MAX, -FLT_MAX)
 	{
 	}
 
@@ -12,32 +14,22 @@ namespace gef
 	{
 		min_vtx_ = min_vtx;
 		max_vtx_ = max_vtx;
-		initialised_ = true;
 	}
 
 	void Aabb::Update(const Vector4& point)
 	{
-		if(!initialised_)
-		{
-			min_vtx_ = point;
-			max_vtx_ = point;
-			initialised_ = true;
-		}
-		else
-		{
-			if(point.x() < min_vtx_.x())
-				min_vtx_.set_x(point.x());
-			if(point.y() < min_vtx_.y())
-				min_vtx_.set_y(point.y());
-			if(point.z() < min_vtx_.z())
-				min_vtx_.set_z(point.z());
-			if(point.x() > max_vtx_.x())
-				max_vtx_.set_x(point.x());
-			if(point.y() > max_vtx_.y())
-				max_vtx_.set_y(point.y());
-			if(point.z() > max_vtx_.z())
-				max_vtx_.set_z(point.z());
-		}
+		if(point.x() < min_vtx_.x())
+			min_vtx_.set_x(point.x());
+		if(point.y() < min_vtx_.y())
+			min_vtx_.set_y(point.y());
+		if(point.z() < min_vtx_.z())
+			min_vtx_.set_z(point.z());
+		if(point.x() > max_vtx_.x())
+			max_vtx_.set_x(point.x());
+		if(point.y() > max_vtx_.y())
+			max_vtx_.set_y(point.y());
+		if(point.z() > max_vtx_.z())
+			max_vtx_.set_z(point.z());
 	}
 
 	const Aabb Aabb::Transform(const Matrix44& transform_matrix) const
