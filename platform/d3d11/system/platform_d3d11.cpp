@@ -476,7 +476,7 @@ namespace gef
 	Matrix44 PlatformD3D11::OrthographicFrustum(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance) const
 	{
 		Matrix44 projection_matrix;
-		projection_matrix.OrthographicFrustumLHD3D(left, right, top, bottom, near_distance, far_distance);
+		projection_matrix.OrthographicFrustumD3D(left, right, top, bottom, near_distance, far_distance);
 		return projection_matrix;
 	}
 

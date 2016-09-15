@@ -136,30 +136,17 @@ namespace gef
 		PerspectiveFrustumD3D(-width, width, height, -height, near_distance, far_distance);
 	}
 
-	
-	void Matrix44::OrthographicFrustumLHD3D(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance)
-	{
-		// transform to D3D clip space
-		// cube dimensions (-1, -1, 0) to (1, 1, 1)
-		SetIdentity();
-		values_[0].set_x((2.0f) / (right - left));
-		values_[3].set_x((right+left) / (left - right));
-		values_[1].set_y((2.0f) / (top - bottom));
-		values_[3].set_y((top+bottom) / (bottom - top));
-		values_[2].set_z((1.0f) / (far_distance - near_distance));
-		values_[3].set_z((near_distance) / (near_distance - far_distance));
-	}
 
-	void Matrix44::OrthographicFrustumRHD3D(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance)
+	void Matrix44::OrthographicFrustumD3D(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance)
 	{
 		// transform to D3D clip space
 		// cube dimensions (-1, -1, 0) to (1, 1, 1)
 		SetIdentity();
 		values_[0].set_x((2.0f) / (right - left));
-		values_[3].set_x((right+left) / (left - right));
+		values_[3].set_x((right + left) / (left - right));
 		values_[1].set_y((2.0f) / (top - bottom));
-		values_[3].set_y((top+bottom) / (bottom - top));
-		values_[2].set_z((1.0f) / (near_distance - far_distance));
+		values_[3].set_y((top + bottom) / (bottom - top));
+		values_[2].set_z((1.0f) / (far_distance - near_distance));
 		values_[3].set_z((near_distance) / (near_distance - far_distance));
 	}
 
