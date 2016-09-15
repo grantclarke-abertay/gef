@@ -69,31 +69,274 @@ $(function() {
 <div class="title">gef::Aabb Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="../../da/d70/aabb_8h_source.html">aabb.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa326ad012978ddf1d2a22dbdd7a8670b"><td class="memItemLeft" align="right" valign="top"><a id="aa326ad012978ddf1d2a22dbdd7a8670b"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Aabb</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;min_vtx, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;max_vtx)</td></tr>
+<tr class="memitem:a720e4f22f8d0828f38a7762234f69497"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a720e4f22f8d0828f38a7762234f69497">Aabb</a> ()</td></tr>
+<tr class="memdesc:a720e4f22f8d0828f38a7762234f69497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a720e4f22f8d0828f38a7762234f69497">More...</a><br /></td></tr>
+<tr class="separator:a720e4f22f8d0828f38a7762234f69497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa326ad012978ddf1d2a22dbdd7a8670b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#aa326ad012978ddf1d2a22dbdd7a8670b">Aabb</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;<a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#ab42916e769234b96851d63a73774aaed">min_vtx</a>, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;<a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a95498222ed4dd80429ae3810cbf544c3">max_vtx</a>)</td></tr>
+<tr class="memdesc:aa326ad012978ddf1d2a22dbdd7a8670b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an AABB given the minimum and maxium vertex position.  <a href="#aa326ad012978ddf1d2a22dbdd7a8670b">More...</a><br /></td></tr>
 <tr class="separator:aa326ad012978ddf1d2a22dbdd7a8670b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ca5a87a32a0d349af36e83a7eb680b2"><td class="memItemLeft" align="right" valign="top"><a id="a9ca5a87a32a0d349af36e83a7eb680b2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Update</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;point)</td></tr>
+<tr class="memitem:a9ca5a87a32a0d349af36e83a7eb680b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a9ca5a87a32a0d349af36e83a7eb680b2">Update</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;point)</td></tr>
+<tr class="memdesc:a9ca5a87a32a0d349af36e83a7eb680b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update this AABB bounds to include the position of a point.  <a href="#a9ca5a87a32a0d349af36e83a7eb680b2">More...</a><br /></td></tr>
 <tr class="separator:a9ca5a87a32a0d349af36e83a7eb680b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4338d18cdbf5566424da73ad56312f2"><td class="memItemLeft" align="right" valign="top"><a id="af4338d18cdbf5566424da73ad56312f2"></a>
-const <a class="el" href="../../d4/d9f/classgef_1_1_aabb.html">Aabb</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Transform</b> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;transform_matrix) const</td></tr>
+<tr class="memitem:af4338d18cdbf5566424da73ad56312f2"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../d4/d9f/classgef_1_1_aabb.html">Aabb</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#af4338d18cdbf5566424da73ad56312f2">Transform</a> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;transform_matrix) const</td></tr>
+<tr class="memdesc:af4338d18cdbf5566424da73ad56312f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transforms the bounds of the AABB by a transformation matrix.  <a href="#af4338d18cdbf5566424da73ad56312f2">More...</a><br /></td></tr>
 <tr class="separator:af4338d18cdbf5566424da73ad56312f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa91ee451c240db7551ca41d5a0870794"><td class="memItemLeft" align="right" valign="top"><a id="aa91ee451c240db7551ca41d5a0870794"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_min_vtx</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;min_vtx)</td></tr>
+<tr class="memitem:aa91ee451c240db7551ca41d5a0870794"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#aa91ee451c240db7551ca41d5a0870794">set_min_vtx</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;<a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#ab42916e769234b96851d63a73774aaed">min_vtx</a>)</td></tr>
+<tr class="memdesc:aa91ee451c240db7551ca41d5a0870794"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the minimum bounds of the AABB.  <a href="#aa91ee451c240db7551ca41d5a0870794">More...</a><br /></td></tr>
 <tr class="separator:aa91ee451c240db7551ca41d5a0870794"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab42916e769234b96851d63a73774aaed"><td class="memItemLeft" align="right" valign="top"><a id="ab42916e769234b96851d63a73774aaed"></a>
-const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>min_vtx</b> () const</td></tr>
+<tr class="memitem:ab42916e769234b96851d63a73774aaed"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#ab42916e769234b96851d63a73774aaed">min_vtx</a> () const</td></tr>
+<tr class="memdesc:ab42916e769234b96851d63a73774aaed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the minimum bounds of the AABB.  <a href="#ab42916e769234b96851d63a73774aaed">More...</a><br /></td></tr>
 <tr class="separator:ab42916e769234b96851d63a73774aaed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7798a19ba029d62f2197367861915d76"><td class="memItemLeft" align="right" valign="top"><a id="a7798a19ba029d62f2197367861915d76"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_max_vtx</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;max_vtx)</td></tr>
+<tr class="memitem:a7798a19ba029d62f2197367861915d76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a7798a19ba029d62f2197367861915d76">set_max_vtx</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;<a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a95498222ed4dd80429ae3810cbf544c3">max_vtx</a>)</td></tr>
+<tr class="memdesc:a7798a19ba029d62f2197367861915d76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum bounds of the AABB.  <a href="#a7798a19ba029d62f2197367861915d76">More...</a><br /></td></tr>
 <tr class="separator:a7798a19ba029d62f2197367861915d76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95498222ed4dd80429ae3810cbf544c3"><td class="memItemLeft" align="right" valign="top"><a id="a95498222ed4dd80429ae3810cbf544c3"></a>
-const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>max_vtx</b> () const</td></tr>
+<tr class="memitem:a95498222ed4dd80429ae3810cbf544c3"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a95498222ed4dd80429ae3810cbf544c3">max_vtx</a> () const</td></tr>
+<tr class="memdesc:a95498222ed4dd80429ae3810cbf544c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the maximum bounds of the AABB.  <a href="#a95498222ed4dd80429ae3810cbf544c3">More...</a><br /></td></tr>
 <tr class="separator:a95498222ed4dd80429ae3810cbf544c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>An axis aligned bounding box represented by the minimum and maximum bounds. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a720e4f22f8d0828f38a7762234f69497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a720e4f22f8d0828f38a7762234f69497">&sect;&nbsp;</a></span>Aabb() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gef::Aabb::Aabb </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<dl class="section note"><dt>Note</dt><dd>The minimum bounds are initialised to largest possible positive float values and maximum bounds are initialised to largest possible negative values so the initial call to the <a class="el" href="../../d4/d9f/classgef_1_1_aabb.html#a9ca5a87a32a0d349af36e83a7eb680b2" title="Update this AABB bounds to include the position of a point. ">Aabb::Update</a> function will result in the bounds being overwritten. </dd></dl>
+
+</div>
+</div>
+<a id="aa326ad012978ddf1d2a22dbdd7a8670b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa326ad012978ddf1d2a22dbdd7a8670b">&sect;&nbsp;</a></span>Aabb() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">gef::Aabb::Aabb </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>min_vtx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>max_vtx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates an AABB given the minimum and maxium vertex position. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">min_vtx</td><td>The minimum vertex position. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_vtx</td><td>The maximum vertex position. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a95498222ed4dd80429ae3810cbf544c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95498222ed4dd80429ae3810cbf544c3">&sect;&nbsp;</a></span>max_vtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&amp; gef::Aabb::max_vtx </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the maximum bounds of the AABB. </p>
+<dl class="section return"><dt>Returns</dt><dd>The maximum bounds. </dd></dl>
+
+</div>
+</div>
+<a id="ab42916e769234b96851d63a73774aaed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab42916e769234b96851d63a73774aaed">&sect;&nbsp;</a></span>min_vtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&amp; gef::Aabb::min_vtx </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the minimum bounds of the AABB. </p>
+<dl class="section return"><dt>Returns</dt><dd>The minimum bounds. </dd></dl>
+
+</div>
+</div>
+<a id="a7798a19ba029d62f2197367861915d76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7798a19ba029d62f2197367861915d76">&sect;&nbsp;</a></span>set_max_vtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Aabb::set_max_vtx </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>max_vtx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the maximum bounds of the AABB. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">max_vtx</td><td>The maximum bounds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa91ee451c240db7551ca41d5a0870794"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa91ee451c240db7551ca41d5a0870794">&sect;&nbsp;</a></span>set_min_vtx()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Aabb::set_min_vtx </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>min_vtx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the minimum bounds of the AABB. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">min_vtx</td><td>The minimum bounds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af4338d18cdbf5566424da73ad56312f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4338d18cdbf5566424da73ad56312f2">&sect;&nbsp;</a></span>Transform()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../d4/d9f/classgef_1_1_aabb.html">Aabb</a> gef::Aabb::Transform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;&#160;</td>
+          <td class="paramname"><em>transform_matrix</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Transforms the bounds of the AABB by a transformation matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">transform_matrix</td><td>The matrix to transform this AABB. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The transformed AABB. </dd></dl>
+
+</div>
+</div>
+<a id="a9ca5a87a32a0d349af36e83a7eb680b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ca5a87a32a0d349af36e83a7eb680b2">&sect;&nbsp;</a></span>Update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Aabb::Update </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update this AABB bounds to include the position of a point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">point</td><td>The point to be included by the AABB bounds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>maths/<a class="el" href="../../da/d70/aabb_8h_source.html">aabb.h</a></li>
 <li>maths/aabb.cpp</li>
@@ -101,7 +344,7 @@ const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &a
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 13 2016 22:43:40 for Games Education Framework by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 15 2016 10:18:45 for Games Education Framework by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

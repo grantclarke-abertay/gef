@@ -1,28 +1,5 @@
 var searchData=
 [
-  ['scene',['Scene',['../d7/d31/classgef_1_1_scene.html',1,'gef']]],
-  ['sceneapp',['SceneApp',['../d8/de1/class_scene_app.html',1,'']]],
-  ['set_5fcolour',['set_colour',['../da/dd5/classgef_1_1_sprite.html#aa8275b4837f6635a31e2b028324f47b7',1,'gef::Sprite']]],
-  ['set_5fheight',['set_height',['../da/dd5/classgef_1_1_sprite.html#af27176b6d11b4cb6223fed0fc6a1f96a',1,'gef::Sprite']]],
-  ['set_5fposition',['set_position',['../da/dd5/classgef_1_1_sprite.html#aeae2f2957f8b9c06b558851706318c0e',1,'gef::Sprite']]],
-  ['set_5frotation',['set_rotation',['../da/dd5/classgef_1_1_sprite.html#a91868d2fa4030c2be1aad9e3ec5c4e3f',1,'gef::Sprite']]],
-  ['set_5fwidth',['set_width',['../da/dd5/classgef_1_1_sprite.html#ac770d5e69f460ac4000ad6f8e5273d98',1,'gef::Sprite']]],
-  ['shader',['Shader',['../d4/dcd/classgef_1_1_shader.html',1,'gef']]],
-  ['shaderinterface',['ShaderInterface',['../d4/d57/classgef_1_1_shader_interface.html',1,'gef']]],
-  ['shaderinterfaced3d11',['ShaderInterfaceD3D11',['../da/df7/classgef_1_1_shader_interface_d3_d11.html',1,'gef']]],
-  ['shaderparameter',['ShaderParameter',['../dd/d12/structgef_1_1_shader_interface_1_1_shader_parameter.html',1,'gef::ShaderInterface']]],
-  ['shadervariable',['ShaderVariable',['../dc/d3b/structgef_1_1_shader_interface_1_1_shader_variable.html',1,'gef::ShaderInterface']]],
-  ['skeleton',['Skeleton',['../df/d21/classgef_1_1_skeleton.html',1,'gef']]],
-  ['skeletonpose',['SkeletonPose',['../d8/d72/classgef_1_1_skeleton_pose.html',1,'gef']]],
-  ['skinnedmeshshaderdata',['SkinnedMeshShaderData',['../df/d48/classgef_1_1_skinned_mesh_shader_data.html',1,'gef']]],
-  ['skinnedvertex',['SkinnedVertex',['../d7/d8d/structgef_1_1_mesh_1_1_skinned_vertex.html',1,'gef::Mesh']]],
-  ['sonycontroller',['SonyController',['../de/d41/classgef_1_1_sony_controller.html',1,'gef']]],
-  ['sonycontrollerinputmanager',['SonyControllerInputManager',['../da/d8e/classgef_1_1_sony_controller_input_manager.html',1,'gef']]],
-  ['sonycontrollerinputmanagerd3d11',['SonyControllerInputManagerD3D11',['../de/d91/classgef_1_1_sony_controller_input_manager_d3_d11.html',1,'gef']]],
-  ['sphere',['Sphere',['../d7/d0d/classgef_1_1_sphere.html',1,'gef']]],
-  ['sprite',['Sprite',['../da/dd5/classgef_1_1_sprite.html',1,'gef']]],
-  ['sprite',['Sprite',['../da/dd5/classgef_1_1_sprite.html#a24fbf5e5f768aa92a64613b7d4ba31a6',1,'gef::Sprite']]],
-  ['spriterenderer',['SpriteRenderer',['../dd/dc1/classgef_1_1_sprite_renderer.html',1,'gef']]],
-  ['spriterendererd3d11',['SpriteRendererD3D11',['../d9/d68/classgef_1_1_sprite_renderer_d3_d11.html',1,'gef']]],
-  ['stringidtable',['StringIdTable',['../dd/d89/classgef_1_1_string_id_table.html',1,'gef']]]
+  ['quaternion',['Quaternion',['../da/da5/classgef_1_1_quaternion.html',1,'gef']]],
+  ['quaternionkey',['QuaternionKey',['../d4/da1/structgef_1_1_quaternion_key.html',1,'gef']]]
 ];

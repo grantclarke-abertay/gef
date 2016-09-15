@@ -70,124 +70,1123 @@ $(function() {
 <div class="title">gef::Matrix44 Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="../../de/dd6/matrix44_8h_source.html">matrix44.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a0278293f37fe256da66037d0410bea9f"><td class="memItemLeft" align="right" valign="top"><a id="a0278293f37fe256da66037d0410bea9f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetIdentity</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a0278293f37fe256da66037d0410bea9f">SetIdentity</a> ()</td></tr>
+<tr class="memdesc:a0278293f37fe256da66037d0410bea9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to the identity matrix. <br /></td></tr>
 <tr class="separator:a0278293f37fe256da66037d0410bea9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ab2b67200353032b0772c32ebda4fd5"><td class="memItemLeft" align="right" valign="top"><a id="a7ab2b67200353032b0772c32ebda4fd5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetZero</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a7ab2b67200353032b0772c32ebda4fd5">SetZero</a> ()</td></tr>
+<tr class="memdesc:a7ab2b67200353032b0772c32ebda4fd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all elements of the matrix to zero. <br /></td></tr>
 <tr class="separator:a7ab2b67200353032b0772c32ebda4fd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4c3392d852bc107547b1abb9fe84429"><td class="memItemLeft" align="right" valign="top"><a id="ab4c3392d852bc107547b1abb9fe84429"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>LookAt</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;eye, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;lookat, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;up)</td></tr>
+<tr class="memitem:ab4c3392d852bc107547b1abb9fe84429"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#ab4c3392d852bc107547b1abb9fe84429">LookAt</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;eye, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;lookat, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;up)</td></tr>
+<tr class="memdesc:ab4c3392d852bc107547b1abb9fe84429"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to a view matrix given a virtual cameras' eye and look at positions.  <a href="#ab4c3392d852bc107547b1abb9fe84429">More...</a><br /></td></tr>
 <tr class="separator:ab4c3392d852bc107547b1abb9fe84429"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad76a57e07cf29d312ed72eec02155c9d"><td class="memItemLeft" align="right" valign="top"><a id="ad76a57e07cf29d312ed72eec02155c9d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFrustumGL</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memitem:ad76a57e07cf29d312ed72eec02155c9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#ad76a57e07cf29d312ed72eec02155c9d">PerspectiveFrustumGL</a> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memdesc:ad76a57e07cf29d312ed72eec02155c9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to an OpenGL style perspective projection matrix given clipping plane coordinates.  <a href="#ad76a57e07cf29d312ed72eec02155c9d">More...</a><br /></td></tr>
 <tr class="separator:ad76a57e07cf29d312ed72eec02155c9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6145110261e3723ac1fd91c69e380bd9"><td class="memItemLeft" align="right" valign="top"><a id="a6145110261e3723ac1fd91c69e380bd9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFovGL</b> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
+<tr class="memitem:a6145110261e3723ac1fd91c69e380bd9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a6145110261e3723ac1fd91c69e380bd9">PerspectiveFovGL</a> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
+<tr class="memdesc:a6145110261e3723ac1fd91c69e380bd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to an OpenGL style perspective projection matrix given the field of view.  <a href="#a6145110261e3723ac1fd91c69e380bd9">More...</a><br /></td></tr>
 <tr class="separator:a6145110261e3723ac1fd91c69e380bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a06aca730c0ec9c66f935a4953bf0dde6"><td class="memItemLeft" align="right" valign="top"><a id="a06aca730c0ec9c66f935a4953bf0dde6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>OrthographicFrustumGL</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memitem:a06aca730c0ec9c66f935a4953bf0dde6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a06aca730c0ec9c66f935a4953bf0dde6">OrthographicFrustumGL</a> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memdesc:a06aca730c0ec9c66f935a4953bf0dde6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to an OpenGL style orthographic projection matrix given clipping plane coordinates.  <a href="#a06aca730c0ec9c66f935a4953bf0dde6">More...</a><br /></td></tr>
 <tr class="separator:a06aca730c0ec9c66f935a4953bf0dde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa67f22cca46ac494b770b3a6b90aac24"><td class="memItemLeft" align="right" valign="top"><a id="aa67f22cca46ac494b770b3a6b90aac24"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFrustumD3D</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memitem:aa67f22cca46ac494b770b3a6b90aac24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#aa67f22cca46ac494b770b3a6b90aac24">PerspectiveFrustumD3D</a> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
 <tr class="separator:aa67f22cca46ac494b770b3a6b90aac24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e90455c33c2f9813103a7b0575a4ffc"><td class="memItemLeft" align="right" valign="top"><a id="a6e90455c33c2f9813103a7b0575a4ffc"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFovD3D</b> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
+<tr class="memitem:a6e90455c33c2f9813103a7b0575a4ffc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a6e90455c33c2f9813103a7b0575a4ffc">PerspectiveFovD3D</a> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
+<tr class="memdesc:a6e90455c33c2f9813103a7b0575a4ffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to an Direct3D style perspective projection matrix given the field of view.  <a href="#a6e90455c33c2f9813103a7b0575a4ffc">More...</a><br /></td></tr>
 <tr class="separator:a6e90455c33c2f9813103a7b0575a4ffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a805f7f817b3405b33e271f684d9d7d9a"><td class="memItemLeft" align="right" valign="top"><a id="a805f7f817b3405b33e271f684d9d7d9a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>OrthographicFrustumLHD3D</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a805f7f817b3405b33e271f684d9d7d9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a345dbb0b35fa3cbf0e3cf7c1bd745f93"><td class="memItemLeft" align="right" valign="top"><a id="a345dbb0b35fa3cbf0e3cf7c1bd745f93"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>OrthographicFrustumRHD3D</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a345dbb0b35fa3cbf0e3cf7c1bd745f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf509e67110e82e2da11e8530c0a864e"><td class="memItemLeft" align="right" valign="top"><a id="acf509e67110e82e2da11e8530c0a864e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFrustumVita</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:acf509e67110e82e2da11e8530c0a864e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85e214187baefc125db7296f47218b1b"><td class="memItemLeft" align="right" valign="top"><a id="a85e214187baefc125db7296f47218b1b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFovVita</b> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a85e214187baefc125db7296f47218b1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48d4cbd46d1d278d9eb23fdf64ad75e2"><td class="memItemLeft" align="right" valign="top"><a id="a48d4cbd46d1d278d9eb23fdf64ad75e2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>OrthographicFrustumVita</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a48d4cbd46d1d278d9eb23fdf64ad75e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d9760879f6cd3f238ef13e2ea839747"><td class="memItemLeft" align="right" valign="top"><a id="a3d9760879f6cd3f238ef13e2ea839747"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFrustumPS4</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a3d9760879f6cd3f238ef13e2ea839747"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7352feeec43c9c29ae7a09cbb8a8c08e"><td class="memItemLeft" align="right" valign="top"><a id="a7352feeec43c9c29ae7a09cbb8a8c08e"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>PerspectiveFovPS4</b> (const float fov, const float aspect_ratio, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:a7352feeec43c9c29ae7a09cbb8a8c08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb52e4495ea00d73eee5fcfa7f0f8190"><td class="memItemLeft" align="right" valign="top"><a id="acb52e4495ea00d73eee5fcfa7f0f8190"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>OrthographicFrustumPS4</b> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
-<tr class="separator:acb52e4495ea00d73eee5fcfa7f0f8190"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d8ccaec37a206c82df3ef565209c732"><td class="memItemLeft" align="right" valign="top"><a id="a6d8ccaec37a206c82df3ef565209c732"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>RotationX</b> (float radiansRot)</td></tr>
+<tr class="memitem:a5e2d0393adefcd170440813182071f96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a5e2d0393adefcd170440813182071f96">OrthographicFrustumD3D</a> (const float left, const float right, const float top, const float bottom, const float near_dist, const float far_dist)</td></tr>
+<tr class="memdesc:a5e2d0393adefcd170440813182071f96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to an Direct3D style orthographic projection matrix given clipping plane coordinates.  <a href="#a5e2d0393adefcd170440813182071f96">More...</a><br /></td></tr>
+<tr class="separator:a5e2d0393adefcd170440813182071f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8ccaec37a206c82df3ef565209c732"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a6d8ccaec37a206c82df3ef565209c732">RotationX</a> (float radiansRot)</td></tr>
+<tr class="memdesc:a6d8ccaec37a206c82df3ef565209c732"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this martix to a rotation matrix around the x-axis.  <a href="#a6d8ccaec37a206c82df3ef565209c732">More...</a><br /></td></tr>
 <tr class="separator:a6d8ccaec37a206c82df3ef565209c732"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52f43b4984479240a289391ae7ed1655"><td class="memItemLeft" align="right" valign="top"><a id="a52f43b4984479240a289391ae7ed1655"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>RotationY</b> (float radiansRot)</td></tr>
+<tr class="memitem:a52f43b4984479240a289391ae7ed1655"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a52f43b4984479240a289391ae7ed1655">RotationY</a> (float radiansRot)</td></tr>
+<tr class="memdesc:a52f43b4984479240a289391ae7ed1655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this martix to a rotation matrix around the y-axis.  <a href="#a52f43b4984479240a289391ae7ed1655">More...</a><br /></td></tr>
 <tr class="separator:a52f43b4984479240a289391ae7ed1655"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a378902cc2876cc98b69fb6c4fe335c3f"><td class="memItemLeft" align="right" valign="top"><a id="a378902cc2876cc98b69fb6c4fe335c3f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>RotationZ</b> (float radiansRot)</td></tr>
+<tr class="memitem:a378902cc2876cc98b69fb6c4fe335c3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a378902cc2876cc98b69fb6c4fe335c3f">RotationZ</a> (float radiansRot)</td></tr>
+<tr class="memdesc:a378902cc2876cc98b69fb6c4fe335c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this martix to a rotation matrix around the z-axis.  <a href="#a378902cc2876cc98b69fb6c4fe335c3f">More...</a><br /></td></tr>
 <tr class="separator:a378902cc2876cc98b69fb6c4fe335c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a398a18c6cab7cf927d0bac06ac3dead3"><td class="memItemLeft" align="right" valign="top"><a id="a398a18c6cab7cf927d0bac06ac3dead3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Rotation</b> (const <a class="el" href="../../da/da5/classgef_1_1_quaternion.html">gef::Quaternion</a> &amp;quat)</td></tr>
+<tr class="memitem:a398a18c6cab7cf927d0bac06ac3dead3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a398a18c6cab7cf927d0bac06ac3dead3">Rotation</a> (const <a class="el" href="../../da/da5/classgef_1_1_quaternion.html">gef::Quaternion</a> &amp;quat)</td></tr>
+<tr class="memdesc:a398a18c6cab7cf927d0bac06ac3dead3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to the rotation matrix created from a quaternion.  <a href="#a398a18c6cab7cf927d0bac06ac3dead3">More...</a><br /></td></tr>
 <tr class="separator:a398a18c6cab7cf927d0bac06ac3dead3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ef32087a9b448004ad9202142dbebf8"><td class="memItemLeft" align="right" valign="top"><a id="a8ef32087a9b448004ad9202142dbebf8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Scale</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;scale)</td></tr>
+<tr class="memitem:a8ef32087a9b448004ad9202142dbebf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a8ef32087a9b448004ad9202142dbebf8">Scale</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;scale)</td></tr>
+<tr class="memdesc:a8ef32087a9b448004ad9202142dbebf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to a scale matrix.  <a href="#a8ef32087a9b448004ad9202142dbebf8">More...</a><br /></td></tr>
 <tr class="separator:a8ef32087a9b448004ad9202142dbebf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab46b1082fc742e89b73599f47ece85db"><td class="memItemLeft" align="right" valign="top"><a id="ab46b1082fc742e89b73599f47ece85db"></a>
-<a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetScale</b> () const</td></tr>
+<tr class="memitem:ab46b1082fc742e89b73599f47ece85db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#ab46b1082fc742e89b73599f47ece85db">GetScale</a> () const</td></tr>
+<tr class="memdesc:ab46b1082fc742e89b73599f47ece85db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Scale values for the xyz axes.  <a href="#ab46b1082fc742e89b73599f47ece85db">More...</a><br /></td></tr>
 <tr class="separator:ab46b1082fc742e89b73599f47ece85db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5aac255c94a9e120a6988c95cd8a95c3"><td class="memItemLeft" align="right" valign="top"><a id="a5aac255c94a9e120a6988c95cd8a95c3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetTranslation</b> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;trans)</td></tr>
+<tr class="memitem:a5aac255c94a9e120a6988c95cd8a95c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a5aac255c94a9e120a6988c95cd8a95c3">SetTranslation</a> (const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;trans)</td></tr>
+<tr class="memdesc:a5aac255c94a9e120a6988c95cd8a95c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the elements in the matrix that represent the translation.  <a href="#a5aac255c94a9e120a6988c95cd8a95c3">More...</a><br /></td></tr>
 <tr class="separator:a5aac255c94a9e120a6988c95cd8a95c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad50800ebe0331636063d7921afeafd0f"><td class="memItemLeft" align="right" valign="top"><a id="ad50800ebe0331636063d7921afeafd0f"></a>
-const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetTranslation</b> () const</td></tr>
+<tr class="memitem:ad50800ebe0331636063d7921afeafd0f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#ad50800ebe0331636063d7921afeafd0f">GetTranslation</a> () const</td></tr>
+<tr class="memdesc:ad50800ebe0331636063d7921afeafd0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the translation from this matrix.  <a href="#ad50800ebe0331636063d7921afeafd0f">More...</a><br /></td></tr>
 <tr class="separator:ad50800ebe0331636063d7921afeafd0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb4ba2166e2296e58c63b4e694d1e075"><td class="memItemLeft" align="right" valign="top"><a id="adb4ba2166e2296e58c63b4e694d1e075"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Transpose</b> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix)</td></tr>
+<tr class="memitem:adb4ba2166e2296e58c63b4e694d1e075"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#adb4ba2166e2296e58c63b4e694d1e075">Transpose</a> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix)</td></tr>
+<tr class="memdesc:adb4ba2166e2296e58c63b4e694d1e075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to the transpose of the matrix provided.  <a href="#adb4ba2166e2296e58c63b4e694d1e075">More...</a><br /></td></tr>
 <tr class="separator:adb4ba2166e2296e58c63b4e694d1e075"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a690f284c97546b3fee00e0356575ea6c"><td class="memItemLeft" align="right" valign="top"><a id="a690f284c97546b3fee00e0356575ea6c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>AffineInverse</b> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix)</td></tr>
+<tr class="memitem:a690f284c97546b3fee00e0356575ea6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a690f284c97546b3fee00e0356575ea6c">AffineInverse</a> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix)</td></tr>
+<tr class="memdesc:a690f284c97546b3fee00e0356575ea6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to the inverse of the matrix provided.  <a href="#a690f284c97546b3fee00e0356575ea6c">More...</a><br /></td></tr>
 <tr class="separator:a690f284c97546b3fee00e0356575ea6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a652cf3276e40c0be56e9e71c07fd5567"><td class="memItemLeft" align="right" valign="top"><a id="a652cf3276e40c0be56e9e71c07fd5567"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>NormaliseRotation</b> ()</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a652cf3276e40c0be56e9e71c07fd5567">NormaliseRotation</a> ()</td></tr>
+<tr class="memdesc:a652cf3276e40c0be56e9e71c07fd5567"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an scaling from the rotational component of this matrix. <br /></td></tr>
 <tr class="separator:a652cf3276e40c0be56e9e71c07fd5567"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98c88215e8789b1e3c7b1c167c42d51f"><td class="memItemLeft" align="right" valign="top"><a id="a98c88215e8789b1e3c7b1c167c42d51f"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>CalculateDeterminant</b> () const</td></tr>
+<tr class="memitem:a98c88215e8789b1e3c7b1c167c42d51f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a98c88215e8789b1e3c7b1c167c42d51f">CalculateDeterminant</a> () const</td></tr>
+<tr class="memdesc:a98c88215e8789b1e3c7b1c167c42d51f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the determinant of this matrix.  <a href="#a98c88215e8789b1e3c7b1c167c42d51f">More...</a><br /></td></tr>
 <tr class="separator:a98c88215e8789b1e3c7b1c167c42d51f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4fc092e56492b4f5669ef11109ec2866"><td class="memItemLeft" align="right" valign="top"><a id="a4fc092e56492b4f5669ef11109ec2866"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>Inverse</b> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> matrix, float *determinant=NULL)</td></tr>
+<tr class="memitem:a4fc092e56492b4f5669ef11109ec2866"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a4fc092e56492b4f5669ef11109ec2866">Inverse</a> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> matrix, float *determinant=NULL)</td></tr>
+<tr class="memdesc:a4fc092e56492b4f5669ef11109ec2866"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set this matrix to the inverse of the matrix provided.  <a href="#a4fc092e56492b4f5669ef11109ec2866">More...</a><br /></td></tr>
 <tr class="separator:a4fc092e56492b4f5669ef11109ec2866"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27f05324d3d7308a2c2b7146f2559d29"><td class="memItemLeft" align="right" valign="top"><a id="a27f05324d3d7308a2c2b7146f2559d29"></a>
-const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix) const</td></tr>
+<tr class="memitem:a27f05324d3d7308a2c2b7146f2559d29"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a27f05324d3d7308a2c2b7146f2559d29">operator*</a> (const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;matrix) const</td></tr>
+<tr class="memdesc:a27f05324d3d7308a2c2b7146f2559d29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the product of two matrices.  <a href="#a27f05324d3d7308a2c2b7146f2559d29">More...</a><br /></td></tr>
 <tr class="separator:a27f05324d3d7308a2c2b7146f2559d29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b5a617f24c301b40249c403a7cbb423"><td class="memItemLeft" align="right" valign="top"><a id="a7b5a617f24c301b40249c403a7cbb423"></a>
-const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>GetRow</b> (int row) const</td></tr>
+<tr class="memitem:a7b5a617f24c301b40249c403a7cbb423"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a7b5a617f24c301b40249c403a7cbb423">GetRow</a> (int row) const</td></tr>
+<tr class="memdesc:a7b5a617f24c301b40249c403a7cbb423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a particular row from this matrix.  <a href="#a7b5a617f24c301b40249c403a7cbb423">More...</a><br /></td></tr>
 <tr class="separator:a7b5a617f24c301b40249c403a7cbb423"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ed148d88bc1cf652b4f1f6e7ce76fde"><td class="memItemLeft" align="right" valign="top"><a id="a6ed148d88bc1cf652b4f1f6e7ce76fde"></a>
-<a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>GetColumn</b> (int column) const</td></tr>
+<tr class="memitem:a6ed148d88bc1cf652b4f1f6e7ce76fde"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a6ed148d88bc1cf652b4f1f6e7ce76fde">GetColumn</a> (int column) const</td></tr>
+<tr class="memdesc:a6ed148d88bc1cf652b4f1f6e7ce76fde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a particular column from this matrix.  <a href="#a6ed148d88bc1cf652b4f1f6e7ce76fde">More...</a><br /></td></tr>
 <tr class="separator:a6ed148d88bc1cf652b4f1f6e7ce76fde"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1680751306399fd7ac25406f4baae20b"><td class="memItemLeft" align="right" valign="top"><a id="a1680751306399fd7ac25406f4baae20b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetRow</b> (int row, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;row_values)</td></tr>
+<tr class="memitem:a1680751306399fd7ac25406f4baae20b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a1680751306399fd7ac25406f4baae20b">SetRow</a> (int row, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;row_values)</td></tr>
+<tr class="memdesc:a1680751306399fd7ac25406f4baae20b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular row in this matrix with the values provided.  <a href="#a1680751306399fd7ac25406f4baae20b">More...</a><br /></td></tr>
 <tr class="separator:a1680751306399fd7ac25406f4baae20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab42aa11008a37a706128c6925771e0bd"><td class="memItemLeft" align="right" valign="top"><a id="ab42aa11008a37a706128c6925771e0bd"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetColumn</b> (int column, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;column_values)</td></tr>
+<tr class="memitem:ab42aa11008a37a706128c6925771e0bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#ab42aa11008a37a706128c6925771e0bd">SetColumn</a> (int column, const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;column_values)</td></tr>
+<tr class="memdesc:ab42aa11008a37a706128c6925771e0bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular column in this matrix with the values provided.  <a href="#ab42aa11008a37a706128c6925771e0bd">More...</a><br /></td></tr>
 <tr class="separator:ab42aa11008a37a706128c6925771e0bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a226025b91b6915ba876a4943524d714c"><td class="memItemLeft" align="right" valign="top"><a id="a226025b91b6915ba876a4943524d714c"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>m</b> (int row, int column) const</td></tr>
+<tr class="memitem:a226025b91b6915ba876a4943524d714c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a226025b91b6915ba876a4943524d714c">m</a> (int row, int column) const</td></tr>
+<tr class="memdesc:a226025b91b6915ba876a4943524d714c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the value of a particular element from this matrix.  <a href="#a226025b91b6915ba876a4943524d714c">More...</a><br /></td></tr>
 <tr class="separator:a226025b91b6915ba876a4943524d714c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ee77bed048654f6079b4a80538d3eef"><td class="memItemLeft" align="right" valign="top"><a id="a2ee77bed048654f6079b4a80538d3eef"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_m</b> (int row, int column, float value)</td></tr>
+<tr class="memitem:a2ee77bed048654f6079b4a80538d3eef"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a2ee77bed048654f6079b4a80538d3eef">set_m</a> (int row, int column, float value)</td></tr>
+<tr class="memdesc:a2ee77bed048654f6079b4a80538d3eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a particular element in this matrix to a the value provided.  <a href="#a2ee77bed048654f6079b4a80538d3eef">More...</a><br /></td></tr>
 <tr class="separator:a2ee77bed048654f6079b4a80538d3eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a1a0f168c784945e479e9c5d3c9235364"><td class="memItemLeft" align="right" valign="top"><a id="a1a0f168c784945e479e9c5d3c9235364"></a>
-<a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><b>values_</b> [4]</td></tr>
+<a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html#a1a0f168c784945e479e9c5d3c9235364">values_</a> [4]</td></tr>
+<tr class="memdesc:a1a0f168c784945e479e9c5d3c9235364"><td class="mdescLeft">&#160;</td><td class="mdescRight">The matrix is stored as 4 rows of Vectors. <br /></td></tr>
 <tr class="separator:a1a0f168c784945e479e9c5d3c9235364"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A homogeneous 4x4 matrix </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a690f284c97546b3fee00e0356575ea6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a690f284c97546b3fee00e0356575ea6c">&sect;&nbsp;</a></span>AffineInverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::AffineInverse </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to the inverse of the matrix provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>The affine transformation matrix to be inverted. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>It is assumed that the matrix passed in is an affine transformation matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a98c88215e8789b1e3c7b1c167c42d51f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98c88215e8789b1e3c7b1c167c42d51f">&sect;&nbsp;</a></span>CalculateDeterminant()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float gef::Matrix44::CalculateDeterminant </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the determinant of this matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>the calculated determinant. </dd></dl>
+
+</div>
+</div>
+<a id="a6ed148d88bc1cf652b4f1f6e7ce76fde"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ed148d88bc1cf652b4f1f6e7ce76fde">&sect;&nbsp;</a></span>GetColumn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> gef::Matrix44::GetColumn </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a particular column from this matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">column</td><td>The column number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The contents of selected column. </dd></dl>
+
+</div>
+</div>
+<a id="a7b5a617f24c301b40249c403a7cbb423"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b5a617f24c301b40249c403a7cbb423">&sect;&nbsp;</a></span>GetRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a>&amp; gef::Matrix44::GetRow </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a particular row from this matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">row</td><td>The row number. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The contents of selected row. </dd></dl>
+
+</div>
+</div>
+<a id="ab46b1082fc742e89b73599f47ece85db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab46b1082fc742e89b73599f47ece85db">&sect;&nbsp;</a></span>GetScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> gef::Matrix44::GetScale </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the Scale values for the xyz axes. </p>
+<dl class="section return"><dt>Returns</dt><dd>The scale values for the xyz axes. </dd></dl>
+
+</div>
+</div>
+<a id="ad50800ebe0331636063d7921afeafd0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad50800ebe0331636063d7921afeafd0f">&sect;&nbsp;</a></span>GetTranslation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> gef::Matrix44::GetTranslation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the translation from this matrix. </p>
+<dl class="section return"><dt>Returns</dt><dd>The translation. </dd></dl>
+
+</div>
+</div>
+<a id="a4fc092e56492b4f5669ef11109ec2866"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fc092e56492b4f5669ef11109ec2866">&sect;&nbsp;</a></span>Inverse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::Inverse </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a>&#160;</td>
+          <td class="paramname"><em>matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>determinant</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to the inverse of the matrix provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>The matrix to be inverted. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">determinant</td><td>the determinant calculated to carry out the inverse operation. This can be set to NULL if it's not required. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab4c3392d852bc107547b1abb9fe84429"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4c3392d852bc107547b1abb9fe84429">&sect;&nbsp;</a></span>LookAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::LookAt </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>eye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>lookat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>up</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to a view matrix given a virtual cameras' eye and look at positions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">eye</td><td>The position the virtual camera is located. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lookat</td><td>The position the virtual camera is aimed at. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">up</td><td>The direction that defines the up axis of the virtual camera. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a226025b91b6915ba876a4943524d714c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a226025b91b6915ba876a4943524d714c">&sect;&nbsp;</a></span>m()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float gef::Matrix44::m </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get the value of a particular element from this matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">row</td><td>The row number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">column</td><td>The column number. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a27f05324d3d7308a2c2b7146f2559d29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27f05324d3d7308a2c2b7146f2559d29">&sect;&nbsp;</a></span>operator*()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> gef::Matrix44::operator* </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate the product of two matrices. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>The matrix for the second operand of the operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the operation. </dd></dl>
+
+</div>
+</div>
+<a id="a5e2d0393adefcd170440813182071f96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e2d0393adefcd170440813182071f96">&sect;&nbsp;</a></span>OrthographicFrustumD3D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::OrthographicFrustumD3D </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to an Direct3D style orthographic projection matrix given clipping plane coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">left</td><td>The left vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">right</td><td>The right vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">top</td><td>The top horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bottom</td><td>The bottom horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in Direct3D is defined with bound (-1, -1, 0) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="a06aca730c0ec9c66f935a4953bf0dde6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06aca730c0ec9c66f935a4953bf0dde6">&sect;&nbsp;</a></span>OrthographicFrustumGL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::OrthographicFrustumGL </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to an OpenGL style orthographic projection matrix given clipping plane coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">left</td><td>The left vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">right</td><td>The right vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">top</td><td>The top horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bottom</td><td>The bottom horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in OpenGL is defined with bound (-1, -1, -1) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="a6e90455c33c2f9813103a7b0575a4ffc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e90455c33c2f9813103a7b0575a4ffc">&sect;&nbsp;</a></span>PerspectiveFovD3D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::PerspectiveFovD3D </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>fov</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>aspect_ratio</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to an Direct3D style perspective projection matrix given the field of view. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fov</td><td>The vertical field of view angle, in radians. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">aspect_ratio</td><td>The aspect ratio that determines the horizontal field of view. The aspect ratio is the ratio of width to height. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. Must be positive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. Must be positive. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in Direct3D is defined with bound (-1, -1, 0) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="a6145110261e3723ac1fd91c69e380bd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6145110261e3723ac1fd91c69e380bd9">&sect;&nbsp;</a></span>PerspectiveFovGL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::PerspectiveFovGL </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>fov</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>aspect_ratio</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to an OpenGL style perspective projection matrix given the field of view. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">fov</td><td>The vertical field of view angle, in radians. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">aspect_ratio</td><td>The aspect ratio that determines the horizontal field of view. The aspect ratio is the ratio of width to height. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. Must be positive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. Must be positive. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in OpenGL is defined with bound (-1, -1, -1) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="aa67f22cca46ac494b770b3a6b90aac24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa67f22cca46ac494b770b3a6b90aac24">&sect;&nbsp;</a></span>PerspectiveFrustumD3D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::PerspectiveFrustumD3D </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">left</td><td>The left vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">right</td><td>The right vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">top</td><td>The top horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bottom</td><td>The bottom horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. Must be positive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. Must be positive. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in Direct3D is defined with bound (-1, -1, 0) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="ad76a57e07cf29d312ed72eec02155c9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad76a57e07cf29d312ed72eec02155c9d">&sect;&nbsp;</a></span>PerspectiveFrustumGL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::PerspectiveFrustumGL </td>
+          <td>(</td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>near_dist</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float&#160;</td>
+          <td class="paramname"><em>far_dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to an OpenGL style perspective projection matrix given clipping plane coordinates. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">left</td><td>The left vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">right</td><td>The right vertical clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">top</td><td>The top horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bottom</td><td>The bottom horizontal clipping plane. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">near_dist</td><td>The near depth clipping plane. Must be positive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">far_dist</td><td>The far depth clipping plane. Must be positive. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>Clipping box in OpenGL is defined with bound (-1, -1, -1) to (1, 1, 1) </dd></dl>
+
+</div>
+</div>
+<a id="a398a18c6cab7cf927d0bac06ac3dead3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a398a18c6cab7cf927d0bac06ac3dead3">&sect;&nbsp;</a></span>Rotation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::Rotation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/da5/classgef_1_1_quaternion.html">gef::Quaternion</a> &amp;&#160;</td>
+          <td class="paramname"><em>quat</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to the rotation matrix created from a quaternion. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">quat</td><td>Rotation as a quaternion. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This function overwrites all current elements of the matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a6d8ccaec37a206c82df3ef565209c732"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d8ccaec37a206c82df3ef565209c732">&sect;&nbsp;</a></span>RotationX()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::RotationX </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radiansRot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this martix to a rotation matrix around the x-axis. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">radiansRot</td><td>Angle of rotation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>A positive angle of rotation results in a anti-clockwise rotation when looking towards the origin from the positive axis direction. </dd>
+<dd>
+This function overwrites all current elements of the matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a52f43b4984479240a289391ae7ed1655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52f43b4984479240a289391ae7ed1655">&sect;&nbsp;</a></span>RotationY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::RotationY </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radiansRot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this martix to a rotation matrix around the y-axis. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">radiansRot</td><td>Angle of rotation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>A positive angle of rotation results in a anti-clockwise rotation when looking towards the origin from the positive axis direction. </dd>
+<dd>
+This function overwrites all current elements of the matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a378902cc2876cc98b69fb6c4fe335c3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a378902cc2876cc98b69fb6c4fe335c3f">&sect;&nbsp;</a></span>RotationZ()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::RotationZ </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>radiansRot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this martix to a rotation matrix around the z-axis. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">radiansRot</td><td>Angle of rotation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>A positive angle of rotation results in a anti-clockwise rotation when looking towards the origin from the positive axis direction. </dd>
+<dd>
+This function overwrites all current elements of the matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a8ef32087a9b448004ad9202142dbebf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8ef32087a9b448004ad9202142dbebf8">&sect;&nbsp;</a></span>Scale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::Scale </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>scale</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to a scale matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">scale</td><td>Scale values for xyz axes. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This function overwrites all current elements of the matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a2ee77bed048654f6079b4a80538d3eef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ee77bed048654f6079b4a80538d3eef">&sect;&nbsp;</a></span>set_m()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::set_m </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set a particular element in this matrix to a the value provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">row</td><td>The row number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">column</td><td>The column number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab42aa11008a37a706128c6925771e0bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab42aa11008a37a706128c6925771e0bd">&sect;&nbsp;</a></span>SetColumn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::SetColumn </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>column</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>column_values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set a particular column in this matrix with the values provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">column</td><td>The column number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">column_values</td><td>The new row values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1680751306399fd7ac25406f4baae20b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1680751306399fd7ac25406f4baae20b">&sect;&nbsp;</a></span>SetRow()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::SetRow </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>row_values</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set a particular row in this matrix with the values provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">row</td><td>The row number. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">row_values</td><td>The new row values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5aac255c94a9e120a6988c95cd8a95c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5aac255c94a9e120a6988c95cd8a95c3">&sect;&nbsp;</a></span>SetTranslation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::SetTranslation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../da/d4d/classgef_1_1_vector4.html">gef::Vector4</a> &amp;&#160;</td>
+          <td class="paramname"><em>trans</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the elements in the matrix that represent the translation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">trans</td><td>The translation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section note"><dt>Note</dt><dd>This function only overwrites the elements where the translation is stored. All other elements remain unaltered. </dd></dl>
+
+</div>
+</div>
+<a id="adb4ba2166e2296e58c63b4e694d1e075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb4ba2166e2296e58c63b4e694d1e075">&sect;&nbsp;</a></span>Transpose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void gef::Matrix44::Transpose </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="../../d6/dfa/classgef_1_1_matrix44.html">Matrix44</a> &amp;&#160;</td>
+          <td class="paramname"><em>matrix</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set this matrix to the transpose of the matrix provided. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">matrix</td><td>The matrix to be transposed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>maths/<a class="el" href="../../de/dd6/matrix44_8h_source.html">matrix44.h</a></li>
 <li>maths/matrix44.cpp</li>
@@ -195,7 +1194,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 13 2016 22:43:41 for Games Education Framework by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Sep 15 2016 10:18:47 for Games Education Framework by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.12
 </small></address>

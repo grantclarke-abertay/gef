@@ -1,10 +1,19 @@
 var searchData=
 [
-  ['renderer3d',['Renderer3D',['../dd/df9/classgef_1_1_renderer3_d.html',1,'gef']]],
-  ['renderer3dd3d11',['Renderer3DD3D11',['../dc/d36/classgef_1_1_renderer3_d_d3_d11.html',1,'gef']]],
-  ['rendertarget',['RenderTarget',['../dc/d9c/classgef_1_1_render_target.html',1,'gef']]],
-  ['rendertargetd3d11',['RenderTargetD3D11',['../d7/d4c/classgef_1_1_render_target_d3_d11.html',1,'gef']]],
-  ['right_5fstick_5fx_5faxis',['right_stick_x_axis',['../de/d41/classgef_1_1_sony_controller.html#aca21f603c5fbb8db3b6cc72bf3d0d886',1,'gef::SonyController']]],
-  ['right_5fstick_5fy_5faxis',['right_stick_y_axis',['../de/d41/classgef_1_1_sony_controller.html#a777e5f1f615b49c3fa0ab093147d66b4',1,'gef::SonyController']]],
-  ['rotation',['rotation',['../da/dd5/classgef_1_1_sprite.html#a2263c6299ece6b7167592857f00b99d6',1,'gef::Sprite']]]
+  ['perspectivefovd3d',['PerspectiveFovD3D',['../d6/dfa/classgef_1_1_matrix44.html#a6e90455c33c2f9813103a7b0575a4ffc',1,'gef::Matrix44']]],
+  ['perspectivefovgl',['PerspectiveFovGL',['../d6/dfa/classgef_1_1_matrix44.html#a6145110261e3723ac1fd91c69e380bd9',1,'gef::Matrix44']]],
+  ['perspectivefrustumd3d',['PerspectiveFrustumD3D',['../d6/dfa/classgef_1_1_matrix44.html#aa67f22cca46ac494b770b3a6b90aac24',1,'gef::Matrix44']]],
+  ['perspectivefrustumgl',['PerspectiveFrustumGL',['../d6/dfa/classgef_1_1_matrix44.html#ad76a57e07cf29d312ed72eec02155c9d',1,'gef::Matrix44']]],
+  ['plane',['Plane',['../de/de3/classgef_1_1_plane.html',1,'gef']]],
+  ['platform',['Platform',['../d4/df8/classgef_1_1_platform.html',1,'gef']]],
+  ['platformd3d11',['PlatformD3D11',['../dc/d3e/classgef_1_1_platform_d3_d11.html',1,'gef']]],
+  ['platformwin32nullrenderer',['PlatformWin32NullRenderer',['../da/de0/classgef_1_1_platform_win32_null_renderer.html',1,'gef']]],
+  ['pngdata',['PNGData',['../d2/da8/struct_p_n_g_data.html',1,'']]],
+  ['pngloader',['PNGLoader',['../d7/d62/classgef_1_1_p_n_g_loader.html',1,'gef']]],
+  ['pointlight',['PointLight',['../db/d7c/classgef_1_1_point_light.html',1,'gef']]],
+  ['polyvertdata',['PolyVertData',['../db/d99/structgef_1_1_poly_vert_data.html',1,'gef']]],
+  ['position',['position',['../da/dd5/classgef_1_1_sprite.html#ad7e33fb50c656d53a2d4c4365d06baaa',1,'gef::Sprite::position()'],['../d7/d0d/classgef_1_1_sphere.html#ad0bb268fd9397e89c4b877870e4da9fb',1,'gef::Sphere::position()']]],
+  ['primitive',['Primitive',['../de/d11/classgef_1_1_primitive.html',1,'gef']]],
+  ['primitivedata',['PrimitiveData',['../da/dae/structgef_1_1_default3_d_shader_1_1_primitive_data.html',1,'gef::Default3DShader']]],
+  ['primitivedata',['PrimitiveData',['../dc/da6/structgef_1_1_primitive_data.html',1,'gef']]]
 ];

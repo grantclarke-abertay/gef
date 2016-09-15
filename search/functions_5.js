@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['position',['position',['../da/dd5/classgef_1_1_sprite.html#ad7e33fb50c656d53a2d4c4365d06baaa',1,'gef::Sprite']]]
+  ['inverse',['Inverse',['../d6/dfa/classgef_1_1_matrix44.html#a4fc092e56492b4f5669ef11109ec2866',1,'gef::Matrix44']]]
 ];

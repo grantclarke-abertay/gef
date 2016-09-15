@@ -1,9 +1,8 @@
 var searchData=
 [
-  ['set_5fcolour',['set_colour',['../da/dd5/classgef_1_1_sprite.html#aa8275b4837f6635a31e2b028324f47b7',1,'gef::Sprite']]],
-  ['set_5fheight',['set_height',['../da/dd5/classgef_1_1_sprite.html#af27176b6d11b4cb6223fed0fc6a1f96a',1,'gef::Sprite']]],
-  ['set_5fposition',['set_position',['../da/dd5/classgef_1_1_sprite.html#aeae2f2957f8b9c06b558851706318c0e',1,'gef::Sprite']]],
-  ['set_5frotation',['set_rotation',['../da/dd5/classgef_1_1_sprite.html#a91868d2fa4030c2be1aad9e3ec5c4e3f',1,'gef::Sprite']]],
-  ['set_5fwidth',['set_width',['../da/dd5/classgef_1_1_sprite.html#ac770d5e69f460ac4000ad6f8e5273d98',1,'gef::Sprite']]],
-  ['sprite',['Sprite',['../da/dd5/classgef_1_1_sprite.html#a24fbf5e5f768aa92a64613b7d4ba31a6',1,'gef::Sprite']]]
+  ['m',['m',['../d6/dfa/classgef_1_1_matrix44.html#a226025b91b6915ba876a4943524d714c',1,'gef::Matrix44']]],
+  ['max_5fvtx',['max_vtx',['../d4/d9f/classgef_1_1_aabb.html#a95498222ed4dd80429ae3810cbf544c3',1,'gef::Aabb']]],
+  ['mesh',['mesh',['../d5/dd5/classgef_1_1_mesh_instance.html#accc550e930f7fbf41615ad812de7abe4',1,'gef::MeshInstance']]],
+  ['meshinstance',['MeshInstance',['../d5/dd5/classgef_1_1_mesh_instance.html#a178dde808db7a750912302ffce99766a',1,'gef::MeshInstance']]],
+  ['min_5fvtx',['min_vtx',['../d4/d9f/classgef_1_1_aabb.html#ab42916e769234b96851d63a73774aaed',1,'gef::Aabb']]]
 ];
