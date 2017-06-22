@@ -1,5 +1,5 @@
-#ifndef _SCENE_H
-#define _SCENE_H
+#ifndef _GEF_SCENE_H
+#define _GEF_SCENE_H
 
 #include <list>
 #include <system/string_id.h>
@@ -53,4 +53,4 @@ namespace gef
 	};
 }
 
-#endif // _SCENE_H
+#endif // _GEF_SCENE_H

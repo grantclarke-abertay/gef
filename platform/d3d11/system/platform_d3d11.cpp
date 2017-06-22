@@ -39,7 +39,7 @@ namespace gef
 		// create window if window has not already been provided
 		if(hwnd == NULL)
 		{
-			window_ = new WindowWin32(hinstance, width, height, fullscreen);
+			window_ = new WindowWin32(hinstance, width, height, fullscreen, NULL);
 			set_width(window_->width());
 			set_height(window_->height());
 			hwnd_ = window_->hwnd();
@@ -528,13 +528,26 @@ namespace gef
 	{
 		return "hlsl";
 	}
+
+
+	class SpriteRenderer* PlatformD3D11::CreateSpriteRenderer()
+	{
+		return new SpriteRendererD3D11(*this);
+	}
+
+	InputManager* PlatformD3D11::CreateInputManager()
+	{
+		return new InputManagerD3D11(*this);
+	}
+
+	Renderer3D* PlatformD3D11::CreateRenderer3D()
+	{
+		return new Renderer3DD3D11(*this);
+	}
 }
 
 #if 0
-class SpriteRenderer* PlatformD3D11::CreateSpriteRenderer()
-{
-	return new SpriteRendererD3D11(*this);
-}
+
 
 class Mesh* PlatformD3D11::CreateMesh()
 {
@@ -556,15 +569,7 @@ AudioManager* PlatformD3D11::CreateAudioManager() const
 	return NULL;
 }
 
-InputManager* PlatformD3D11::CreateInputManager()
-{
-	return new InputManagerD3D11(*this);
-}
 
-Renderer3D* PlatformD3D11::CreateRenderer3D()
-{
-	return new Renderer3DD3D11(*this);
-}
 
 RenderTarget* PlatformD3D11::CreateRenderTarget(const Int32 width, const Int32 height) const
 {
@@ -591,3 +596,4 @@ DepthBuffer* PlatformD3D11::CreateDepthBuffer(UInt32 width, UInt32 height) const
 	return new DepthBufferD3D11(device_, width, height);
 }
 #endif
+

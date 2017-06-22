@@ -19,6 +19,11 @@ namespace gef
 
 		std::string FormatFilename(const std::string& filename) const;
 		std::string FormatFilename(const char* filename) const;
+
+		class SpriteRenderer* CreateSpriteRenderer();
+		class Renderer3D* CreateRenderer3D();
+		class InputManager* CreateInputManager();
+
 #if 0
 		class SpriteRenderer* CreateSpriteRenderer();
 		File* CreateFile() const;

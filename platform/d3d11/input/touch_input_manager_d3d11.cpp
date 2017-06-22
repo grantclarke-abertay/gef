@@ -30,9 +30,13 @@ namespace gef
 			dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
 			dipdw.diph.dwObj        = 0;
 			dipdw.diph.dwHow        = DIPH_DEVICE;
-			dipdw.dwData            = 16;
+			dipdw.dwData = 16;
 
 			hresult = mouse_->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph);
+
+			dipdw.dwData = DIPROPAXISMODE_REL;
+			hresult = mouse_->SetProperty(DIPROP_AXISMODE, &dipdw.diph);
+
 		}
 
 		if(FAILED(hresult))
@@ -55,6 +59,8 @@ namespace gef
 
 		is_button_down_[0] = false;
 		is_button_down_[1] = false;
+		is_button_down_[2] = false;
+		is_button_down_[3] = false;
 	}
 
 	TouchInputManagerD3D11::~TouchInputManagerD3D11()
@@ -77,15 +83,33 @@ namespace gef
 		HRESULT hresult = S_OK;
 		mouse_->Acquire();
 
-		DIDEVICEOBJECTDATA od;
-		DWORD dwElements = 1;
-
 		// store the button status for this update
 		// intialise it to the same state as last frame
-		bool is_button_down[2] = {false, false};
+		bool is_button_down[4] = { false, false, false, false };
 
 		is_button_down[0] = is_button_down_[0];
 		is_button_down[1] = is_button_down_[1];
+		is_button_down[2] = is_button_down_[2];
+		is_button_down[3] = is_button_down_[3];
+
+		DIMOUSESTATE mouse_state;
+		if (mouse_->GetDeviceState(sizeof(DIMOUSESTATE), (LPVOID)&mouse_state) == S_OK)
+		{
+			mouse_rel_.set_x(mouse_state.lX);
+			mouse_rel_.set_y(mouse_state.lY);
+			mouse_rel_.set_z(mouse_state.lZ);
+
+			is_button_down[0] = mouse_state.rgbButtons[0] & 0x80 ? true : false;
+			is_button_down[1] = mouse_state.rgbButtons[1] & 0x80 ? true : false;
+			is_button_down[2] = mouse_state.rgbButtons[2] & 0x80 ? true : false;
+			is_button_down[3] = mouse_state.rgbButtons[3] & 0x80 ? true : false;
+		}
+
+/*
+		DIDEVICEOBJECTDATA od;
+		DWORD dwElements = 1;
+
+
 
 		while(dwElements != 0)
 		{
@@ -110,6 +134,7 @@ namespace gef
 				break;
 			}
 		}
+*/
 
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
@@ -169,10 +194,15 @@ namespace gef
 						}
 					}
 
-					is_button_down_[touch_index] = is_button_down[touch_index];
 				}
 			}
 		}
+
+		is_button_down_[0] = is_button_down[0];
+		is_button_down_[1] = is_button_down[1];
+		is_button_down_[2] = is_button_down[2];
+		is_button_down_[3] = is_button_down[3];
+
 	}
 
 	void TouchInputManagerD3D11::EnablePanel(const Int32 panel_index)

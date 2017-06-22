@@ -44,7 +44,7 @@ namespace gef
 		// allocate memory to store local copy of variable data
 		//
 		AllocateVariableData();
-		CreateSamplerStates();
+//		CreateSamplerStates();
 		CreateVertexShaderConstantBuffer();
 		CreatePixelShaderConstantBuffer();
 
@@ -273,6 +273,9 @@ namespace gef
 		case kVector4:
 			attribute_type = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			break;
+		case kUByte4:
+			attribute_type = DXGI_FORMAT_R32_UINT;
+			break;
 		}
 
 		return attribute_type;
@@ -324,13 +327,14 @@ namespace gef
 			D3D11_SAMPLER_DESC sampler_desc;
 
 			// Create a texture sampler state description.
-			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-			sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-			sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-			//sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-			//sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-			//sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+//			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+			//sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+			//sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+			//sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+			sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+			sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 			sampler_desc.MipLODBias = 0.0f;
 			sampler_desc.MaxAnisotropy = 1;
 			sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
@@ -348,5 +352,11 @@ namespace gef
 		}
 	}
 
-
+	void ShaderInterfaceD3D11::AddSamplerState(const D3D11_SAMPLER_DESC& sampler_desc)
+	{
+		// Create the texture sampler state.
+		ID3D11SamplerState* sampler_state;
+		HRESULT hresult = device_->CreateSamplerState(&sampler_desc, &sampler_state);
+		sampler_states_.push_back(sampler_state);
+	}
 }

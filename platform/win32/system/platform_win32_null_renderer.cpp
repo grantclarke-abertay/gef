@@ -88,11 +88,23 @@ namespace gef
 	{
 		return NULL;
 	}
-#if 0
+
 	class SpriteRenderer* PlatformWin32NullRenderer::CreateSpriteRenderer()
 	{
 		return NULL;
 	}
+
+	Renderer3D* PlatformWin32NullRenderer::CreateRenderer3D()
+	{
+		return NULL;
+	}
+
+	class InputManager* PlatformWin32NullRenderer::CreateInputManager()
+	{
+		return NULL;
+	}
+
+#if 0
 
 	class Mesh* PlatformWin32NullRenderer::CreateMesh()
 	{
@@ -119,15 +131,7 @@ namespace gef
 	//		return NULL;
 	//	}
 
-	InputManager* PlatformWin32NullRenderer::CreateInputManager()
-	{
-		return NULL;
-	}
 
-	Renderer3D* PlatformWin32NullRenderer::CreateRenderer3D()
-	{
-		return NULL;
-	}
 
 	RenderTarget* PlatformWin32NullRenderer::CreateRenderTarget(const Int32 width, const Int32 height) const
 	{

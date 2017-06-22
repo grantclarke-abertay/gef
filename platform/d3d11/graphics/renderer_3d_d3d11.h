@@ -38,8 +38,6 @@ namespace gef
 	protected:
 		static const D3D11_PRIMITIVE_TOPOLOGY Renderer3DD3D11::primitive_types[NUM_PRIMITIVE_TYPES];
 
-		Default3DShader default_shader_;
-
 	private:
 		ID3D11RasterizerState* default_render_state_;
 		ID3D11RasterizerState* wireframe_render_state_;

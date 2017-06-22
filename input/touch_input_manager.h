@@ -3,6 +3,7 @@
 
 #include <gef.h>
 #include <maths/vector2.h>
+#include <maths/vector4.h>
 #include <vector>
 #include <list>
 
@@ -55,6 +56,7 @@ namespace gef
 		virtual const gef::Vector2& mouse_position() const = 0;
 		virtual bool is_button_down(Int32 button_num) const = 0;
 
+		virtual const gef::Vector4& mouse_rel() const = 0;
 
 		void CleanupReleasedTouches();
 	protected:

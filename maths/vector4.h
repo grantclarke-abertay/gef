@@ -54,6 +54,7 @@ protected:
 	float values_[4];
 public:
 	static const Vector4 kZero;
+	static const Vector4 kOne;
 };
 
 }

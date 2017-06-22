@@ -24,6 +24,8 @@ namespace gef
 		void BindTextureResources(const Platform& platform) const;
 		void UnbindTextureResources(const Platform& platform) const;
 
+		void AddSamplerState(const D3D11_SAMPLER_DESC& sampler_desc);
+
 	protected:
 		void SetInputAssemblyElement(const ShaderParameter& shader_parameter, D3D11_INPUT_ELEMENT_DESC& element);
 		void CreateVertexShaderConstantBuffer();

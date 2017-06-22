@@ -32,6 +32,8 @@ public:
 	float y;
 	float z;
 	float w;
+
+	static const Quaternion kIdentity;
 };
 
 }

@@ -15,6 +15,11 @@
 #include <graphics/colour.h>
 #include <graphics/default_3d_shader_data.h>
 
+#ifdef _WIN32
+#include <platform/d3d11/graphics/shader_interface_d3d11.h>
+#endif
+
+
 namespace gef
 {
 	Default3DShader::Default3DShader(const Platform& platform)
@@ -66,7 +71,42 @@ namespace gef
 		device_interface_->set_vertex_size(sizeof(Mesh::Vertex));
 		device_interface_->CreateVertexFormat();
 
+#ifdef _WIN32
+		gef::ShaderInterfaceD3D11* shader_interface_d3d11 = static_cast<gef::ShaderInterfaceD3D11*>(device_interface_);
+
+		// Create a texture sampler state description.
+		D3D11_SAMPLER_DESC sampler_desc;
+		sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.MipLODBias = 0.0f;
+		sampler_desc.MaxAnisotropy = 1;
+		sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		sampler_desc.BorderColor[0] = 0;
+		sampler_desc.BorderColor[1] = 0;
+		sampler_desc.BorderColor[2] = 0;
+		sampler_desc.BorderColor[3] = 0;
+		sampler_desc.MinLOD = 0;
+		sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		shader_interface_d3d11->AddSamplerState(sampler_desc);
+#endif
+
 		success = device_interface_->CreateProgram();
+	}
+
+	Default3DShader::Default3DShader()
+		: wvp_matrix_variable_index_(-1)
+		, world_matrix_variable_index_(-1)
+		, invworld_matrix_variable_index_(-1)
+		, light_position_variable_index_(-1)
+		, material_colour_variable_index_(-1)
+		, ambient_light_colour_variable_index_(-1)
+		, light_colour_variable_index_(-1)
+		, texture_sampler_index_(-1)
+	{
+
 	}
 
 	Default3DShader::~Default3DShader()

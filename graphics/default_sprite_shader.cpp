@@ -14,6 +14,9 @@
 #include <graphics/sprite.h>
 #include <math.h>
 
+#ifdef _WIN32
+#include <platform/d3d11/graphics/shader_interface_d3d11.h>
+#endif
 
 namespace gef
 {
@@ -52,6 +55,28 @@ namespace gef
 
 		device_interface_->CreateVertexFormat();
 
+#ifdef _WIN32
+		gef::ShaderInterfaceD3D11* shader_interface_d3d11 = static_cast<gef::ShaderInterfaceD3D11*>(device_interface_);
+
+		// Create a texture sampler state description.
+		D3D11_SAMPLER_DESC sampler_desc;
+		sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.MipLODBias = 0.0f;
+		sampler_desc.MaxAnisotropy = 1;
+		sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+		sampler_desc.BorderColor[0] = 0;
+		sampler_desc.BorderColor[1] = 0;
+		sampler_desc.BorderColor[2] = 0;
+		sampler_desc.BorderColor[3] = 0;
+		sampler_desc.MinLOD = 0;
+		sampler_desc.MaxLOD = D3D11_FLOAT32_MAX;
+
+		shader_interface_d3d11->AddSamplerState(sampler_desc);
+#endif
+
 		success = device_interface_->CreateProgram();
 	}
 
@@ -59,6 +84,15 @@ namespace gef
 	{
 
 	}
+
+	DefaultSpriteShader::DefaultSpriteShader()
+		: sprite_data_variable_index_(-1)
+		, projection_matrix_variable_index_(-1)
+		, texture_sampler_index_(-1)
+	{
+
+	}
+
 
 	void DefaultSpriteShader::SetSceneData(const Matrix44& projection_matrix)
 	{
