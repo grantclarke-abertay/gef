@@ -29,11 +29,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 namespace gef
 {
 
-WindowWin32::WindowWin32(HINSTANCE hinstance, UInt32 screen_width, UInt32 screen_height, bool fullscreen) :
+WindowWin32::WindowWin32(HINSTANCE hinstance, UInt32 screen_width, UInt32 screen_height, bool fullscreen, WNDPROC wndproc) :
 hwnd_(NULL)
 {
 	DEVMODE screen_settings;
 	UInt32 wnd_pos_x, wnd_pos_y;
+
+	if (wndproc == NULL)
+		wndproc = WndProc;
 
 	bits_per_pixel_ = 32;
 
@@ -47,7 +50,7 @@ hwnd_(NULL)
 	WNDCLASSEX wc;
 	memset(&wc, 0, sizeof(wc));
 	wc.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-	wc.lpfnWndProc   = WndProc;
+	wc.lpfnWndProc   = wndproc;
 	wc.cbClsExtra    = 0;
 	wc.cbWndExtra    = 0;
 	wc.hInstance     = hinstance_;
@@ -121,10 +124,14 @@ hwnd_(NULL)
 			wnd_pos_x, wnd_pos_y, screen_width, screen_height, NULL, NULL, hinstance_, NULL);
 	}
 
+	HRESULT hres = SetWindowText(hwnd_, application_name_);
+
+
 	// Bring the window up on the screen and set it as main focus.
 	ShowWindow(hwnd_, SW_SHOW);
 	SetForegroundWindow(hwnd_);
 	SetFocus(hwnd_);
+
 
 	// Hide the mouse cursor.
 //	ShowCursor(false);

@@ -7,10 +7,10 @@ namespace gef
 {
 	Renderer3D::Renderer3D(Platform& platform) :
 		shader_(NULL),
-		default_shader_(NULL),
-		default_skinned_mesh_shader_(NULL),
 		override_material_(NULL),
-		platform_(platform)
+		platform_(platform),
+		default_shader_(platform),
+		default_skinned_mesh_shader_(platform)
 	{
 		projection_matrix_.SetIdentity();
 		view_matrix_.SetIdentity();
@@ -19,14 +19,12 @@ namespace gef
 
 	Renderer3D::~Renderer3D()
 	{
-		delete default_shader_;
-		delete default_skinned_mesh_shader_;
 	}
 
 	void Renderer3D::SetShader( Shader* shader)
 	{
 		if(shader == NULL)
-			set_shader(default_shader_);
+			set_shader(&default_shader_);
 		else
 			set_shader(shader);
 	}
@@ -49,8 +47,9 @@ namespace gef
 
 			default_skinned_mesh_shader_data_.set_bone_matrices(&bone_matrices);
 
+			SetShader(&default_skinned_mesh_shader_);
 
-			SetShader(default_skinned_mesh_shader_);
+			default_skinned_mesh_shader_.SetSceneData(default_skinned_mesh_shader_data_, view_matrix_, projection_matrix_);
 		}
 
 		DrawMesh(mesh_instance);

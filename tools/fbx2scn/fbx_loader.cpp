@@ -750,9 +750,14 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 			if(skin_count > 0 && !fbx_ignore_skinning_)
 			{
 				Mesh::SkinnedVertex* skinned_vertex = (Mesh::SkinnedVertex*)vertex_data;
-				skinned_vertex->position = cp.position;
-				skinned_vertex->normal = cp.normals[mesh_vertex_data.normal_index];
-				skinned_vertex->uv = cp.uvs[mesh_vertex_data.uv_index];
+				skinned_vertex->px = cp.position.x();
+				skinned_vertex->py = cp.position.y();
+				skinned_vertex->pz = cp.position.z();
+				skinned_vertex->nx = cp.normals[mesh_vertex_data.normal_index].x();
+				skinned_vertex->ny = cp.normals[mesh_vertex_data.normal_index].y();
+				skinned_vertex->nz = cp.normals[mesh_vertex_data.normal_index].z();
+				skinned_vertex->u = cp.uvs[mesh_vertex_data.uv_index].x;
+				skinned_vertex->v = cp.uvs[mesh_vertex_data.uv_index].y;
 				skinned_vertex->bone_weights[0] = 1.0f;
 				skinned_vertex->bone_weights[1] = 0.0f;
 				skinned_vertex->bone_weights[2] = 0.0f;

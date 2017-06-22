@@ -70,8 +70,11 @@ namespace gef
 
 	VertexData::~VertexData()
 	{
-		free(vertices);
-		vertices = NULL;
+		if (vertices)
+		{
+			free(vertices);
+			vertices = NULL;
+		}
 	}
 
 	bool VertexData::Read(std::istream& stream)

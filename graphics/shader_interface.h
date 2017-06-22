@@ -27,6 +27,7 @@ namespace gef
 			kVector2,
 			kVector3,
 			kVector4,
+			kUByte4
 //			kNumParameterTypes
 		};
 
@@ -66,7 +67,7 @@ namespace gef
 		inline void set_vertex_size(Int32 vertex_size) {vertex_size_ = vertex_size; }
 
 		Int32 AddVertexShaderVariable(const char* variable_name, VariableType variable_type, Int32 variable_count = 1);
-		void SetVertexShaderVariable(Int32 variable_index, const void* value);
+		void SetVertexShaderVariable(Int32 variable_index, const void* value, Int32 variable_count = -1);
 		Int32 AddPixelShaderVariable(const char* variable_name, VariableType variable_type, Int32 variable_count = 1);
 		void SetPixelShaderVariable(Int32 variable_index, const void* value);
 
@@ -90,7 +91,7 @@ namespace gef
 		static Int32 GetTypeSize(VariableType type);
 
 		Int32 AddVariable(std::vector<ShaderVariable>& variables, const char* variable_name, VariableType variable_type, Int32 variable_count);
-		virtual void SetVariable(std::vector<ShaderVariable>& variables, UInt8* variables_data, Int32 variable_index, const void* value);
+		virtual void SetVariable(std::vector<ShaderVariable>& variables, UInt8* variables_data, Int32 variable_index, const void* value, Int32 variable_count = -1);
 		void AllocateVariableData();
 		UInt8* AllocateVariableData(std::vector<ShaderVariable>& variables, Int32& variable_data_size);
 

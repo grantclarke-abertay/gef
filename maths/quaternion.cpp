@@ -1,8 +1,11 @@
 #include <maths/quaternion.h>
 #include <maths/matrix44.h>
 
+
 namespace gef
 {
+	const Quaternion Quaternion::kIdentity(0.0f, 0.0f, 0.0f, 1.0f);
+
 	Quaternion::Quaternion(const Matrix44& matrix)
 	{
 		SetFromMatrix(matrix);

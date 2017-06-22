@@ -53,6 +53,7 @@ namespace gef
 
 		inline PrimitiveData& primitive_data() { return primitive_data_; }
 	protected:
+		Default3DShader();
 
 		Int32 wvp_matrix_variable_index_;
 		Int32 world_matrix_variable_index_;

@@ -11,7 +11,7 @@ namespace gef
 	class WindowWin32
 	{
 	public:
-		WindowWin32(HINSTANCE hinstance, UInt32 screen_width, UInt32 screen_height, bool fullscreen);
+		WindowWin32(HINSTANCE hinstance, UInt32 screen_width, UInt32 screen_height, bool fullscreen, WNDPROC wndproc = NULL);
 		~WindowWin32();
 		inline HWND hwnd() { return hwnd_; }
 		inline UInt32 bits_per_pixel() { return bits_per_pixel_; }

@@ -2,7 +2,6 @@
 #define _GEF_SPRITE_RENDERER_D3D11_H
 
 #include <graphics/sprite_renderer.h>
-#include <graphics/default_sprite_shader.h>
 #include <d3d11.h>
 
 namespace gef
@@ -26,7 +25,6 @@ namespace gef
 
 		Texture* default_texture_;
 		VertexBuffer* vertex_buffer_;
-		DefaultSpriteShader default_shader_;
 
 		ID3D11RasterizerState* default_render_state_;
 		ID3D11BlendState* default_blend_state_;

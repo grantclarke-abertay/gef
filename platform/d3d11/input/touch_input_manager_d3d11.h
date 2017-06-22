@@ -26,7 +26,8 @@ namespace gef
 		const bool panel_enabled(const Int32 panel_index) const { return panel_enabled_[panel_index]; }
 
 		inline const gef::Vector2& mouse_position() const { return mouse_position_; }
-		inline bool is_button_down(Int32 button_num) const { return is_button_down_[button_num]; } 
+		inline const gef::Vector4& mouse_rel() const { return mouse_rel_; }
+		inline bool is_button_down(Int32 button_num) const { return is_button_down_[button_num]; }
 
 	private:
 		void CleanUp();
@@ -35,8 +36,9 @@ namespace gef
 		const PlatformD3D11* platform_;
 		Touch touches_[1][2];
 		bool panel_enabled_[1];
-		bool is_button_down_[2];
+		bool is_button_down_[4];
 		gef::Vector2 mouse_position_;
+		gef::Vector4 mouse_rel_;
 	};
 }
 
