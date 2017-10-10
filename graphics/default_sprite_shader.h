@@ -26,6 +26,7 @@ namespace gef
 		void SetSceneData(const Matrix44& projection_matrix);
 		void SetSpriteData(const Sprite& sprite, const Texture* texture);
 	protected:
+		DefaultSpriteShader();
 		void BuildSpriteShaderData(const Sprite& sprite, Matrix44& sprite_data);
 
 

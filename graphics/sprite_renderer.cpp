@@ -14,7 +14,7 @@ namespace gef
 SpriteRenderer::SpriteRenderer(Platform& platform) :
 platform_(platform),
 	shader_(NULL),
-	default_shader_(NULL)
+	default_shader_(platform_)
 {
 	//SCE_DBG_ASSERT(platform_ != NULL);
 }
@@ -22,13 +22,12 @@ platform_(platform),
 
 SpriteRenderer::~SpriteRenderer()
 {
-	DeleteNull(default_shader_);
 }
 
 void SpriteRenderer::SetShader( Shader* shader)
 {
 	if(shader == NULL)
-		set_shader(default_shader_);
+		set_shader(&default_shader_);
 	else
 		set_shader(shader);
 }

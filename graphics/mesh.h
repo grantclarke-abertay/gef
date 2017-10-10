@@ -34,11 +34,16 @@ namespace gef
 
 		struct SkinnedVertex
 		{
-			Vector4 position;
-			Vector4 normal;
+			float px;
+			float py;
+			float pz;
+			float nx;
+			float ny;
+			float nz;
 			UInt8 bone_indices[4]; 
 			float bone_weights[4];
-			Vector2 uv;
+			float u;
+			float v;
 		};
 
 		Mesh(Platform& platform);

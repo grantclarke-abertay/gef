@@ -24,11 +24,8 @@ namespace gef
 		~PlatformD3D11();
 		void Resize(UInt32 width, UInt32 height);
 #if 0
-		class Renderer3D* CreateRenderer3D();
-		class SpriteRenderer* CreateSpriteRenderer();
 		Mesh* CreateMesh();
 		class Texture* CreateTexture(const ImageData& image_data) const;
-		InputManager* CreateInputManager();
 		VertexBuffer* CreateVertexBuffer() const;
 		IndexBuffer* CreateIndexBuffer() const;
 		File* CreateFile() const;
@@ -38,6 +35,11 @@ namespace gef
 		RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const;
 		DepthBuffer* CreateDepthBuffer(UInt32 width, UInt32 height) const;
 #endif
+		class Renderer3D* CreateRenderer3D();
+		class SpriteRenderer* CreateSpriteRenderer();
+		InputManager* CreateInputManager();
+
+
 //		class Texture* CreateCheckerTexture(UInt32 size, UInt32 num_checkers) ;
 		Matrix44 PerspectiveProjectionFov(const float fov, const float aspect_ratio, const float near_distance, const float far_distance) const;
 		Matrix44 PerspectiveProjectionFrustum(const float left, const float right, const float top, const float bottom, const float near_distance, const float far_distance) const;

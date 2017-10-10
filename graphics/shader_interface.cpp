@@ -40,9 +40,9 @@ namespace gef
 		return AddVariable(vertex_shader_variables_, variable_name, variable_type, variable_count);
 	}
 
-	void ShaderInterface::SetVertexShaderVariable(Int32 variable_index, const void* value)
+	void ShaderInterface::SetVertexShaderVariable(Int32 variable_index, const void* value, Int32 variable_count)
 	{
-		SetVariable(vertex_shader_variables_, vertex_shader_variable_data_, variable_index, value);
+		SetVariable(vertex_shader_variables_, vertex_shader_variable_data_, variable_index, value, variable_count);
 	}
 
 	Int32 ShaderInterface::AddPixelShaderVariable(const char* variable_name, VariableType variable_type, Int32 variable_count)
@@ -66,11 +66,14 @@ namespace gef
 		return (Int32)variables.size()-1;
 	}
 
-	void ShaderInterface::SetVariable(std::vector<ShaderVariable>& variables, UInt8* variables_data, Int32 variable_index, const void* value)
+	void ShaderInterface::SetVariable(std::vector<ShaderVariable>& variables, UInt8* variables_data, Int32 variable_index, const void* value, Int32 variable_count)
 	{
 		ShaderVariable& shader_variable = variables[variable_index];
+		if (variable_count == -1)
+			variable_count = shader_variable.count;
+
 		void* variable_data = &static_cast<UInt8*>(variables_data)[shader_variable.byte_offset];
-		Int32 data_size = GetTypeSize(shader_variable.type)*shader_variable.count;
+		Int32 data_size = GetTypeSize(shader_variable.type)*variable_count;
 		memcpy(variable_data, value, data_size);
 	}
 
@@ -106,6 +109,7 @@ namespace gef
 		Int32 size;
 		switch(type)
 		{
+		case kUByte4:
 		case kFloat:
 			size = 4;
 			break;

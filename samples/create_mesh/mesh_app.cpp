@@ -23,8 +23,8 @@ MeshApp::MeshApp(gef::Platform& platform) :
 
 void MeshApp::Init()
 {
-	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
-	renderer_3d_ = gef::Renderer3D::Create(platform_);
+	sprite_renderer_ = platform_.CreateSpriteRenderer();
+	renderer_3d_ = platform_.CreateRenderer3D();
 
 	InitFont();
 
@@ -67,6 +67,7 @@ void MeshApp::Render()
 
 	// draw meshes here
 	renderer_3d_->Begin();
+
 	renderer_3d_->DrawMesh(cube_player_);
 	renderer_3d_->End();
 
@@ -99,7 +100,7 @@ void MeshApp::DrawHUD()
 
 gef::Mesh* MeshApp::CreateCubeMesh()
 {
-	gef::Mesh* mesh = new gef::Mesh(platform_);
+	gef::Mesh* mesh = platform_.CreateMesh();
 
 	// initialise the vertex data to create a 1, 1, 1 cube
 	const float half_size = 0.5f;

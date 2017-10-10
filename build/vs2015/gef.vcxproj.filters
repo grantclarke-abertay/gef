@@ -51,9 +51,6 @@
     <ClCompile Include="..\..\maths\vector2.cpp">
       <Filter>maths</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\maths\vector4.cpp">
-      <Filter>maths</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\animation\animation.cpp">
       <Filter>animation</Filter>
     </ClCompile>
@@ -168,11 +165,17 @@
     <ClCompile Include="..\..\graphics\vertex_buffer.cpp">
       <Filter>graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\input\input_manager.cpp">
+      <Filter>input</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\input\keyboard.cpp">
       <Filter>input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\input\input_manager.cpp">
-      <Filter>input</Filter>
+    <ClCompile Include="..\..\maths\vector4.cpp">
+      <Filter>maths</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\graphics\default_3d_skinning_shader.cpp">
+      <Filter>graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +210,6 @@
       <Filter>maths</Filter>
     </ClInclude>
     <ClInclude Include="..\..\maths\vector2.h">
-      <Filter>maths</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\maths\vector4.h">
       <Filter>maths</Filter>
     </ClInclude>
     <ClInclude Include="..\..\animation\animation.h">
@@ -332,11 +332,17 @@
     <ClInclude Include="..\..\graphics\vertex_buffer.h">
       <Filter>graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\input\input_manager.h">
+      <Filter>input</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\input\keyboard.h">
       <Filter>input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\input\input_manager.h">
-      <Filter>input</Filter>
+    <ClInclude Include="..\..\maths\vector4.h">
+      <Filter>maths</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\graphics\default_3d_skinning_shader.h">
+      <Filter>graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

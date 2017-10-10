@@ -69,6 +69,19 @@ namespace gef
 		success = device_interface_->CreateProgram();
 	}
 
+	Default3DShader::Default3DShader()
+		: wvp_matrix_variable_index_(-1)
+		, world_matrix_variable_index_(-1)
+		, invworld_matrix_variable_index_(-1)
+		, light_position_variable_index_(-1)
+		, material_colour_variable_index_(-1)
+		, ambient_light_colour_variable_index_(-1)
+		, light_colour_variable_index_(-1)
+		, texture_sampler_index_(-1)
+	{
+
+	}
+
 	Default3DShader::~Default3DShader()
 	{
 	}

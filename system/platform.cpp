@@ -1,6 +1,7 @@
 #include <system/platform.h>
 #include <input/touch_input_manager.h>
 #include <graphics/render_target.h>
+#include <graphics/mesh.h>
 
 namespace gef
 {
@@ -72,5 +73,11 @@ namespace gef
 	{
 		index_buffers_.remove(index_buffer);
 	}
+
+	Mesh* Platform::CreateMesh()
+	{
+		return new Mesh(*this);
+	}
+
 
 }

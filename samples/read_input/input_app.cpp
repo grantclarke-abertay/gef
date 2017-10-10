@@ -105,7 +105,11 @@ static const char* key_names[] =
 "BACKSLASH",
 "COMMA",
 "PERIOD",
-"SLASH"
+"SLASH",
+"UP",
+"DOWN",
+"LEFT",
+"RIGHT"
 };
 
 
@@ -120,8 +124,8 @@ InputApp::InputApp(gef::Platform& platform) :
 
 void InputApp::Init()
 {
-	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
-	input_manager_ = gef::InputManager::Create(platform_);
+	sprite_renderer_ = platform_.CreateSpriteRenderer();
+	input_manager_ = platform_.CreateInputManager();
 
 	// make sure if there is a panel to detect touch input, then activate it
 	if (input_manager_ && input_manager_->touch_manager() && (input_manager_->touch_manager()->max_num_panels() > 0))
@@ -181,7 +185,9 @@ void InputApp::DrawHUD()
 	{
 		// if a touch is active lets draw some text
 		if (active_touch_id_ != -1)
+		{
 			font_->RenderText(sprite_renderer_, gef::Vector4(touch_position_.x, touch_position_.y, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "(%.1f, %.1f)", touch_position_.x, touch_position_.y);
+		}
 
 		// display frame rate
 		font_->RenderText(sprite_renderer_, gef::Vector4(850.0f, 510.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);

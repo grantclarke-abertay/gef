@@ -101,7 +101,12 @@ namespace gef
 		DIK_BACKSLASH,   //	KC_BACKSLASH,
 		DIK_COMMA,   //	KC_COMMA,
 		DIK_PERIOD,   //	KC_PERIOD,
-		DIK_SLASH };   //	KC_SLASH,	};
+		DIK_SLASH,	//	KC_SLASH,
+		DIK_UP,		// KC_UP
+		DIK_DOWN,	// KC_LEFT
+		DIK_LEFT,	// KC_RIGHT
+		DIK_RIGHT	// KC_LEFT
+	};
 
 	KeyboardD3D11::KeyboardD3D11(const PlatformD3D11& platform, LPDIRECTINPUT8 direct_input)
 		: direct_input_(direct_input)

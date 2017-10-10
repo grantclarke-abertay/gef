@@ -46,13 +46,9 @@ namespace gef
 		/// each class will have it's own Create method instead
 		/// for better encapsulation
 #if 0
-		virtual SpriteRenderer* CreateSpriteRenderer() = 0;
 		virtual File* CreateFile() const = 0;
 		virtual AudioManager* CreateAudioManager() const = 0;
-		virtual InputManager* CreateInputManager() = 0;
 		virtual Texture* CreateTexture(const ImageData& image_data) const = 0;
-		virtual Mesh* CreateMesh() = 0;
-		virtual Renderer3D* CreateRenderer3D() = 0;
 		virtual VertexBuffer* CreateVertexBuffer() const = 0;
 		virtual IndexBuffer* CreateIndexBuffer() const = 0;
 		virtual ShaderInterface* CreateShaderInterface() const = 0;
@@ -60,6 +56,12 @@ namespace gef
 		/// could just be the fact the depth buffer size has to be equal or bigger
 		virtual RenderTarget* CreateRenderTarget(const Int32 width, const Int32 height) const = 0;
 #endif
+		/// Keeping for backward campatability with original samples for CMP404 module
+		virtual SpriteRenderer* CreateSpriteRenderer() = 0;
+		virtual Renderer3D* CreateRenderer3D() = 0;
+		virtual InputManager* CreateInputManager() = 0;
+		Mesh* CreateMesh();
+
 
 		void AddShader(Shader* shader);
 		void RemoveShader(Shader* shader);

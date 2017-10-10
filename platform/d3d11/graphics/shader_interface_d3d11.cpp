@@ -273,6 +273,9 @@ namespace gef
 		case kVector4:
 			attribute_type = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			break;
+		case kUByte4:
+			attribute_type = DXGI_FORMAT_R32_UINT;
+			break;
 		}
 
 		return attribute_type;

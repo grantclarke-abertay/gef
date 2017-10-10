@@ -105,6 +105,10 @@ namespace gef
 			KC_COMMA,
 			KC_PERIOD,
 			KC_SLASH,
+			KC_UP,
+			KC_DOWN,
+			KC_LEFT,
+			KC_RIGHT,
 			NUM_KEY_CODES
 		};
 

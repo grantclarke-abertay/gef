@@ -5,6 +5,8 @@
 #include <maths/matrix44.h>
 #include <graphics/default_3d_shader_data.h>
 #include <graphics/skinned_mesh_shader_data.h>
+#include <graphics/default_3d_shader.h>
+#include <graphics/default_3d_skinning_shader.h>
 #include <vector>
 
 namespace gef
@@ -25,6 +27,7 @@ namespace gef
 		{
 			kSolid = 0,
 			kWireframe,
+			kLines
 		};
 
 		enum DepthTest
@@ -71,8 +74,8 @@ namespace gef
 		Matrix44 inv_world_transpose_matrix_;
 		Matrix44 world_matrix_;
 		Shader* shader_;
-		Shader* default_shader_;
-		Shader* default_skinned_mesh_shader_;
+		Default3DShader default_shader_;
+		Default3DSkinningShader default_skinned_mesh_shader_;
 		Default3DShaderData default_shader_data_;
 		SkinnedMeshShaderData default_skinned_mesh_shader_data_;
 		const Material* override_material_;

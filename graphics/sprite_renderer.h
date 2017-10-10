@@ -2,6 +2,7 @@
 #define _GEF_SPRITE_RENDERER_H
 
 #include <maths/matrix44.h>
+#include <graphics/default_sprite_shader.h>
 
 namespace gef
 {
@@ -35,7 +36,7 @@ namespace gef
 		Matrix44 projection_matrix_;
 
 		Shader* shader_;
-		Shader* default_shader_;
+		DefaultSpriteShader default_shader_;
 	};
 }
 #endif // _GEF_SPRITE_RENDERER_H

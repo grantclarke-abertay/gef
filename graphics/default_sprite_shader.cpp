@@ -60,6 +60,15 @@ namespace gef
 
 	}
 
+	DefaultSpriteShader::DefaultSpriteShader()
+		: sprite_data_variable_index_(-1)
+		, projection_matrix_variable_index_(-1)
+		, texture_sampler_index_(-1)
+	{
+
+	}
+
+
 	void DefaultSpriteShader::SetSceneData(const Matrix44& projection_matrix)
 	{
 		Matrix44 projectionT;

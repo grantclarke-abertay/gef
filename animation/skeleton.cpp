@@ -130,8 +130,7 @@ namespace gef
 
 	void SkeletonPose::SetPoseFromAnim(const Animation& anim, const SkeletonPose& bind_pose, float time, const bool updateGlobalPose)
 	{
-		Int32 joint_index=0;
-		for(std::vector<JointPose>::iterator joint_iter = local_pose_.begin(); joint_iter != local_pose_.end(); ++joint_iter, ++joint_index)
+		for (Int32 joint_index = 0; joint_index < skeleton_->joints().size(); ++joint_index)
 		{
 			const AnimNode* anim_node = anim.FindNode(skeleton_->joints()[joint_index].name_id);
 			JointPose& joint_pose = local_pose_[joint_index];

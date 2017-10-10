@@ -7,6 +7,7 @@
 #include <maths/vector4.h>
 #include <vector>
 #include <graphics/mesh_instance.h>
+#include <graphics/material.h>
 
 // FRAMEWORK FORWARD DECLARATIONS
 namespace gef
