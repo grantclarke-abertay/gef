@@ -107,8 +107,10 @@ namespace gef
 			KC_SLASH,
 			KC_UP,
 			KC_DOWN,
-			KC_RIGHT,
 			KC_LEFT,
+			KC_RIGHT,
+			KC_PGUP,
+			KC_PGDN,
 			NUM_KEY_CODES
 		};
 
