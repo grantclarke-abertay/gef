@@ -75,6 +75,7 @@ namespace gef
 		}
 		else
 		{
+			// texture now owns shader resource view
 			texture_d3d11->set_shader_resource_view(shader_resource_view); 
 		}
 	}
