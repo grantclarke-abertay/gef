@@ -29,6 +29,10 @@ public:
 
 	float x;
 	float y;
+
+	static const Vector2 kZero;
+	static const Vector2 kOne;
+
 };
 
 }
