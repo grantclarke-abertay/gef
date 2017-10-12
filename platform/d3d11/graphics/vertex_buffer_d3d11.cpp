@@ -26,23 +26,6 @@ namespace gef
 		bool success = true;
 		const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform);
 
-		D3D11_BUFFER_DESC bd;
-		// if copy vertex data is set then we're assuming this buffer will be getting updated, so let's make it dynamic
-		bd.Usage = read_only ? D3D11_USAGE_DEFAULT : D3D11_USAGE_DYNAMIC;
-		bd.ByteWidth = vertex_byte_size * num_vertices;
-		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bd.CPUAccessFlags = read_only ? 0 : D3D11_CPU_ACCESS_WRITE;
-		bd.MiscFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA init_data;
-		init_data.pSysMem = vertices;
-
-		HRESULT hresult = platform_d3d.device()->CreateBuffer(&bd, &init_data, &vertex_buffer_);
-		if (FAILED(hresult))
-		{
-			success = false;
-		}
-
 		if (!read_only)
 		{
 			// take a copy of the vertex data
@@ -51,9 +34,40 @@ namespace gef
 				success = false;
 			else
 			{
-				memcpy(vertex_data_, vertices, vertex_byte_size * num_vertices);
+				if (vertices)
+					memcpy(vertex_data_, vertices, vertex_byte_size * num_vertices);
+				else
+				{
+					// if vertices ptr is null
+					// then assign vertex_data_ to vertices
+					// so we can create a vertex buffer with unintialised data
+					// that can be written to later
+					vertices = vertex_data_;
+				}
 			}
 		}
+
+		if (success)
+		{
+			D3D11_BUFFER_DESC bd;
+			// if copy vertex data is set then we're assuming this buffer will be getting updated, so let's make it dynamic
+			bd.Usage = read_only ? D3D11_USAGE_DEFAULT : D3D11_USAGE_DYNAMIC;
+			bd.ByteWidth = vertex_byte_size * num_vertices;
+			bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			bd.CPUAccessFlags = read_only ? 0 : D3D11_CPU_ACCESS_WRITE;
+			bd.MiscFlags = 0;
+
+			D3D11_SUBRESOURCE_DATA init_data;
+			init_data.pSysMem = vertices;
+
+			HRESULT hresult = platform_d3d.device()->CreateBuffer(&bd, &init_data, &vertex_buffer_);
+			if (FAILED(hresult))
+			{
+				success = false;
+			}
+		}
+
+
 
 		return success;
 	}
