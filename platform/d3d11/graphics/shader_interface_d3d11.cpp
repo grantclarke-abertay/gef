@@ -56,7 +56,7 @@ namespace gef
 
 			DWORD shader_flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #ifdef _DEBUG
-			shader_flags |= D3DCOMPILE_DEBUG;
+			shader_flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 			ID3D10Blob* vs_blob = NULL;
 			ID3D10Blob* error_blob = NULL;
@@ -101,7 +101,7 @@ namespace gef
 		{
 			DWORD shader_flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #ifdef _DEBUG
-			shader_flags |= D3DCOMPILE_DEBUG;
+			shader_flags |= D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 			ID3D10Blob* ps_blob = NULL;
 			ID3D10Blob* error_blob = NULL;
@@ -327,14 +327,14 @@ namespace gef
 			D3D11_SAMPLER_DESC sampler_desc;
 
 			// Create a texture sampler state description.
-//			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-			//sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-			//sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-			//sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-			sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-			sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-			sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+//			sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+			sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+			sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+			//sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+			//sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+			//sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
 			sampler_desc.MipLODBias = 0.0f;
 			sampler_desc.MaxAnisotropy = 1;
 			sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;

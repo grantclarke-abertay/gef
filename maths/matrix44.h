@@ -16,6 +16,9 @@ namespace gef
 	class Matrix44
 	{
 	public:
+		Matrix44() {};
+		Matrix44(const float *m);
+
 		/// @brief Set this matrix to the identity matrix
 		void SetIdentity();
 

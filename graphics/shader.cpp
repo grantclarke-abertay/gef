@@ -39,6 +39,12 @@ namespace gef
 
 	}
 
+	void Shader::SetMeshData(const gef::Matrix44& transform)
+	{
+
+	}
+
+
 	void Shader::SetMaterialData(const gef::Material* material)
 	{
 

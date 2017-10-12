@@ -7,6 +7,16 @@
 
 namespace gef
 {
+
+	Matrix44::Matrix44(const float *m)
+	{
+		values_[0] = Vector4(m[0], m[1], m[2], m[3]);
+		values_[1] = Vector4(m[4], m[5], m[6], m[7]);
+		values_[2] = Vector4(m[8], m[9], m[10], m[11]);
+		values_[3] = Vector4(m[12], m[13], m[14], m[15]);
+
+	}
+
 	void Matrix44::SetIdentity()
 	{
 		values_[0] = Vector4(1.0f, 0.0f, 0.0f, 0.0f);

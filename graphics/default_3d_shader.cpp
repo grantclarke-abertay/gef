@@ -77,9 +77,9 @@ namespace gef
 		// Create a texture sampler state description.
 		D3D11_SAMPLER_DESC sampler_desc;
 		sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-		sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-		sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-		sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+		sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 		sampler_desc.MipLODBias = 0.0f;
 		sampler_desc.MaxAnisotropy = 1;
 		sampler_desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
@@ -173,6 +173,30 @@ namespace gef
 		device_interface_->SetVertexShaderVariable(world_matrix_variable_index_, &worldT);
 		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
 	}
+
+	void Default3DShader::SetMeshData(const gef::Matrix44& transform)
+	{
+		// calculate world view projection matrix
+		gef::Matrix44 wvp = transform * view_projection_matrix_;
+
+		// calculate the transpose of inverse world matrix to transform normals in shader
+		Matrix44 inv_world;
+		inv_world.Inverse(transform);
+		//inv_world_transpose_matrix.Transpose(inv_world);
+
+		// take transpose of matrices for the shaders
+		gef::Matrix44 wvpT, worldT;
+
+		wvpT.Transpose(wvp);
+		worldT.Transpose(transform);
+		// taking the transpose of the inverse world transpose matrix, just give use the inverse world matrix
+		// no need to waste calculating that here
+
+		device_interface_->SetVertexShaderVariable(wvp_matrix_variable_index_, &wvpT);
+		device_interface_->SetVertexShaderVariable(world_matrix_variable_index_, &worldT);
+		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
+	}
+
 
 	void Default3DShader::SetMaterialData(const gef::Material* material)
 	{

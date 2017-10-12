@@ -11,6 +11,7 @@ namespace gef
 	class MeshInstance;
 	class Primitive;
 	class Material;
+	class Matrix44;
 
 	class Shader
 	{
@@ -21,6 +22,7 @@ namespace gef
 		virtual void SetVertexFormat();
 		//virtual void SetData(const void* data);
 		virtual void SetMeshData(const gef::MeshInstance& mesh_instance);
+		virtual void SetMeshData(const gef::Matrix44& transform);
 		virtual void SetMaterialData(const gef::Material* material);
 
 		inline ShaderInterface* device_interface() { return device_interface_; }

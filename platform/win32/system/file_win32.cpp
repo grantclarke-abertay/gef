@@ -40,6 +40,20 @@ namespace gef
 			return false;
 	}
 
+	bool FileWin32::Exists(const char* const filename)
+	{
+		WIN32_FIND_DATA FindFileData;
+		HANDLE handle = FindFirstFile(filename, &FindFileData);
+		bool found = handle != INVALID_HANDLE_VALUE;
+		if (found)
+		{
+			//FindClose(&handle); this will crash
+			FindClose(handle);
+		}
+		return found ;
+	}
+
+
 	bool FileWin32::Close()
 	{
 		bool success = true;

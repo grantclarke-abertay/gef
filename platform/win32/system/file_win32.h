@@ -15,6 +15,7 @@ public:
 	~FileWin32();
 
 	bool Open(const char* const filename);
+	bool Exists(const char* const filename);
 	bool Seek(const SeekFrom seek_from, Int32 offset/*, Int32* position = NULL*/);
 	bool Read(void *buffer, const Int32 size, Int32& bytes_read);
 	bool Read(void *buffer, const Int32 size, const Int32 offset, Int32& bytes_read);

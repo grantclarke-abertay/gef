@@ -103,9 +103,11 @@ namespace gef
 		DIK_PERIOD,   //	KC_PERIOD,
 		DIK_SLASH,	//	KC_SLASH,
 		DIK_UP,		// KC_UP
-		DIK_DOWN,	// KC_LEFT
-		DIK_LEFT,	// KC_RIGHT
-		DIK_RIGHT	// KC_LEFT
+		DIK_DOWN,	// KC_DOWN
+		DIK_LEFT,	// KC_LEFT
+		DIK_RIGHT,	// KC_RIGHT
+			DIK_PGUP, // KC_PGUP
+			DIK_PGDN, // KC_PGDN
 	};
 
 	KeyboardD3D11::KeyboardD3D11(const PlatformD3D11& platform, LPDIRECTINPUT8 direct_input)

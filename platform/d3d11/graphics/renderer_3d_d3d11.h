@@ -30,7 +30,8 @@ namespace gef
 		void Begin(bool clear = true);
 		void End();
 
-		void DrawMesh(const  MeshInstance& mesh_instance);
+		void DrawMesh(const MeshInstance& mesh_instance);
+		void DrawMesh(const Mesh& mesh, const gef::Matrix44& matrix);
 		void DrawPrimitive(const  MeshInstance& mesh_instance, Int32 primitive_index, Int32 num_indices = -1);
 		void SetFillMode(FillMode fill_mode);
 		void SetDepthTest(DepthTest depth_test);

@@ -188,6 +188,29 @@ namespace gef
 		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
 	}
 
+	void Default3DSkinningShader::SetMeshData(const gef::Matrix44& transform)
+	{
+		// calculate world view projection matrix
+		gef::Matrix44 wvp = transform * view_projection_matrix_;
+
+		// calculate the transpose of inverse world matrix to transform normals in shader
+		Matrix44 inv_world;
+		inv_world.Inverse(transform);
+		//inv_world_transpose_matrix.Transpose(inv_world);
+
+		// take transpose of matrices for the shaders
+		gef::Matrix44 wvpT, worldT;
+
+		wvpT.Transpose(wvp);
+		worldT.Transpose(transform);
+		// taking the transpose of the inverse world transpose matrix, just give use the inverse world matrix
+		// no need to waste calculating that here
+
+		device_interface_->SetVertexShaderVariable(wvp_matrix_variable_index_, &wvpT);
+		device_interface_->SetVertexShaderVariable(world_matrix_variable_index_, &worldT);
+		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
+	}
+
 	void Default3DSkinningShader::SetMaterialData(const gef::Material* material)
 	{
 		Colour material_colour(1.0f, 1.0f, 1.0f, 1.0f);
