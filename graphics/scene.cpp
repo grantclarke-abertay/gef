@@ -22,8 +22,8 @@ namespace gef
 		for(std::list<Skeleton*>::iterator skeleton_iter = skeletons.begin(); skeleton_iter != skeletons.end(); ++skeleton_iter)
 			delete *skeleton_iter;
 
-		// free up meshes
-//		for(std::list<MeshData>::iterator mesh_iter = meshes.begin(); mesh_iter != meshes.end(); ++mesh_iter)
+		// free up mesh_data
+//		for(std::list<MeshData>::iterator mesh_iter = mesh_data.begin(); mesh_iter != mesh_data.end(); ++mesh_iter)
 //			delete *mesh_iter;
 
 		// free up textures
@@ -33,6 +33,11 @@ namespace gef
 		// free up materials
 		for(std::list<Material*>::iterator material_iter = materials.begin(); material_iter != materials.end(); ++material_iter)
 			delete *material_iter;
+
+		// free up meshes
+		for (std::list<Mesh*>::iterator mesh_iter = meshes.begin(); mesh_iter != meshes.end(); ++mesh_iter)
+			delete *mesh_iter;
+
 
 		// free up animations
 		for(std::map<gef::StringId, Animation*>::iterator animation_iter = animations.begin(); animation_iter != animations.end(); ++animation_iter)
@@ -75,6 +80,16 @@ namespace gef
 
 		return mesh;
 	}
+
+	void Scene::CreateMeshes(Platform& platform, const bool read_only)
+	{
+		for (std::list<MeshData>::const_iterator meshIter = mesh_data.begin(); meshIter != mesh_data.end(); ++meshIter)
+		{
+			meshes.push_back(CreateMesh(platform, *meshIter, read_only));
+		}
+
+	}
+
 
 	void Scene::CreateMaterials(const Platform& platform)
 	{
@@ -215,12 +230,12 @@ namespace gef
 			material_data_map[material.name_id] = &material;
 		}
 
-		// meshes
+		// mesh_data
 		for(Int32 mesh_num=0;mesh_num<mesh_count;++mesh_num)
 		{
-			meshes.push_back(MeshData());
+			mesh_data.push_back(MeshData());
 
-			MeshData& mesh = meshes.back();
+			MeshData& mesh = mesh_data.back();
 
 			mesh.Read(stream);
 
@@ -259,7 +274,7 @@ namespace gef
 	{
 		bool success = true;
 
-		Int32 mesh_count = (Int32)meshes.size();
+		Int32 mesh_count = (Int32)mesh_data.size();
 		Int32 material_count = (Int32)material_data.size();
 		Int32 skeleton_count = (Int32)skeletons.size();
 		Int32 animation_count = (Int32)animations.size();
@@ -282,8 +297,8 @@ namespace gef
 		for(std::list<MaterialData>::const_iterator material_iter = material_data.begin(); material_iter != material_data.end(); ++material_iter)
 			material_iter->Write(stream);
 
-		// meshes
-		for(std::list<MeshData>::const_iterator mesh_iter = meshes.begin(); mesh_iter != meshes.end(); ++mesh_iter)
+		// mesh_data
+		for(std::list<MeshData>::const_iterator mesh_iter = mesh_data.begin(); mesh_iter != mesh_data.end(); ++mesh_iter)
 			mesh_iter->Write(stream);
 
 		// skeletons
@@ -326,7 +341,7 @@ namespace gef
 
 	void Scene::FixUpSkinWeights()
 	{
-		for(std::list<MeshData>::iterator mesh_iter = meshes.begin(); mesh_iter != meshes.end(); ++mesh_iter)
+		for(std::list<MeshData>::iterator mesh_iter = mesh_data.begin(); mesh_iter != mesh_data.end(); ++mesh_iter)
 		{
 			if((mesh_iter->vertex_data.num_vertices > 0) && (mesh_iter->vertex_data.vertex_byte_size == sizeof(Mesh::SkinnedVertex)))
 			{

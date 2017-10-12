@@ -22,6 +22,7 @@ namespace gef
 		~Scene();
 
 		Mesh* CreateMesh(Platform& platform, const MeshData& mesh_data, const bool read_only = true);
+		void CreateMeshes(Platform& platform, const bool read_only = true);
 		void CreateMaterials(const Platform& platform);
 
 		bool WriteSceneToFile(const Platform& platform, const char* filename) const;
@@ -37,8 +38,9 @@ namespace gef
 
 		Animation* FindAnimation(const gef::StringId anim_name_id);
 
-		std::list<MeshData> meshes;
+		std::list<MeshData> mesh_data;
 		std::list<MaterialData> material_data;
+		std::list<Mesh*> meshes;
 		std::list<Texture*> textures;
 		std::list<Material*> materials;
 		std::list<Skeleton*> skeletons;
