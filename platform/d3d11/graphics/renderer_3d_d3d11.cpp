@@ -147,13 +147,15 @@ namespace gef
 
 	}
 
+	// GRC - clear flag will eventually get ignored here
+	// and use only variables to clear render_target, depth_duffer and stencil_buffer separately
 	void Renderer3DD3D11::Begin(bool clear)
 	{
 		const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform());
 		platform_d3d.BeginScene();
 
 		if (clear)
-			platform_d3d.Clear();
+			platform_d3d.Clear(clear_render_target_enabled_, clear_depth_buffer_enabled_, clear_stencil_buffer_enabled_);
 
 		platform_d3d.device_context()->RSSetState(default_render_state_);
 		platform_d3d.device_context()->OMSetBlendState(default_blend_state_, NULL, 0xffffffff);
@@ -164,6 +166,10 @@ namespace gef
 	{
 		const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform());
 		platform_d3d.EndScene();
+
+		set_clear_render_target_enabled(true);
+		set_clear_depth_buffer_enabled(true);
+		set_clear_stencil_buffer_enabled(true);
 	}
 
 	void Renderer3DD3D11::DrawMesh(const  MeshInstance& mesh_instance)
@@ -239,6 +245,79 @@ namespace gef
 			}
 		}
 	}
+
+	void Renderer3DD3D11::DrawMesh(const Mesh& mesh, const gef::Matrix44& transform)
+	{
+		// set up the shader data for default shader
+		if (shader_ == &default_shader_)
+			default_shader_.SetSceneData(default_shader_data_, view_matrix_, projection_matrix_);
+
+		{
+			set_world_matrix(transform);
+
+			const VertexBuffer* vertex_buffer = mesh.vertex_buffer();
+			//ShaderGL* shader_GL = static_cast<ShaderGL*>(shader_);
+
+			if (vertex_buffer && shader_)
+			{
+				shader_->SetMeshData(transform);
+
+				shader_->device_interface()->UseProgram();
+				vertex_buffer->Bind(platform_);
+
+				// vertex format must be set after the vertex buffer is bound
+				shader_->device_interface()->SetVertexFormat();
+
+				for (UInt32 primitive_index = 0; primitive_index < mesh.num_primitives(); ++primitive_index)
+				{
+					const Primitive* primitive = mesh.GetPrimitive(primitive_index);
+					const IndexBuffer* index_buffer = primitive->index_buffer();
+					if (primitive->type() != UNDEFINED && index_buffer)
+					{
+						// default texture
+						const Material* material;
+						if (override_material_)
+							material = override_material_;
+						else
+							material = primitive->material();
+
+
+						//only set default shader data if current shader is the default shader
+						shader_->SetMaterialData(material);
+
+						// GRC FIXME - probably want to split variable data into scene, object, primitive[material?] based
+						// rather than set all variables per primitive
+						shader_->device_interface()->SetVariableData();
+						shader_->device_interface()->BindTextureResources(platform());
+
+						//GLenum primitive_type = primitive_types[primitive->type()];
+
+						// Set primitive topology
+						const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform_);
+						platform_d3d.device_context()->IASetPrimitiveTopology(primitive_types[primitive->type()]);
+
+						index_buffer->Bind(platform_);
+
+						// use the primitive end index to specify how may indices we wish to draw
+						// in case we don't want to draw them all
+
+						if (index_buffer->num_indices() > 0)
+							platform_d3d.device_context()->DrawIndexed(index_buffer->num_indices(), 0, 0);
+						else
+							platform_d3d.device_context()->Draw(vertex_buffer->num_vertices(), 0);
+
+
+						index_buffer->Unbind(platform_);
+						shader_->device_interface()->UnbindTextureResources(platform());
+					}
+				}
+
+				vertex_buffer->Unbind(platform_);
+				shader_->device_interface()->ClearVertexFormat();
+			}
+		}
+	}
+
 
 	void Renderer3DD3D11::DrawPrimitive(const  MeshInstance& mesh_instance, Int32 primitive_index, Int32 num_indices)
 	{

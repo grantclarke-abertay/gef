@@ -49,6 +49,7 @@ namespace gef
 		//void SetSpriteData(const Sprite& sprite, const Texture* texture);
 		void SetSceneData(const Default3DShaderData& shader_data, const Matrix44& view_matrix, const Matrix44& projection_matrix);
 		void SetMeshData(const gef::MeshInstance& mesh_instance);
+		void SetMeshData(const gef::Matrix44& transform);
 		void SetMaterialData(const gef::Material* material);
 
 		inline PrimitiveData& primitive_data() { return primitive_data_; }

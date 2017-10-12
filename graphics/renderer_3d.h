@@ -16,6 +16,7 @@ namespace gef
 	class Shader;
 	class Material;
 	class Texture;
+	class Mesh;
 
 	class Skeleton;
 
@@ -41,6 +42,8 @@ namespace gef
 		virtual void Begin(bool clear = true) = 0;
 		virtual void End() = 0;
 		virtual void DrawMesh(const  MeshInstance& mesh_instance) = 0;
+		virtual void DrawMesh(const Mesh& mesh, const gef::Matrix44& matrix) = 0;
+
 		virtual void DrawPrimitive(const  MeshInstance& mesh_instance, Int32 primitive_index, Int32 num_indices = -1) = 0;
 		virtual void SetFillMode(FillMode fill_mode) = 0;
 		virtual void SetDepthTest(DepthTest depth_test) = 0;
@@ -64,6 +67,12 @@ namespace gef
 		inline const Material* override_material() const { return override_material_; }
 
 		static Renderer3D* Create(Platform& platform);
+		bool clear_render_target_enabled() const { return clear_render_target_enabled_; }
+		void set_clear_render_target_enabled(bool val) { clear_render_target_enabled_ = val; }
+		bool clear_depth_buffer_enabled() const { return clear_depth_buffer_enabled_; }
+		void set_clear_depth_buffer_enabled(bool val) { clear_depth_buffer_enabled_ = val; }
+		bool clear_stencil_buffer_enabled() const { return clear_stencil_buffer_enabled_; }
+		void set_clear_stencil_buffer_enabled(bool val) { clear_stencil_buffer_enabled_ = val; }
 	protected:
 		Renderer3D(Platform& platform);
 		void CalculateInverseWorldTransposeMatrix();
@@ -81,6 +90,10 @@ namespace gef
 		const Material* override_material_;
 
 		Platform& platform_;
+
+		bool clear_render_target_enabled_;
+		bool clear_depth_buffer_enabled_;
+		bool clear_stencil_buffer_enabled_;
 	};
 }
 #endif // _GEF_RENDERER_3D_H
