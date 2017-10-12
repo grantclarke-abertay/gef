@@ -6,6 +6,7 @@
 namespace gef
 {
 	class Platform;
+	class Texture;
 
 	class DepthBuffer
 	{
@@ -14,6 +15,7 @@ namespace gef
 
 		inline UInt32 width() const { return width_; }
 		inline UInt32 height() const { return height_; }
+		inline const Texture* texture() const { return texture_; }
 
 		static DepthBuffer* Create(const Platform& platform, UInt32 width, UInt32 height);
 	protected:
@@ -21,6 +23,9 @@ namespace gef
 
 		UInt32 width_;
 		UInt32 height_;
+
+		Texture* texture_;
+
 
 	};
 }
