@@ -1,0 +1,10 @@
+newmtl Soccer_Ball:baked_Soccer_leather
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd SoccerBallDiffuseMap1.png
+map_Ka SoccerBallDiffuseMap.tga
+Ni 1.50
+Ks 0.00 0.00 0.00
+Ns 10.00

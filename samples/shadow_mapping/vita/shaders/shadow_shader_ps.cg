@@ -1,0 +1,71 @@
+﻿#define NUM_LIGHTS 4
+
+float4 main(
+	float4 input_position : POSITION,
+	float3 input_normal : TEXCOORD0,
+	float2 input_uv : TEXCOORD1,
+	float3 input_light_vector1 : TEXCOORD2,
+	float3 input_light_vector2 : TEXCOORD3,
+	float3 input_light_vector3 : TEXCOORD4,
+	float3 input_light_vector4 : TEXCOORD5,
+	float4 input_lightViewPosition : TEXCOORD6,
+	uniform float4 material_colour,
+	uniform float4 ambient_light_colour,
+	uniform float4 light_colour[NUM_LIGHTS],
+	uniform sampler2D texture_sampler : TEXUNIT0,
+	uniform sampler2D depth_sampler : TEXUNIT1
+	)
+{
+	// Set the bias value for fixing the floating point precision issues.
+	float bias = 0.001f;
+    
+    float diffuse_light1 = 0.0;
+    float diffuse_light2 = 0.0;
+    float diffuse_light3 = 0.0;
+    float diffuse_light4 = 0.0; 
+
+	// Calculate the projected texture coordinates.
+	float2 projectTexCoord;
+	projectTexCoord.x =  input_lightViewPosition.x / input_lightViewPosition.w / 2.0f + 0.5f;
+	projectTexCoord.y = -input_lightViewPosition.y / input_lightViewPosition.w / 2.0f + 0.5f;
+
+	// Determine if the projected coordinates are in the 0 to 1 range.  If so then this pixel is in the view of the light.
+	if((saturate(projectTexCoord.x) == projectTexCoord.x) && (saturate(projectTexCoord.y) == projectTexCoord.y))
+	{
+		// Sample the shadow map depth value from the depth texture using the sampler at the projected texture coordinate location.
+		float depthValue = tex2D(depth_sampler, projectTexCoord).r;
+
+		// Calculate the depth of the light.
+		float lightDepthValue = input_lightViewPosition.z / input_lightViewPosition.w;
+
+		// Subtract the bias from the lightDepthValue.
+		lightDepthValue = lightDepthValue - bias;
+
+		// Compare the depth of the shadow map value and the depth of the light to determine whether to shadow or to light this pixel.
+		// If the light is in front of the object then light the pixel, if not then shadow this pixel since an object (occluder) is casting a shadow on it.
+		if(lightDepthValue < depthValue)
+		{
+		    // Calculate the amount of light on this pixel.
+
+            
+            diffuse_light1 = saturate(dot(input_normal, input_light_vector1));
+            diffuse_light2 = saturate(dot(input_normal, input_light_vector2));
+            diffuse_light3 = saturate(dot(input_normal, input_light_vector3));
+            diffuse_light4 = saturate(dot(input_normal, input_light_vector4));            
+		}
+	}
+    else
+    {
+            diffuse_light1 = saturate(dot(input_normal, input_light_vector1));
+            diffuse_light2 = saturate(dot(input_normal, input_light_vector2));
+            diffuse_light3 = saturate(dot(input_normal, input_light_vector3));
+            diffuse_light4 = saturate(dot(input_normal, input_light_vector4));            
+    }
+
+    float4 diffuse_texture_colour = tex2D(texture_sampler, input_uv);
+    float4 diffuse_colour1 = diffuse_light1*light_colour[0];
+    float4 diffuse_colour2 = diffuse_light2*light_colour[1];
+    float4 diffuse_colour3 = diffuse_light3*light_colour[2];
+    float4 diffuse_colour4 = diffuse_light4*light_colour[3];
+    return saturate(ambient_light_colour+diffuse_colour1+diffuse_colour2+diffuse_colour3+diffuse_colour4)*diffuse_texture_colour*material_colour;
+}

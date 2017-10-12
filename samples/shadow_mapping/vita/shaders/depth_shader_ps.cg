@@ -1,0 +1,9 @@
+﻿
+float4 main(
+	float4 input_position : POSITION,
+	float4 input_depth_position : TEXCOORD0)
+{
+	float depth_value = input_depth_position.z / input_depth_position.w;
+	float4 colour = float4(depth_value, depth_value, depth_value, 1);
+	return colour;
+}

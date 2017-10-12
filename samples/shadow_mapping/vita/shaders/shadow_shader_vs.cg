@@ -1,0 +1,44 @@
+﻿#define NUM_LIGHTS 4
+
+void main(
+	float3 position : POSITION,
+	float3 normal : NORMAL,
+	float2 uv : TEXCOORD0,
+	uniform float4x4 wvp,
+	uniform float4x4 world,
+	uniform float4x4 lightwvp,
+	uniform float4x4 invworld,
+	uniform float4 light_position[NUM_LIGHTS],
+	float4 out output_position : POSITION,
+	float3 out output_normal : TEXCOORD0,
+	float2 out output_uv : TEXCOORD1,
+	float3 out output_light_vector1 : TEXCOORD2,
+	float3 out output_light_vector2 : TEXCOORD3,
+	float3 out output_light_Vector3 : TEXCOORD4,
+	float3 out output_light_vector4 : TEXCOORD5,
+	float4 out output_lightViewPosition : TEXCOORD6
+	)
+{
+	float4 position_vec = float4(position, 1);
+	output_position = mul(position_vec, wvp);
+	output_uv = uv;
+
+	// add the light position stuff
+	output_lightViewPosition = mul(position_vec, lightwvp);
+
+	float4 normal_vec = float4(normal, 0);
+	normal_vec = mul(normal_vec, invworld);
+	output_normal = normalize(normal_vec.xyz);
+
+	float4 world_position = mul(position_vec, world);
+	output_light_vector1 = light_position[0].xyz - world_position.xyz;
+	output_light_vector1 = normalize(output_light_vector1);
+	output_light_vector2 = light_position[1].xyz - world_position.xyz;
+	output_light_vector2 = normalize(output_light_vector2);
+	output_light_Vector3 = light_position[2].xyz - world_position.xyz;
+	output_light_Vector3 = normalize(output_light_Vector3);
+	output_light_vector4 = light_position[3].xyz - world_position.xyz;
+	output_light_vector4 = normalize(output_light_vector4);
+
+
+}

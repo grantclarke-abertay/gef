@@ -1,0 +1,13 @@
+﻿
+void main(
+	float3 position : POSITION,
+	float3 normal : NORMAL,
+	float2 uv : TEXCOORD0,
+	uniform float4x4 wvp,
+	float4 out output_position : POSITION,
+	float4 out output_depth_position : TEXCOORD0)
+{
+	float4 position_vec = float4(position, 1);
+	output_position = mul(position_vec, wvp);
+	output_depth_position = output_position;
+}
