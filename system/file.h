@@ -20,6 +20,8 @@ namespace gef
 		virtual ~File();
 
 		virtual bool Open(const char* const filename) = 0;
+		virtual bool Exists(const char* const filename) = 0;
+
 		virtual bool Seek(const SeekFrom seek_from, Int32 offset/*, Int32* position = NULL*/) = 0;
 		virtual bool Read(void *buffer, const Int32 size, Int32& bytes_read) = 0;
 //		virtual bool Read(void *buffer, const Int32 size, const Int32 offset, Int32& bytes_read) =  0;
