@@ -68,6 +68,8 @@ namespace gef
 		inline const VertexBuffer* vertex_buffer() const { return vertex_buffer_; }
 		inline VertexBuffer* vertex_buffer() { return vertex_buffer_; }
 
+		static Mesh* Create(Platform& platform);
+
 	protected:
 		virtual class Primitive* AllocatePrimitive(); // move to platform class?
 		void ReleasePrimitives();

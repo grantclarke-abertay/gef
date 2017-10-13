@@ -5,6 +5,12 @@
 
 namespace gef
 {
+	Mesh* Mesh::Create(Platform& platform)
+	{
+		return new Mesh(platform);
+	}
+
+
 	Mesh::Mesh(Platform& platform) :
 	num_primitives_(0),
 	primitives_(NULL),
