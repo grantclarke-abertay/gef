@@ -1,3 +1,6 @@
 /html/
 /cmake-build-debug/
 /.idea/
+
+# Ignore VS2015 debug binary files ===
+*.VC.db
