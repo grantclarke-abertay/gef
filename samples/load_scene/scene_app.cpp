@@ -40,8 +40,8 @@ void SceneApp::Init()
 	model_scene_->CreateMaterials(platform_);
 
 	// now check to see if there is any mesh data in the file, if so lets create a mesh from it
-	if (model_scene_->meshes.size() > 0)
-		mesh_ = model_scene_->CreateMesh(platform_, model_scene_->meshes.front());
+	if (model_scene_->mesh_data.size() > 0)
+		mesh_ = model_scene_->CreateMesh(platform_, model_scene_->mesh_data.front());
 
 	// get the player mesh instance to use this mesh for drawing
 	player_.set_mesh(mesh_);
