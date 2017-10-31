@@ -10,7 +10,7 @@ namespace gef
 		override_material_(NULL),
 		platform_(platform),
 		default_shader_(platform),
-		default_skinned_mesh_shader_(platform),
+//		default_skinned_mesh_shader_(platform),
 		clear_render_target_enabled_(true),
 		clear_depth_buffer_enabled_(true),
 		clear_stencil_buffer_enabled_(true)
@@ -34,6 +34,7 @@ namespace gef
 
 	void Renderer3D::DrawSkinnedMesh(const MeshInstance& mesh_instance, const std::vector<Matrix44>& bone_matrices, bool use_default_shader)
 	{
+#if 0
 		Shader* previous_shader = shader_;
 		if(use_default_shader)
 		{
@@ -59,6 +60,7 @@ namespace gef
 
 		if(use_default_shader)
 			SetShader(previous_shader);
+#endif
 	}
 
 	void Renderer3D::CalculateInverseWorldTransposeMatrix()

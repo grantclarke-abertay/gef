@@ -23,7 +23,7 @@ void main(void)
     ps_in_uv = uv;
 
     vec4 world_normal = vec4(normal, 0);
-    world_normal = world_normal * invworld;
+    world_normal = world_normal * world;
     ps_in_normal = normalize(world_normal.xyz);
 
     vec4 world_position = vec4(position, 1) * world;

@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <cstring>
 #include <istream>
+#include <cfloat>
 
 namespace gef
 {

@@ -26,7 +26,7 @@ namespace gef
 	:Shader(platform)
 	,wvp_matrix_variable_index_(-1)
 	,world_matrix_variable_index_(-1)
-	,invworld_matrix_variable_index_(-1)
+//	,invworld_matrix_variable_index_(-1)
 	,light_position_variable_index_(-1)
 	,material_colour_variable_index_(-1)
 	,ambient_light_colour_variable_index_(-1)
@@ -54,7 +54,7 @@ namespace gef
 
 		wvp_matrix_variable_index_ = device_interface_->AddVertexShaderVariable("wvp", ShaderInterface::kMatrix44);
 		world_matrix_variable_index_ = device_interface_->AddVertexShaderVariable("world", ShaderInterface::kMatrix44);
-		invworld_matrix_variable_index_ = device_interface_->AddVertexShaderVariable("invworld", ShaderInterface::kMatrix44);
+//		invworld_matrix_variable_index_ = device_interface_->AddVertexShaderVariable("invworld", ShaderInterface::kMatrix44);
 		light_position_variable_index_ = device_interface_->AddVertexShaderVariable("light_position", ShaderInterface::kVector4, 4);
 
 		// pixel shader variables
@@ -99,7 +99,7 @@ namespace gef
 	Default3DShader::Default3DShader()
 		: wvp_matrix_variable_index_(-1)
 		, world_matrix_variable_index_(-1)
-		, invworld_matrix_variable_index_(-1)
+//		, invworld_matrix_variable_index_(-1)
 		, light_position_variable_index_(-1)
 		, material_colour_variable_index_(-1)
 		, ambient_light_colour_variable_index_(-1)
@@ -171,7 +171,7 @@ namespace gef
 
 		device_interface_->SetVertexShaderVariable(wvp_matrix_variable_index_, &wvpT);
 		device_interface_->SetVertexShaderVariable(world_matrix_variable_index_, &worldT);
-		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
+//		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
 	}
 
 	void Default3DShader::SetMeshData(const gef::Matrix44& transform)
@@ -194,7 +194,7 @@ namespace gef
 
 		device_interface_->SetVertexShaderVariable(wvp_matrix_variable_index_, &wvpT);
 		device_interface_->SetVertexShaderVariable(world_matrix_variable_index_, &worldT);
-		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
+//		device_interface_->SetVertexShaderVariable(invworld_matrix_variable_index_, &inv_world);
 	}
 
 

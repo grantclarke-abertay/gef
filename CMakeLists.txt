@@ -1,0 +1,124 @@
+cmake_minimum_required(VERSION 3.8)
+project(gef)
+
+set(CMAKE_CXX_STANDARD 11)
+
+find_package(PNG)
+if(PNG_FOUND)
+    include_directories(PNG_INCLUDE_DIRS)
+endif()
+
+include_directories(.)
+
+set(SOURCE_FILES
+        animation/animation.cpp
+        animation/animation.h
+        animation/joint.cpp
+        animation/joint.h
+        animation/skeleton.cpp
+        animation/skeleton.h
+        assets/obj_loader.cpp
+        assets/obj_loader.h
+        assets/png_loader.cpp
+        assets/png_loader.h
+        audio/audio_manager.cpp
+        audio/audio_manager.h
+        graphics/colour.cpp
+        graphics/colour.h
+        graphics/default_3d_shader.cpp
+        graphics/default_3d_shader.h
+        graphics/default_3d_shader_data.cpp
+        graphics/default_3d_shader_data.h
+        graphics/default_3d_skinning_shader.cpp
+        graphics/default_3d_skinning_shader.h
+        graphics/default_sprite_shader.cpp
+        graphics/default_sprite_shader.h
+        graphics/depth_buffer.cpp
+        graphics/depth_buffer.h
+        graphics/font.cpp
+        graphics/font.h
+        graphics/image_data.cpp
+        graphics/image_data.h
+        graphics/index_buffer.cpp
+        graphics/index_buffer.h
+        graphics/material.cpp
+        graphics/material.h
+        graphics/mesh.cpp
+        graphics/mesh.h
+        graphics/mesh_data.cpp
+        graphics/mesh_data.h
+        graphics/mesh_instance.cpp
+        graphics/mesh_instance.h
+        graphics/model.cpp
+        graphics/model.h
+        graphics/point_light.h
+        graphics/primitive.cpp
+        graphics/primitive.h
+        graphics/render_target.cpp
+        graphics/render_target.h
+        graphics/renderer_3d.cpp
+        graphics/renderer_3d.h
+        graphics/scene.cpp
+        graphics/scene.h
+        graphics/shader.cpp
+        graphics/shader.h
+        graphics/shader_interface.cpp
+        graphics/shader_interface.h
+        graphics/skinned_mesh_shader.cpp
+        graphics/skinned_mesh_shader.h
+        graphics/skinned_mesh_shader_data.cpp
+        graphics/skinned_mesh_shader_data.h
+        graphics/sprite.cpp
+        graphics/sprite.h
+        graphics/sprite_renderer.cpp
+        graphics/sprite_renderer.h
+        graphics/texture.cpp
+        graphics/texture.h
+        graphics/vertex_buffer.cpp
+        graphics/vertex_buffer.h
+        input/input_manager.cpp
+        input/input_manager.h
+        input/keyboard.cpp
+        input/keyboard.h
+        input/sony_controller_input_manager.cpp
+        input/sony_controller_input_manager.h
+        input/touch_input_manager.cpp
+        input/touch_input_manager.h
+        maths/aabb.cpp
+        maths/aabb.h
+        maths/frustum.cpp
+        maths/frustum.h
+        maths/math_utils.h
+        maths/matrix22.h
+        maths/matrix33.cpp
+        maths/matrix33.h
+        maths/matrix44.cpp
+        maths/matrix44.h
+        maths/plane.cpp
+        maths/plane.h
+        maths/quaternion.cpp
+        maths/quaternion.h
+        maths/sphere.cpp
+        maths/sphere.h
+        maths/transform.cpp
+        maths/transform.h
+        maths/vector2.cpp
+        maths/vector2.h
+        maths/vector4.cpp
+        maths/vector4.h
+        system/application.cpp
+        system/application.h
+        system/crc.cpp
+        system/crc.h
+        system/debug_log.h
+        system/file.cpp
+        system/file.h
+        system/memory_stream_buffer.cpp
+        system/memory_stream_buffer.h
+        system/platform.cpp
+        system/platform.h
+        system/string_id.cpp
+        system/string_id.h
+        gef.h)
+
+add_library(gef STATIC ${SOURCE_FILES})

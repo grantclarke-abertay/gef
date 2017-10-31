@@ -84,7 +84,7 @@ namespace gef
 		Matrix44 world_matrix_;
 		Shader* shader_;
 		Default3DShader default_shader_;
-		Default3DSkinningShader default_skinned_mesh_shader_;
+//		Default3DSkinningShader default_skinned_mesh_shader_;
 		Default3DShaderData default_shader_data_;
 		SkinnedMeshShaderData default_skinned_mesh_shader_data_;
 		const Material* override_material_;

@@ -58,7 +58,7 @@ namespace gef
 
 		Int32 wvp_matrix_variable_index_;
 		Int32 world_matrix_variable_index_;
-		Int32 invworld_matrix_variable_index_;
+//		Int32 invworld_matrix_variable_index_;
 		Int32 light_position_variable_index_;
 
 		Int32 material_colour_variable_index_;
