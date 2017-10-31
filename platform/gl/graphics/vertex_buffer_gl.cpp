@@ -21,7 +21,6 @@ gef::VertexBufferGL::VertexBufferGL() :
 gef::VertexBufferGL::~VertexBufferGL()
 {
     ReleaseResources();
-    free(vertex_data_);
 }
 
 bool gef::VertexBufferGL::Init(const gef::Platform &platform, const void *vertices, const UInt32 num_vertices,

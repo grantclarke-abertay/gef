@@ -19,7 +19,6 @@ gef::IndexBufferGL::IndexBufferGL()
 gef::IndexBufferGL::~IndexBufferGL()
 {
     ReleaseResources();
-    free(index_data_);
 }
 
 bool gef::IndexBufferGL::Init(const gef::Platform &platform, const void *indices, const UInt32 num_indices,
