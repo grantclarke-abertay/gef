@@ -1,12 +1,12 @@
 #ifndef _ASSIMP_VIEWER_H
 #define _ASSIMP_VIEWER_H
-
 #include <system/application.h>
 #include <graphics/sprite.h>
 #include <maths/vector2.h>
 #include <maths/vector4.h>
 #include <vector>
 #include <graphics/mesh_instance.h>
+
 #include <imgui.h>
 #include <addons/imguifilesystem/imguifilesystem.h>
 #include <graphics/scene.h>
@@ -24,14 +24,24 @@ namespace gef
     class InputManager;
 }
 
+class AssimpSceneLoader;
+
 class AssimpViewer : public gef::Application
 {
     enum FILE_COMMAND
     {
         FC_NONE,
         FC_LOAD_MODEL,
-        FC_LOAD_TEXTURE
-    };
+		FC_LOAD_TEXTURE,
+		FC_SAVE_MODEL,
+	};
+
+	enum FILE_COMMAND_STATUS
+	{
+		FS_NONE,
+		FS_MODEL_LOADED_SUCCESS,
+		FS_MODEL_LOADED_FAILED,
+	};
 
 public:
 	AssimpViewer(gef::Platform& platform);
@@ -71,11 +81,19 @@ private:
     OrbitCamera orbit_camera_;
 
     FILE_COMMAND file_command_;
+	FILE_COMMAND_STATUS file_command_status_;
     int open_material_num_;
+
+	AssimpSceneLoader* loader_;
+
 
     void MaterialsMenu(bool& open_file_triggered);
 
 	void MeshesMenu() const;
+
+	void ModelMenu() const;
+
+	void LoadOptionsMenu() const;
 
 	gef::Texture* CreateTexture(const std::string& texture_filepath);
 
@@ -83,9 +101,15 @@ private:
 
     void OpenFileDialog(bool open_file_triggered);
 
-    void MainMenuBarFileOpen();
+	void MainMenuBarFileOpen();
+	void MainMenuBarFileSave();
 
     void LoadTexture(const char *texture_file_path);
+
+	void SaveTextures();
+
+	std::string ExtractImageFilename(std::string &src_filename);
+
 };
 
 #endif // _ASSIMP_VIEWER_H

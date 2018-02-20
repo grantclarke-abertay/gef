@@ -15,6 +15,8 @@
 #include <graphics/renderer_3d.h>
 #include "assimp_scene_loader.h"
 
+
+
 #include <IL/il.h>
 
 void ImGui_NewFrame();
@@ -28,7 +30,9 @@ AssimpViewer::AssimpViewer(gef::Platform& platform) :
     open_file_dialog_active_(false),
     scene_assets_(nullptr),
     file_command_(FC_NONE),
-    open_material_num_(-1)
+    open_material_num_(-1),
+	file_command_status_(FS_NONE),
+	loader_(nullptr)
 {
 }
 
@@ -48,10 +52,15 @@ void AssimpViewer::Init()
 
     SetupCamera();
     SetupLights();
+
+	loader_ = new AssimpSceneLoader();
 }
 
 void AssimpViewer::CleanUp()
 {
+	delete loader_;
+	loader_ = nullptr;
+
     delete scene_assets_;
     scene_assets_ = nullptr;
 
@@ -103,26 +112,68 @@ bool AssimpViewer::Update(float frame_time)
 
     MainMenuBar(running, open_file_triggered);
 
-    // if we have an object loaded, enable object UI
+	LoadOptionsMenu();
+
+	
+	// if we have an object loaded, enable object UI
     if(scene_assets_ && (scene_assets_->meshes.size() > 0))
     {
+		ModelMenu();
         MaterialsMenu(open_file_triggered);
-        MeshesMenu();
+        // MeshesMenu();
 
-        ImGui::Begin("Textures");
+        //ImGui::Begin("Textures");
 
-        auto mesh_data = scene_assets_->mesh_data.begin();
-        for (int mesh_num = 0; mesh_num < scene_assets_->mesh_data.size(); ++mesh_num)
-        {
-            std::__cxx11::string mesh_text = "Mesh: " + std::__cxx11::to_string(mesh_num);
-            ImGui::Text("%s", mesh_text.c_str());
-            mesh_data++;
-        }
+        //auto mesh_data = scene_assets_->mesh_data.begin();
+        //for (int mesh_num = 0; mesh_num < scene_assets_->mesh_data.size(); ++mesh_num)
+        //{
+        //    std::string mesh_text = "Mesh: " + std::to_string(mesh_num);
+        //    ImGui::Text("%s", mesh_text.c_str());
+        //    mesh_data++;
+        //}
 
-        ImGui::End();
+        //ImGui::End();
     }
 
     OpenFileDialog(open_file_triggered);
+	
+	if (file_command_status_ != FS_NONE)
+	{
+		switch (file_command_status_)
+		{
+		case AssimpViewer::FS_NONE:
+			break;
+		//case AssimpViewer::FS_MODEL_LOADED_SUCCESS:
+		//	ImGui::OpenPopup("Model Load Success");
+		//	break;
+		case AssimpViewer::FS_MODEL_LOADED_FAILED:
+			ImGui::OpenPopup("Model Load Failed");
+			break;
+		default:
+			break;
+		}
+	}
+
+	//if (ImGui::BeginPopupModal("Model Load Success", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	//{
+	//	if (ImGui::Button("OK", ImVec2(120, 0)))
+	//	{
+	//		file_command_status_ = FS_NONE;
+	//		ImGui::CloseCurrentPopup();
+	//	}
+	//	ImGui::EndPopup();
+	//}
+
+	if (ImGui::BeginPopupModal("Model Load Failed", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		if (ImGui::Button("OK", ImVec2(120, 0)))
+		{
+			file_command_status_ = FS_NONE;
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
 
 	return running;
 }
@@ -131,7 +182,12 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
 {
     if(open_file_dialog_active_)
     {
-        const char* chosenPath = open_file_dlg_.chooseFileDialog(open_file_triggered, open_file_dlg_.getLastDirectory());             // see other dialog types and the full list of arguments for advanced usage
+		const char* chosenPath = NULL;
+		
+		if (file_command_ == FC_SAVE_MODEL)
+			chosenPath = open_file_dlg_.saveFileDialog(open_file_triggered, open_file_dlg_.getLastDirectory(), NULL, ".scn");
+		else
+			chosenPath = open_file_dlg_.chooseFileDialog(open_file_triggered, open_file_dlg_.getLastDirectory());             // see other dialog types and the full list of arguments for advanced usage
 
         if (strlen(open_file_dlg_.getChosenPath()) > 0)
         {
@@ -151,13 +207,19 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
                 }
                 break;
 
+				case FC_SAVE_MODEL:
+				{
+					MainMenuBarFileSave();
+				}
+				break;
+
             }
 
             file_command_ = FC_NONE;
             open_file_dialog_active_ = false;
         }
 
-        if(open_file_dlg_.hasUserJustCancelledDialog())
+		if(open_file_dlg_.hasUserJustCancelledDialog())
         {
             open_file_dialog_active_ = false;
         }
@@ -188,13 +250,14 @@ void AssimpViewer::LoadTexture(const char *texture_file_path)
             }
 
             // map material data to new texture
-            material_data->diffuse_texture = open_file_dlg_.getChosenPath();
+            material_data->diffuse_texture = texture_file_path;
 
             // add new texture to the list of textures
             scene_assets_->textures.push_back(new_texture);
 
-            gef::StringId new_texture_id = gef::GetStringId(material_data->diffuse_texture);
+            gef::StringId new_texture_id = scene_assets_->string_id_table.Add(material_data->diffuse_texture);
             scene_assets_->textures_map[new_texture_id] = new_texture;
+			
 
             // fix up material to point to new material
             (*material)->set_texture(new_texture);
@@ -204,43 +267,171 @@ void AssimpViewer::LoadTexture(const char *texture_file_path)
     open_material_num_ = -1;
 }
 
+void AssimpViewer::SaveTextures()
+{
+	// init DevIL. This needs to be done only once per application
+	ilInit();
+	int texture_num = 0;
+	std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
+	for (auto texture_mapping : scene_assets_->textures_map)
+	{
+		std::string src_texture_filename;
+		gef::StringId src_texture_filename_id;
+		src_texture_filename_id = texture_mapping.first;
+
+		if (scene_assets_->string_id_table.Find(src_texture_filename_id, src_texture_filename))
+		{
+			std::string texture_filename = ExtractImageFilename(src_texture_filename);
+			texture_filename += ".png";
+
+
+			gef::StringId new_texture_filename_id = scene_assets_->string_id_table.Add(texture_filename.c_str());
+			old_to_new_texture_filename[src_texture_filename_id] = new_texture_filename_id;
+			unsigned int srcImageID = 0;
+
+
+			// load source image
+			{
+				ILboolean success;
+
+				// generate an image name
+				ilGenImages(1, &srcImageID);
+				// bind it
+				ilBindImage(srcImageID);
+				// match image origin to OpenGL’s
+				ilEnable(IL_ORIGIN_SET);
+				ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
+				// load  the image
+				success = ilLoadImage((ILstring)(src_texture_filename).c_str());
+				// check to see if everything went OK
+				if (!success)
+				{
+					ilDeleteImages(1, &srcImageID);
+				}
+			}
+
+			// save image as png
+			if (srcImageID != 0)
+			{
+				std::string texture_filename_fullpath = open_file_dlg_.getLastDirectory() + std::string("/") + texture_filename;
+				ilSaveImage(texture_filename_fullpath.c_str());
+
+				// finished with source image
+				ilDeleteImages(1, &srcImageID);
+			}
+
+			texture_num++;
+		}
+	}
+	ilShutDown();
+
+	// go through all materials and rename textures
+	// go through materials and try and load textures from model folder
+	auto material_data = scene_assets_->material_data.begin();
+	for (size_t material_num = 0; material_num < scene_assets_->material_data.size(); ++material_num)
+	{
+		if (material_data->diffuse_texture.length() > 0)
+		{
+			gef::StringId old_texture_id = gef::GetStringId(material_data->diffuse_texture.c_str());
+			gef::StringId new_texture_id = old_to_new_texture_filename[old_texture_id];
+
+			std::string new_texture_filename;
+			if (scene_assets_->string_id_table.Find(new_texture_id, new_texture_filename))
+			{
+				gef::Texture* texture = scene_assets_->textures_map[old_texture_id];
+				scene_assets_->textures_map.erase(old_texture_id);
+				scene_assets_->textures_map[new_texture_id] = texture;
+
+				material_data->diffuse_texture = new_texture_filename;
+			}
+		}
+		material_data++;
+	}
+
+
+}
+
+std::string AssimpViewer::ExtractImageFilename(std::string &src_filename)
+{
+	bool extension_processed = false;
+	std::string filename;
+	std::string extension;
+	for (auto filename_char = src_filename.rbegin(); filename_char != src_filename.rend(); filename_char++)
+	{
+		if (!extension_processed)
+		{
+			extension = std::string(1, *filename_char) + extension;
+
+			if (*filename_char == '.')
+				extension_processed = true;
+		}
+		else
+		{
+			if (*filename_char == '\\' || *filename_char == '/')
+				break;
+
+			filename = std::string(1, *filename_char) + filename;
+		}
+	}
+	return filename;
+}
+
 void AssimpViewer::MainMenuBarFileOpen()
 {
-    // delete previously loaded assets
-    delete scene_assets_;
-    scene_assets_ = nullptr;
 
-    scene_assets_ = new gef::Scene();
+	gef::Scene* new_assets = new gef::Scene();
+	bool import_success = loader_->ReadAssets(open_file_dlg_.getChosenPath(), new_assets, &platform_);
 
-    AssimpSceneLoader loader;
-    loader.ReadAssets(open_file_dlg_.getChosenPath(), scene_assets_, &platform_);
+	if (import_success)
+	{
+		// delete previously loaded assets
+		delete scene_assets_;
+		scene_assets_ = nullptr;
 
-    scene_assets_->CreateMaterials(platform_);
+		scene_assets_ = new_assets;
+		scene_assets_->CreateMaterials(platform_);
 
-    // go through materials and try and load textures from model folder
-    auto material_data = scene_assets_->material_data.begin();
+		// go through materials and try and load textures from model folder
+		auto material_data = scene_assets_->material_data.begin();
+		for (size_t material_num = 0; material_num < scene_assets_->material_data.size(); ++material_num)
+		{
+			open_material_num_ = material_num;
+			if (material_data->diffuse_texture.length() > 0)
+			{
+				std::string texture_filepath = open_file_dlg_.getLastDirectory() + std::string("/") + material_data->diffuse_texture;
+				LoadTexture(texture_filepath.c_str());
+			}
+			material_data++;
+		}
 
-    for(int material_num=0; material_num < scene_assets_->material_data.size(); ++material_num)
-    {
-        open_material_num_ = material_num;
+		scene_assets_->CreateMeshes(platform_);
 
-        if(material_data->diffuse_texture.length() > 0)
-        {
-            std::string texture_filepath = open_file_dlg_.getLastDirectory() + std::string("/")+material_data->diffuse_texture;
+		scene_aabb_ = loader_->get_scene_aabb();
+		FrameScene();
 
-            LoadTexture(texture_filepath.c_str());
-        }
+		file_command_status_ = FS_MODEL_LOADED_SUCCESS;
+	}
+	else
+	{
+		// import failed, throw away new assets
+		delete new_assets;
+		new_assets = nullptr;
 
-        material_data++;
-    }
+		file_command_status_ = FS_MODEL_LOADED_FAILED;
+	}
+}
 
+void AssimpViewer::MainMenuBarFileSave()
+{
+	if (scene_assets_)
+	{
+		const char* save_file_path = open_file_dlg_.getChosenPath();
 
+		// saving textures must be done before the scene is written as it overwrites texture filenames
+		SaveTextures();
 
-
-    scene_assets_->CreateMeshes(platform_);
-
-    scene_aabb_ = loader.get_scene_aabb();
-    FrameScene();
+		scene_assets_->WriteSceneToFile(platform_, save_file_path);
+	}
 }
 
 void AssimpViewer::MainMenuBar(bool &running, bool &open_file_triggered)
@@ -261,6 +452,18 @@ void AssimpViewer::MainMenuBar(bool &running, bool &open_file_triggered)
                 }
             }
 
+
+			bool save_triggered = ImGui::MenuItem("Save", "Ctrl+S", open_file_dialog_active_, !open_file_dialog_active_);
+			if (save_triggered)
+			{
+				if (!open_file_dialog_active_)
+				{
+					open_file_triggered = save_triggered;
+					open_file_dialog_active_ = true;
+					file_command_ = FC_SAVE_MODEL;
+				}
+			}
+
             if(ImGui::MenuItem("Exit"))
             {
                 running = false;
@@ -279,14 +482,41 @@ void AssimpViewer::MeshesMenu() const
     ImGui::Begin("Meshes");
 
     auto mesh_data = scene_assets_->mesh_data.begin();
-    for (int mesh_num = 0; mesh_num < scene_assets_->mesh_data.size(); ++mesh_num)
+    for (size_t mesh_num = 0; mesh_num < scene_assets_->mesh_data.size(); ++mesh_num)
     {
-        std::__cxx11::string mesh_text = "Mesh: " + std::__cxx11::to_string(mesh_num);
+        std::string mesh_text = "Mesh: " + std::to_string(mesh_num);
         ImGui::Text("%s", mesh_text.c_str());
         mesh_data++;
     }
 
     ImGui::End();
+}
+
+void AssimpViewer::ModelMenu() const
+{
+	ImGui::Begin("Model");
+
+	ImGui::Text("AABB min: (%.2f, %.2f, %.2f)", scene_aabb_.min_vtx().x(), scene_aabb_.min_vtx().y(), scene_aabb_.min_vtx().z());
+	ImGui::Text("AABB max: (%.2f, %.2f, %.2f)", scene_aabb_.max_vtx().x(), scene_aabb_.max_vtx().y(), scene_aabb_.max_vtx().z());
+//	ImGui::Text("camera eye: (%.2f, %.2f, %.2f)", camera_eye_.x(), camera_eye_.y(), camera_eye_.z());
+//	ImGui::Text("camera lookat: (%.2f, %.2f, %.2f)", camera_lookat_.x(), camera_lookat_.y(), camera_lookat_.z());
+
+	ImGui::End();
+}
+
+void AssimpViewer::LoadOptionsMenu() const
+{
+	ImGui::Begin("Load Options");
+
+	bool flip_winding_order = loader_->flip_winding_order();
+	if (ImGui::Checkbox("Flip winding order", &flip_winding_order))
+		loader_->set_flip_winding_order(flip_winding_order);
+
+	bool make_left_handed = loader_->make_left_handed();
+	if (ImGui::Checkbox("Make left handed", &make_left_handed))
+		loader_->set_make_left_handed(make_left_handed);
+
+	ImGui::End();
 }
 
 void AssimpViewer::MaterialsMenu(bool& open_file_triggered)
@@ -295,18 +525,18 @@ void AssimpViewer::MaterialsMenu(bool& open_file_triggered)
 
     auto material_data = scene_assets_->material_data.begin();
 
-    for(int material_num=0; material_num < scene_assets_->material_data.size(); ++material_num)
+    for(size_t material_num=0; material_num < scene_assets_->material_data.size(); ++material_num)
     {
         ImGui::PushID(material_num);
-        std::__cxx11::string material_name;
+        std::string material_name;
         scene_assets_->string_id_table.Find(material_data->name_id, material_name);
 
         ImGui::Text("%s", material_name.c_str());
 
-        std::__cxx11::string texture_filepath = material_data->diffuse_texture;
+        std::string texture_filepath = material_data->diffuse_texture;
 
 
-        std::__cxx11::string texture_text = "Texture: ";
+        std::string texture_text = "Texture: ";
 
         if(texture_filepath.length() > 0)
         {
@@ -502,7 +732,7 @@ gef::Texture *AssimpViewer::CreateTexture(const std::string &image_filename)
         image_data.set_width(ilGetInteger(IL_IMAGE_WIDTH));
         image_data.set_height(ilGetInteger(IL_IMAGE_HEIGHT));
 
-        /* Convert image to RGBA with unsigned byte data type */
+        // Convert image to RGBA with unsigned byte data type
         ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
 
         image_data.set_image(ilGetData());
@@ -521,4 +751,3 @@ gef::Texture *AssimpViewer::CreateTexture(const std::string &image_filename)
 
     return texture;
 }
-

@@ -63,6 +63,8 @@ AssimpSceneLoader::AssimpSceneLoader()
 	: output_scene_(nullptr)
 	, assimp_scene_(nullptr)
 	, importer_(nullptr)
+	, flip_winding_order_(false)
+	, make_left_handed_(false)
 {
 
 }
@@ -86,9 +88,16 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 		return false;
 
 	importer_ = new Assimp::Importer;
-	// assets from unity are already in left handed coordinate space.
-	// adding aiProcess_MakeLeftHanded will flip it to right handed which GEF uses.
-	assimp_scene_ = importer_->ReadFile(filename, aiProcess_Triangulate | aiProcess_MakeLeftHanded);
+
+	unsigned int import_flags = aiProcess_Triangulate;
+
+	if (flip_winding_order_)
+		import_flags |= aiProcess_FlipWindingOrder;
+
+	if (make_left_handed_)
+		import_flags |= aiProcess_MakeLeftHanded;
+
+	assimp_scene_ = importer_->ReadFile(filename, import_flags);
 
 	if (!assimp_scene_)
 		return false;
@@ -107,27 +116,99 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 		output_scene_->material_data_map[material_name_id] = &output_scene_->material_data.back();
 	}
 
-	// create meshes
+	int num_vertices = 0;
 	for (unsigned int mesh_num = 0; mesh_num < assimp_scene_->mNumMeshes; ++mesh_num)
 	{
-		output_scene_->mesh_data.push_back(gef::MeshData());
-
-		ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back());
+		num_vertices += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
 	}
 
-	aiVector3D scene_min, scene_max, scene_center;
 
-	get_bounding_box(assimp_scene_, &scene_min,&scene_max);
-	scene_center.x = (scene_min.x + scene_max.x) / 2.0f;
-	scene_center.y = (scene_min.y + scene_max.y) / 2.0f;
-	scene_center.z = (scene_min.z + scene_max.z) / 2.0f;
+	// create meshes
+	int start_vertex = 0;
+	output_scene_->mesh_data.push_back(gef::MeshData());
+	output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::Vertex);
+	output_scene_->mesh_data.back().vertex_data.num_vertices = num_vertices;
+	output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::Vertex[num_vertices];
+	for (unsigned int mesh_num = 0; mesh_num < assimp_scene_->mNumMeshes; ++mesh_num)
+	{
+		ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back(), start_vertex);
+		start_vertex += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
+	}
+	scene_aabb_ = output_scene_->mesh_data.back().aabb;
 
 
-	scene_aabb_.set_min_vtx(gef::Vector4(scene_min.x, scene_min.y, scene_min.z));
-	scene_aabb_.set_max_vtx(gef::Vector4(scene_max.x, scene_max.y, scene_max.z));
+	delete importer_;
+	importer_ = nullptr;
+
 
 	return true;
 }
+
+void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex)
+{
+	// Data to fill
+	std::vector<gef::Mesh::Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	// Walk through each of the mesh's vertices
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	{
+		gef::Mesh::Vertex vertex;
+
+		vertex.px = mesh->mVertices[i].x;
+		vertex.py = mesh->mVertices[i].y;
+		vertex.pz = mesh->mVertices[i].z;
+
+		if (mesh->mTextureCoords[0])
+		{
+			vertex.u = (float)mesh->mTextureCoords[0][i].x;
+			vertex.v = -(float)mesh->mTextureCoords[0][i].y;
+		}
+
+		if (mesh->HasNormals())
+		{
+			vertex.nx = mesh->mNormals[i].x;
+			vertex.ny = mesh->mNormals[i].y;
+			vertex.nz = mesh->mNormals[i].z;
+		}
+
+		vertices.push_back(vertex);
+
+		mesh_data.aabb.Update(gef::Vector4(vertex.px, vertex.py, vertex.pz));
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(start_vertex+face.mIndices[j]);
+	}
+
+	memcpy(((UInt8*)mesh_data.vertex_data.vertices)+start_vertex*sizeof(gef::Mesh::Vertex), &vertices[0], mesh->mNumVertices * mesh_data.vertex_data.vertex_byte_size);
+
+	gef::PrimitiveData* primitive_data = new gef::PrimitiveData();
+	primitive_data->index_byte_size = sizeof(unsigned int);
+	primitive_data->type = gef::TRIANGLE_LIST;
+	primitive_data->num_indices = (Int32)indices.size();
+	primitive_data->indices = new unsigned int[primitive_data->num_indices];
+
+	// find name id of material
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		std::list<gef::MaterialData>::iterator material_data_iter = output_scene_->material_data.begin();
+		std::advance(material_data_iter, mesh->mMaterialIndex);
+		primitive_data->material_name_id = material_data_iter->name_id;
+	}
+	else
+		primitive_data->material_name_id = 0;
+
+
+	memcpy(primitive_data->indices, &indices[0], primitive_data->num_indices * primitive_data->index_byte_size);
+	mesh_data.primitives.push_back(primitive_data);
+}
+
 
 void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data)
 {
@@ -222,6 +303,11 @@ gef::MaterialData AssimpSceneLoader::ProcessMaterial(aiMaterial* material, const
 	}
 	else
 		material_data.diffuse_texture = "";
+
+	aiColor3D diffuse_colour(1.f, 1.f, 1.f);
+	material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_colour);
+
+	material_data.colour = gef::Colour(diffuse_colour.r, diffuse_colour.g, diffuse_colour.b).GetABGR();
 
 	return material_data;
 }

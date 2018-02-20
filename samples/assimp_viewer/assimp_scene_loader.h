@@ -33,6 +33,12 @@ public:
 	}
 
 
+	inline bool flip_winding_order() const { return flip_winding_order_; }
+	inline void set_flip_winding_order(bool val) { flip_winding_order_ = val; }
+
+
+	inline bool make_left_handed() const { return make_left_handed_; }
+	inline void set_make_left_handed(bool val) { make_left_handed_ = val; }
 protected:
 	gef::Scene* output_scene_;
 	gef::Platform* platform_;
@@ -41,9 +47,13 @@ protected:
 	const aiScene* assimp_scene_;
 	gef::Aabb scene_aabb_;
 
+	bool flip_winding_order_;
+	bool make_left_handed_;
+
 
 protected:
 
+	void ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex);
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data);
 	gef::MaterialData ProcessMaterial(aiMaterial* material, const aiScene* scene, const char* name);
 };

@@ -69,6 +69,7 @@ void OrbitCamera::Update(float ticks, const gef::Vector4& mouse_rel, const Movem
 
 	if (movement == kPan)
 		displacement += (right*mouse_rel.x() + up_*mouse_rel.y())*ticks*rotate_speed_*zoom_distance_speed_modifier;
+//	displacement += (right*mouse_rel.x() + up_*mouse_rel.y())*ticks*rotate_speed_*zoom_distance_speed_modifier;
 
 	lookat_ += displacement;
 	eye_ = lookat_ - direction*zoom_distance_;
