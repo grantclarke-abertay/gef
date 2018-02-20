@@ -75,7 +75,7 @@ namespace gef
 	bool VertexBufferD3D11::Update(const Platform& platform)
 	{
 		bool success = true;
-		if (vertex_data_)
+		if (vertex_data_ && vertex_buffer_)
 		{
 
 			const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform);
