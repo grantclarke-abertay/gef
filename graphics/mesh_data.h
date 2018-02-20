@@ -17,6 +17,7 @@ namespace gef
 	{
 		std::string diffuse_texture;
 		gef::StringId name_id;
+		UInt32 colour;
 
 		bool Read(std::istream& stream);
 		bool Write(std::ostream& stream) const;

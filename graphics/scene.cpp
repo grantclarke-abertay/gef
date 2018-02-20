@@ -101,6 +101,12 @@ namespace gef
 			Material* material = new Material();
 			materials.push_back(material);
 			materials_map[materialIter->name_id] = material;
+
+
+			// colour
+			material->set_colour(materialIter->colour);
+
+			// texture
 			if(materialIter->diffuse_texture != "")
 			{
 				gef::StringId texture_name_id = gef::GetStringId(materialIter->diffuse_texture);

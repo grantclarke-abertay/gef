@@ -160,6 +160,7 @@ namespace gef
 		bool success = true;
 
 		stream.read((char*)&name_id, sizeof(gef::StringId));
+		stream.read((char*)&colour, sizeof(UInt32));
 
 		char string_character;
 		do
@@ -178,6 +179,7 @@ namespace gef
 		bool success = true;
 
 		stream.write((char*)&name_id, sizeof(gef::StringId));
+		stream.write((char*)&colour, sizeof(UInt32));
 
 		Int32 string_length = (Int32)diffuse_texture.length();
 		stream.write(diffuse_texture.c_str(), string_length+1);

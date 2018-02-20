@@ -582,8 +582,8 @@ void AddMesh(FbxNode& node, Scene& scene, Platform& platform)
 	// material name -> triangles that use that material
 	std::map<std::string, std::vector<MeshTriangle>> materials_primitives_;
 
-	scene.meshes.push_back(MeshData());
-	gef::MeshData& mesh = scene.meshes.back();
+	scene.mesh_data.push_back(MeshData());
+	gef::MeshData& mesh = scene.mesh_data.back();
 	gef::VertexData& vertex_buffer_data = mesh.vertex_data;
 
 
@@ -1130,6 +1130,7 @@ const char* GetMeshMaterial(FbxMesh* const fbx_mesh, const Int32 poly_index, gef
 
 				gef::MaterialData material_data;
 				material_data.name_id = material_name_id;
+				material_data.colour = 0xffffffff;
 
 				Int32 lMatId = leMat->GetIndexArray().GetAt(poly_index);
 
