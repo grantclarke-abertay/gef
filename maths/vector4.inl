@@ -89,6 +89,11 @@ namespace gef
 		return values_[index];
 	}
 
+	inline const Vector4 Vector4::operator-() const
+	{
+		return Vector4(-values_[0], -values_[1], -values_[2]);
+	}
+
 	inline float Vector4::x() const
 	{
 		return values_[0];

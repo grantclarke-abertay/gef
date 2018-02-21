@@ -22,6 +22,7 @@ public:
 	Vector4& operator *= (const float _scalar);
 	Vector4& operator /= (const float _scalar);
 	const float operator[] (const int index) const;
+	const Vector4 operator - () const;
 
 	void Normalise();
 	float LengthSqr() const;
