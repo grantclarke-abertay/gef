@@ -12,7 +12,7 @@ void ImGui_NewFrame()
 
 int main()
 {
-    gef::PlatformGLFW platform_xgl;
+    gef::PlatformGLFW platform_xgl(1280, 720);
 
     ImGui_ImplGlfwGL3_Init(platform_xgl.window(), true);
 

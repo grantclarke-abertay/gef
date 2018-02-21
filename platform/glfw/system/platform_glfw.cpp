@@ -10,7 +10,7 @@ static void error_callback(int error, const char* description)
     fprintf(stderr, "Error %d: %s\n", error, description);
 }
 
-gef::PlatformGLFW::PlatformGLFW()
+gef::PlatformGLFW::PlatformGLFW(int width, int height)
     : window_(nullptr)
     , clock_last_frame_(0)
 {
@@ -18,11 +18,11 @@ gef::PlatformGLFW::PlatformGLFW()
     glfwSetErrorCallback(error_callback);
     if (glfwInit())
     {
-        window_ = glfwCreateWindow(1280, 720, "GEF Application", NULL, NULL);
+        window_ = glfwCreateWindow(width, height, "GEF Application", NULL, NULL);
         glfwMakeContextCurrent(window_);
 
-        set_width(1280);
-        set_height(720);
+        set_width(width);
+        set_height(height);
 
         GLenum err = glewInit();
         if (GLEW_OK != err)

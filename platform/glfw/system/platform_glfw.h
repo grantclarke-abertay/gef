@@ -14,7 +14,7 @@ namespace gef
     class PlatformGLFW : public PlatformGL
     {
     public:
-        PlatformGLFW();
+        PlatformGLFW(int width, int height);
         ~PlatformGLFW() override ;
 
         bool Update() override;
