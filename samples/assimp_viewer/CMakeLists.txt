@@ -17,7 +17,7 @@ find_package(DevIL REQUIRED)
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(../.. ${IMGUI_INCLUDE_DIR})
+include_directories(. ../..)
 
 find_library(GEF_LIBRARY gef
         PATHS ../../cmake-build-debug)
@@ -39,12 +39,11 @@ set(SOURCE_FILES
         orbit_camera.h
         imgui_impl_glfw_gl3.cpp
         imgui_impl_glfw_gl3.h
-        ${IMGUI_SRC_DIR}/imgui.cpp
-        ${IMGUI_SRC_DIR}/imgui.h
-        ${IMGUI_SRC_DIR}/imgui_draw.cpp
-        ${IMGUI_SRC_DIR}/imgui_demo.cpp
-        ${IMGUI_SRC_DIR}/addons/imguifilesystem/imguifilesystem.cpp
-        ${IMGUI_SRC_DIR}/addons/imguifilesystem/imguifilesystem.h
+        imgui.cpp
+        imgui.h
+        imgui_draw.cpp
+        addons/imguifilesystem/imguifilesystem.cpp
+        addons/imguifilesystem/imguifilesystem.h
         )
 add_executable(assimp_viewer ${SOURCE_FILES})
 
