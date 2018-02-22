@@ -39,6 +39,9 @@ public:
 
 	inline bool make_left_handed() const { return make_left_handed_; }
 	inline void set_make_left_handed(bool val) { make_left_handed_ = val; }
+
+	inline bool generate_normals() const { return generate_normals_; }
+	inline void set_generate_normals(bool val) { generate_normals_ = val; }
 protected:
 	gef::Scene* output_scene_;
 	gef::Platform* platform_;
@@ -49,6 +52,7 @@ protected:
 
 	bool flip_winding_order_;
 	bool make_left_handed_;
+	bool generate_normals_;
 
 
 protected:

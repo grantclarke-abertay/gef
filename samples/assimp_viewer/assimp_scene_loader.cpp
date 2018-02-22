@@ -65,6 +65,7 @@ AssimpSceneLoader::AssimpSceneLoader()
 	, importer_(nullptr)
 	, flip_winding_order_(false)
 	, make_left_handed_(false)
+	, generate_normals_(false)
 {
 
 }
@@ -96,6 +97,9 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 
 	if (make_left_handed_)
 		import_flags |= aiProcess_MakeLeftHanded;
+
+    if(generate_normals_)
+        import_flags |= aiProcess_GenSmoothNormals;
 
 	assimp_scene_ = importer_->ReadFile(filename, import_flags);
 
