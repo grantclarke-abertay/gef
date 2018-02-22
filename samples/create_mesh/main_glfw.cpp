@@ -4,7 +4,7 @@
 
 int main()
 {
-    gef::PlatformGLFW platform_xgl;
+    gef::PlatformGLFW platform_xgl(960, 544);
     MeshApp myApplication(platform_xgl);
 
     myApplication.Run();
