@@ -34,6 +34,7 @@ class AssimpViewer : public gef::Application
         FC_LOAD_MODEL,
 		FC_LOAD_TEXTURE,
 		FC_SAVE_MODEL,
+		FC_LOAD_TEXTURES_DIRECTORY
 	};
 
 	enum FILE_COMMAND_STATUS
@@ -73,8 +74,8 @@ private:
     float near_plane_;
     float far_plane_;
 
-    ImGuiFs::Dialog open_file_dlg_;
-    bool open_file_dialog_active_;
+    ImGuiFs::Dialog file_dlg_;
+    bool file_dialog_active_;
 
     gef::Scene* scene_assets_;
     gef::Aabb scene_aabb_;
@@ -97,19 +98,22 @@ private:
 
 	gef::Texture* CreateTexture(const std::string& texture_filepath);
 
-    void MainMenuBar(bool &running, bool &open_file_triggered);
+    void MainMenuBar(bool &running, bool &file_command_triggered);
 
     void OpenFileDialog(bool open_file_triggered);
 
 	void MainMenuBarFileOpen();
 	void MainMenuBarFileSave();
+	void MainMenuBarFileLoadTexturesDirectory();
 
-    void LoadTexture(const char *texture_file_path);
+    void LoadTexture(const char *texture_file_path, int material_num);
 
+	void LoadTextures(const char *texture_directory);
 	void SaveTextures();
 
 	std::string ExtractImageFilename(std::string &src_filename);
 
+    void ReassignMaterialTextures(const std::map<gef::StringId, gef::StringId> &old_to_new_texture_filename) const;
 };
 
 #endif // _ASSIMP_VIEWER_H
