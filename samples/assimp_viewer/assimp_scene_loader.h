@@ -42,6 +42,14 @@ public:
 
 	inline bool generate_normals() const { return generate_normals_; }
 	inline void set_generate_normals(bool val) { generate_normals_ = val; }
+
+    inline bool rotate_90_xaxis() const {
+        return rotate_90_xaxis_;
+    }
+
+    inline void set_rotate_90_xaxis(bool val) {
+        rotate_90_xaxis_ = val;
+    }
 protected:
 	gef::Scene* output_scene_;
 	gef::Platform* platform_;
@@ -53,6 +61,9 @@ protected:
 	bool flip_winding_order_;
 	bool make_left_handed_;
 	bool generate_normals_;
+    bool rotate_90_xaxis_;
+public:
+
 
 
 protected:

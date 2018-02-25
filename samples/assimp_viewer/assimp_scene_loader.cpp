@@ -8,6 +8,7 @@
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <maths/math_utils.h>
 
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
@@ -66,6 +67,7 @@ AssimpSceneLoader::AssimpSceneLoader()
 	, flip_winding_order_(false)
 	, make_left_handed_(false)
 	, generate_normals_(false)
+	, rotate_90_xaxis_(false)
 {
 
 }
@@ -154,6 +156,14 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 	std::vector<gef::Mesh::Vertex> vertices;
 	std::vector<unsigned int> indices;
 
+	gef::Matrix44 mesh_transform;
+	mesh_transform.SetIdentity();
+
+	if(rotate_90_xaxis_)
+	{
+		mesh_transform.RotationX(gef::DegToRad(-90.0f));
+	}
+
 	// Walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -162,6 +172,15 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 		vertex.px = mesh->mVertices[i].x;
 		vertex.py = mesh->mVertices[i].y;
 		vertex.pz = mesh->mVertices[i].z;
+
+		if(rotate_90_xaxis_)
+		{
+			gef::Vector4 position(vertex.px, vertex.py, vertex.pz);
+			position = position.Transform(mesh_transform);
+			vertex.px = position.x();
+			vertex.py = position.y();
+			vertex.pz = position.z();
+		}
 
 		if (mesh->mTextureCoords[0])
 		{
@@ -174,6 +193,15 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 			vertex.nx = mesh->mNormals[i].x;
 			vertex.ny = mesh->mNormals[i].y;
 			vertex.nz = mesh->mNormals[i].z;
+
+			if(rotate_90_xaxis_)
+			{
+				gef::Vector4 normal(vertex.nx, vertex.ny, vertex.nz);
+				normal = normal.Transform(mesh_transform);
+				vertex.nx = normal.x();
+				vertex.ny = normal.y();
+				vertex.nz = normal.z();
+			}
 		}
 
 		vertices.push_back(vertex);

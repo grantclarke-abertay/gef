@@ -119,7 +119,7 @@ bool AssimpViewer::Update(float frame_time)
     if(scene_assets_ && (scene_assets_->meshes.size() > 0))
     {
 		ModelMenu();
-        MaterialsMenu(open_file_triggered);
+//        MaterialsMenu(open_file_triggered);
         // MeshesMenu();
 
         //ImGui::Begin("Textures");
@@ -286,21 +286,18 @@ void AssimpViewer::LoadTextures(const char *texture_directory)
     std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
     for (auto texture_mapping : scene_assets_->textures_map)
     {
-        std::string src_texture_filename;
+        std::string src_texture_filename, extension;
         gef::StringId src_texture_filename_id;
         src_texture_filename_id = texture_mapping.first;
 
         if (scene_assets_->string_id_table.Find(src_texture_filename_id, src_texture_filename))
         {
-            std::string texture_filename = ExtractImageFilename(src_texture_filename);
-            texture_filename = std::string(texture_directory)+"/"+texture_filename+".png";
+            std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
+            texture_filename = std::string(texture_directory)+"/"+texture_filename+extension;
 
             gef::StringId new_texture_filename_id = scene_assets_->string_id_table.Add(texture_filename.c_str());
             old_to_new_texture_filename[src_texture_filename_id] = new_texture_filename_id;
             unsigned int srcImageID = 0;
-
-
-
 
             texture_num++;
         }
@@ -325,13 +322,13 @@ void AssimpViewer::SaveTextures()
 	std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
 	for (auto texture_mapping : scene_assets_->textures_map)
 	{
-		std::string src_texture_filename;
+		std::string src_texture_filename, extension;
 		gef::StringId src_texture_filename_id;
 		src_texture_filename_id = texture_mapping.first;
 
 		if (scene_assets_->string_id_table.Find(src_texture_filename_id, src_texture_filename))
 		{
-			std::string texture_filename = ExtractImageFilename(src_texture_filename);
+			std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
 			texture_filename += ".png";
 
 
@@ -403,12 +400,11 @@ void AssimpViewer::ReassignMaterialTextures(const std::map<gef::StringId, gef::S
 	}
 }
 
-std::string AssimpViewer::ExtractImageFilename(std::string &src_filename)
+std::string AssimpViewer::ExtractImageFilename(std::string &src_filename, std::string &extension)
 {
 	bool extension_processed = false;
 	std::string filename;
-	std::string extension;
-	for (auto filename_char = src_filename.rbegin(); filename_char != src_filename.rend(); filename_char++)
+    for (auto filename_char = src_filename.rbegin(); filename_char != src_filename.rend(); filename_char++)
 	{
 		if (!extension_processed)
 		{
@@ -592,6 +588,10 @@ void AssimpViewer::LoadOptionsMenu() const
     bool generate_normals = loader_->generate_normals();
     if (ImGui::Checkbox("Generate normals", &generate_normals))
         loader_->set_generate_normals(generate_normals);
+
+    bool rotate_90_xaxis = loader_->rotate_90_xaxis();
+    if (ImGui::Checkbox("Fix Z-up", &rotate_90_xaxis))
+        loader_->set_rotate_90_xaxis(rotate_90_xaxis);
 
 	ImGui::End();
 }

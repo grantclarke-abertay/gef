@@ -111,7 +111,7 @@ private:
 	void LoadTextures(const char *texture_directory);
 	void SaveTextures();
 
-	std::string ExtractImageFilename(std::string &src_filename);
+	std::string ExtractImageFilename(std::string &src_filename, std::string &extension);
 
     void ReassignMaterialTextures(const std::map<gef::StringId, gef::StringId> &old_to_new_texture_filename) const;
 };
