@@ -31,8 +31,10 @@ AssimpViewer::AssimpViewer(gef::Platform& platform) :
     scene_assets_(nullptr),
     file_command_(FC_NONE),
     open_material_num_(-1),
+    open_texture_num_(-1),
 	file_command_status_(FS_NONE),
-	loader_(nullptr)
+	loader_(nullptr),
+    textures_window_visible_(true)
 {
 }
 
@@ -122,6 +124,9 @@ bool AssimpViewer::Update(float frame_time)
 //        MaterialsMenu(open_file_triggered);
         // MeshesMenu();
 
+        if(textures_window_visible_)
+            TexturesMenu(open_file_triggered);
+
         //ImGui::Begin("Textures");
 
         //auto mesh_data = scene_assets_->mesh_data.begin();
@@ -205,7 +210,39 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
 
                 case FC_LOAD_TEXTURE:
                 {
-                    LoadTexture(file_dlg_.getChosenPath(), open_material_num_);
+                                                                                                                    if(open_texture_num_ != -1)
+                    {
+                        auto texture_map = scene_assets_->textures_map.begin();
+                        advance(texture_map, open_texture_num_);
+
+                        open_texture_num_ = -1;
+
+                        gef::StringId new_texture_id = scene_assets_->string_id_table.Add(std::string(file_dlg_.getChosenPath()));
+
+                        // get old texture filename
+                        gef::StringId old_texture_id = texture_map->first;
+                        std::string old_texture_filename;
+                        scene_assets_->string_id_table.Find(old_texture_id, old_texture_filename);
+
+                        // reassign material texture maps from old texture to new one
+                        std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
+
+                        old_to_new_texture_filename[old_texture_id] = new_texture_id;
+                        ReassignMaterialTextures(old_to_new_texture_filename);
+
+                        // go through all materials and load textures that match the
+                        // new texture filename
+                        auto material_data = scene_assets_->material_data.begin();
+                        for (size_t material_num = 0; material_num < scene_assets_->material_data.size(); ++material_num)
+                        {
+                            gef::StringId material_texture_id = gef::GetStringId(material_data->diffuse_texture);
+
+                            if(material_texture_id == new_texture_id)
+                                LoadTexture(material_data->diffuse_texture.c_str(), material_num);
+                            material_data++;
+                        }                    }
+
+//                    LoadTexture(file_dlg_.getChosenPath(), open_material_num_);
                 }
                 break;
 
@@ -384,18 +421,22 @@ void AssimpViewer::ReassignMaterialTextures(const std::map<gef::StringId, gef::S
 		if (material_data->diffuse_texture.length() > 0)
 		{
 			gef::StringId old_texture_id = gef::GetStringId(material_data->diffuse_texture.c_str());
-			gef::StringId new_texture_id = old_to_new_texture_filename.at(old_texture_id);
 
-			std::__cxx11::string new_texture_filename;
-			if (scene_assets_->string_id_table.Find(new_texture_id, new_texture_filename))
-			{
-				gef::Texture* texture = scene_assets_->textures_map[old_texture_id];
-				scene_assets_->textures_map.erase(old_texture_id);
-				scene_assets_->textures_map[new_texture_id] = texture;
+            if(old_to_new_texture_filename.find(old_texture_id) != old_to_new_texture_filename.end())
+            {
+                gef::StringId new_texture_id = old_to_new_texture_filename.at(old_texture_id);
 
-				material_data->diffuse_texture = new_texture_filename;
-			}
-		}
+                std::string new_texture_filename;
+                if (scene_assets_->string_id_table.Find(new_texture_id, new_texture_filename))
+                {
+                    gef::Texture* texture = scene_assets_->textures_map[old_texture_id];
+                    scene_assets_->textures_map.erase(old_texture_id);
+                    scene_assets_->textures_map[new_texture_id] = texture;
+
+                    material_data->diffuse_texture = new_texture_filename;
+                }
+            }
+        }
 		material_data++;
 	}
 }
@@ -542,6 +583,12 @@ void AssimpViewer::MainMenuBar(bool &running, bool &file_command_triggered)
             ImGui::EndMenu();
         }
 
+        if(ImGui::BeginMenu("Window"))
+        {
+            ImGui::Checkbox("Textures", &textures_window_visible_);
+            ImGui::EndMenu();
+        }
+
         ImGui::EndMainMenuBar();
     }
 }
@@ -643,6 +690,53 @@ void AssimpViewer::MaterialsMenu(bool& open_file_triggered)
         ImGui::Separator();
         ImGui::PopID();
         material_data++;
+    }
+
+    ImGui::End();
+}
+
+
+void AssimpViewer::TexturesMenu(bool& open_file_triggered)
+{
+    ImGui::Begin("Textures");
+
+    int texture_num = 0;
+    for (auto texture_mapping : scene_assets_->textures_map)
+    {
+        ImGui::PushID(texture_num);
+        std::string texture_filepath;
+        scene_assets_->string_id_table.Find(texture_mapping.first, texture_filepath);
+
+        std::string texture_text = "Texture: ";
+
+        if(texture_filepath.length() > 0)
+        {
+            texture_text += texture_filepath;
+
+            ImGui::Text("%s", texture_text.c_str());
+            bool texture_button_triggered = ImGui::Button("...");
+
+            if(texture_button_triggered)
+            {
+                if(!file_dialog_active_)
+                {
+                    open_file_triggered = texture_button_triggered;
+                    file_dialog_active_ = true;
+                    file_command_ = FC_LOAD_TEXTURE;
+                    open_texture_num_ = texture_num;
+                }
+            }
+        }
+        else
+        {
+            texture_text += "None";
+            ImGui::Text("%s", texture_text.c_str());
+        }
+
+
+        ImGui::Separator();
+        ImGui::PopID();
+        texture_num++;
     }
 
     ImGui::End();

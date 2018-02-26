@@ -84,11 +84,13 @@ private:
     FILE_COMMAND file_command_;
 	FILE_COMMAND_STATUS file_command_status_;
     int open_material_num_;
+    int open_texture_num_;
 
 	AssimpSceneLoader* loader_;
-
+    bool textures_window_visible_;
 
     void MaterialsMenu(bool& open_file_triggered);
+    void TexturesMenu(bool& open_file_triggered);
 
 	void MeshesMenu() const;
 
