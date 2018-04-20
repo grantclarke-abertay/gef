@@ -2,6 +2,7 @@
 #define _GEF_QUATERNION_H
 
 #include <math.h>
+#include <maths/vector4.h>
 
 namespace gef
 {
@@ -26,6 +27,9 @@ public:
 	void Lerp(const Quaternion& startQ, const Quaternion& endQ, float time);
 	void Slerp(const Quaternion& startQ, const Quaternion& endQ, float time);
 	void Conjugate(const Quaternion& quaternion);
+
+	static gef::Vector4 Rotate(const Quaternion& rotation, const Vector4& v);
+
 	
 
 	float x;

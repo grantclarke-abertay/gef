@@ -15,6 +15,7 @@ namespace gef
 		const Matrix44 GetMatrix() const;
 		void Set(const Matrix44& matrix);
 		void Linear2TransformBlend(const gef::Transform& start, const gef::Transform& end, const float time);
+		void Inverse(const Transform& transform);
 
 		inline void set_rotation(const Quaternion& rot) { rotation_ = rot; }
 		inline const Quaternion& rotation() const { return rotation_; }

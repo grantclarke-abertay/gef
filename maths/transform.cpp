@@ -43,4 +43,15 @@ namespace gef
 		set_rotation(rotation);
 		set_translation(translation);
 	}
+
+	void Transform::Inverse(const Transform& transform)
+	{
+		rotation_.Conjugate(transform.rotation());
+
+		Vector4 inv_translation = -transform.translation();
+
+		inv_translation = Quaternion::Rotate(rotation_, inv_translation);
+		translation_ = inv_translation;
+	}
+
 }

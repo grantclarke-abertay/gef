@@ -139,4 +139,16 @@ void Quaternion::Conjugate(const Quaternion& quaternion)
 }
 
 
+gef::Vector4 Quaternion::Rotate(const Quaternion& rotation, const Vector4& v)
+{
+	Quaternion q =  Quaternion(v.x(), v.y(), v.z(), v.w())*rotation;
+
+	Quaternion rotation_inv;
+	rotation_inv.Conjugate(rotation);
+
+	q = rotation_inv*q;
+
+	return Vector4(q.x, q.y, q.z);
+}
+
 }
