@@ -69,6 +69,8 @@ namespace gef
 		inline HWND hwnd() const { return hwnd_; }
 		inline void set_top_level_hwnd(HWND parent_hwnd) {top_level_hwnd_ = parent_hwnd;}
 		inline HWND top_level_hwnd() const { return top_level_hwnd_; }
+
+		inline IDXGISwapChain* swap_chain() { return swap_chain_; }
 	private:
 		ID3D11RenderTargetView* GetRenderTargetView() const;
 		ID3D11DepthStencilView* GetDepthStencilView() const;
