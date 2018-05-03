@@ -212,7 +212,12 @@ namespace gef
                                 //outHasAlpha = true;
                                 ParseRGBA(image_data.image(), png_ptr, info_ptr, width, height);
                                 break;
+
                         }
+
+						/* Free all of the memory associated
+						* with the png_ptr and info_ptr */
+						png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
                     }
                 }
 
