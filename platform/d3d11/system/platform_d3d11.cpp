@@ -14,6 +14,7 @@
 #include <platform/d3d11/graphics/depth_buffer_d3d11.h>
 #include <cassert>
 
+
 namespace gef
 {
 	PlatformD3D11::PlatformD3D11(HINSTANCE hinstance, UInt32 width, UInt32 height, bool fullscreen, bool vsync_enabled, HWND hwnd) :
@@ -28,7 +29,8 @@ namespace gef
 		depth_stencil_view_(NULL),
 		vsync_enabled_(vsync_enabled),
 		hwnd_(NULL),
-		top_level_hwnd_(NULL)
+		top_level_hwnd_(NULL),
+		screenshot_texture_(NULL)
 	{
 		HRESULT hresult = S_OK;
 
@@ -106,6 +108,7 @@ namespace gef
 
 	void PlatformD3D11::Release()
 	{
+		ReleaseNull(screenshot_texture_);
 		ReleaseNull(depth_stencil_view_);
 		ReleaseNull(depth_stencil_);
 		ReleaseNull(render_target_view_);
@@ -544,56 +547,10 @@ namespace gef
 	{
 		return new Renderer3DD3D11(*this);
 	}
-}
 
-#if 0
-
-
-class Mesh* PlatformD3D11::CreateMesh()
-{
-	return new Mesh(*this);
-}
-
-class Texture* PlatformD3D11::CreateTexture(const ImageData& image_data) const
-{
-	return new TextureD3D11(*this, image_data);
-}
-
-File* PlatformD3D11::CreateFile() const
-{
-	return new gef::FileWin32();
-}
-
-AudioManager* PlatformD3D11::CreateAudioManager() const
-{
-	return NULL;
 }
 
 
 
-RenderTarget* PlatformD3D11::CreateRenderTarget(const Int32 width, const Int32 height) const
-{
-	return new RenderTargetD3D11(*this, width, height);
-}
 
-VertexBuffer* PlatformD3D11::CreateVertexBuffer() const
-{
-	return new VertexBufferD3D11();
-}
-
-IndexBuffer* PlatformD3D11::CreateIndexBuffer() const
-{
-	return new IndexBufferD3D11();
-}
-
-ShaderInterface* PlatformD3D11::CreateShaderInterface() const
-{
-	return new ShaderInterfaceD3D11(device_, device_context_);
-}
-
-DepthBuffer* PlatformD3D11::CreateDepthBuffer(UInt32 width, UInt32 height) const
-{
-	return new DepthBufferD3D11(device_, width, height);
-}
-#endif
 
