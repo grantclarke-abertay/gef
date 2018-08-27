@@ -81,28 +81,28 @@ void Quaternion::Lerp(const Quaternion& startQ, const Quaternion& endQ, float ti
 void Quaternion::Slerp(const Quaternion& startQ, const Quaternion& endQ, float time)
 {
 	float dot = startQ.x*endQ.x + startQ.y*endQ.y + startQ.z*endQ.z + startQ.w*endQ.w;
-	if(dot >= 1.0f)
+
+/*	dot = cos(theta)
+		if (dot < 0), q1 and q2 are more than 90 degrees apart,
+		so we can invert one to reduce spinning	*/
+	Quaternion targetQ;
+	if (dot < 0.0f)
 	{
-		*this = endQ;
+		dot = -dot;
+		targetQ = -endQ;
+	}
+	else
+		targetQ = endQ;
+
+	if (dot >= 1.0f)
+	{
+		*this = targetQ;
 	}
 	else
 	{
-		/*	dot = cos(theta)
-			if (dot < 0), q1 and q2 are more than 90 degrees apart,
-			so we can invert one to reduce spinning	*/
-		Quaternion targetQ;
-		if (dot < 0.0f)
-		{
-			dot = -dot;
-			targetQ = -endQ;
-		}
-		else
-			targetQ = endQ;
-		
 		float angle = acosf(dot);
-		*this = (startQ*sinf(angle*(1.0f-time)) + targetQ*sinf(angle*time))/sinf(angle);
+		*this = (startQ*sinf(angle*(1.0f - time)) + targetQ*sinf(angle*time)) / sinf(angle);
 	}
-
 }
 
 // result = this * quaternion;
