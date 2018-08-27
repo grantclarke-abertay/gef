@@ -35,7 +35,7 @@ LRESULT WINAPI myWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 {
-	gef::PlatformD3D11 platform(hInstance, 960, 544, false, true);
+	gef::PlatformD3D11 platform(hInstance, 1280, 720, false, true);
 
 	WNDPROC prevWndProc = (WNDPROC)SetWindowLongPtr(platform.hwnd(), GWL_WNDPROC, (LONG_PTR)&myWndProc);
 
@@ -44,6 +44,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline,
 
 
     AssimpViewer myApplication(platform);
+	myApplication.set_camera_key(gef::Keyboard::KC_LALT);
 
     myApplication.Run();
 

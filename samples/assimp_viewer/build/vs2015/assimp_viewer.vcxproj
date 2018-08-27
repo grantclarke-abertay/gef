@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;C:\Program Files %28x86%29\zlib\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\..\..\tools\fbx2scn;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;C:\Program Files %28x86%29\zlib\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -168,7 +168,9 @@
     <ClCompile Include="..\..\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\..\main_d3d11.cpp" />
     <ClCompile Include="..\..\assimp_viewer.cpp" />
+    <ClCompile Include="..\..\motion_clip_player.cpp" />
     <ClCompile Include="..\..\orbit_camera.cpp" />
+    <ClCompile Include="..\..\primitive_builder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\addons\imguifilesystem\dirent_portable.h" />
@@ -183,7 +185,9 @@
     <ClInclude Include="..\..\imgui.h" />
     <ClInclude Include="..\..\imgui_impl_dx11.h" />
     <ClInclude Include="..\..\imgui_internal.h" />
+    <ClInclude Include="..\..\motion_clip_player.h" />
     <ClInclude Include="..\..\orbit_camera.h" />
+    <ClInclude Include="..\..\primitive_builder.h" />
     <ClInclude Include="..\..\stb_rect_pack.h" />
     <ClInclude Include="..\..\stb_textedit.h" />
     <ClInclude Include="..\..\stb_truetype.h" />

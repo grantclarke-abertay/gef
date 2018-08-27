@@ -5,6 +5,7 @@
 #include <graphics/material.h>
 #include <graphics/mesh.h>
 #include <graphics/primitive.h>
+#include <graphics/vertex_buffer.h>
 #include <assets/png_loader.h>
 #include <graphics/image_data.h>
 #include <graphics/font.h>
@@ -14,6 +15,7 @@
 #include <maths/math_utils.h>
 #include <graphics/renderer_3d.h>
 #include "assimp_scene_loader.h"
+#include "primitive_builder.h"
 
 
 
@@ -29,12 +31,15 @@ AssimpViewer::AssimpViewer(gef::Platform& platform) :
 	font_(nullptr),
     file_dialog_active_(false),
     scene_assets_(nullptr),
+	anim_assets_(nullptr),
     file_command_(FC_NONE),
     open_material_num_(-1),
     open_texture_num_(-1),
 	file_command_status_(FS_NONE),
 	loader_(nullptr),
-    textures_window_visible_(true)
+    textures_window_visible_(true),
+	camera_key_(gef::Keyboard::KC_LALT),
+	primitive_builder_(nullptr)
 {
 }
 
@@ -42,6 +47,8 @@ void AssimpViewer::Init()
 {
 	sprite_renderer_ = gef::SpriteRenderer::Create(platform_);
     renderer_3d_ = gef::Renderer3D::Create(platform_);
+
+	primitive_builder_ = new PrimitiveBuilder(platform_);
 
     input_manager_ = gef::InputManager::Create(platform_);
 
@@ -56,15 +63,43 @@ void AssimpViewer::Init()
     SetupLights();
 
 	loader_ = new AssimpSceneLoader();
+	loader_->set_flip_winding_order(true);
+
+	//MainMenuBarFileOpen(
+	//	"D:\\Development\\gef_abertay\\samples\\animation_playback\\assets\\y_bot.fbx",
+	//	"D:\\Development\\gef_abertay\\samples\\animation_playback\\assets");
+
+	//anim_assets_ = new gef::Scene();
+	//loader_->ReadAnimation("D:\\Development\\gef_abertay\\samples\\animation_playback\\assets\\running_inPlace.fbx", anim_assets_);
+	//if (anim_assets_->animations.size() > 0)
+	//{
+	//	anim_player_.set_clip(anim_assets_->animations.cbegin()->second);
+	//	anim_player_.set_looping(true);
+	//}
+
+	base_save_directory_ = "";
+	load_textures_directory_ = "";
+	open_directory_ = "";
+	save_directory_ = "";
+	open_anim_directory_ = "";
+	save_anim_directory_ = "";
 }
 
 void AssimpViewer::CleanUp()
 {
+	delete primitive_builder_;
+	primitive_builder_ = nullptr;
+
+	bone_matrices_.clear();
+
 	delete loader_;
 	loader_ = nullptr;
 
     delete scene_assets_;
     scene_assets_ = nullptr;
+
+	delete anim_assets_;
+	anim_assets_ = nullptr;
 
 	CleanUpFont();
 	delete sprite_renderer_;
@@ -87,7 +122,7 @@ bool AssimpViewer::Update(float frame_time)
 
         if(input_manager_->keyboard() && input_manager_->touch_manager())
         {
-            if (input_manager_->keyboard()->IsKeyDown(gef::Keyboard::KC_LCONTROL))
+            if (input_manager_->keyboard()->IsKeyDown(camera_key_) && !file_dialog_active_)
             {
                 if(input_manager_->touch_manager()->is_button_down(0))
                     camera_movement = OrbitCamera::kRotate;
@@ -107,6 +142,11 @@ bool AssimpViewer::Update(float frame_time)
         }
     }
 
+	if (anim_player_.clip())
+	{
+		anim_player_.Update(frame_time, bind_pose_);
+	}
+
     bool running = true;
     bool open_file_triggered = false;
 
@@ -124,8 +164,8 @@ bool AssimpViewer::Update(float frame_time)
 //        MaterialsMenu(open_file_triggered);
         // MeshesMenu();
 
-        if(textures_window_visible_)
-            TexturesMenu(open_file_triggered);
+        //if(textures_window_visible_)
+        //    TexturesMenu(open_file_triggered);
 
         //ImGui::Begin("Textures");
 
@@ -154,6 +194,9 @@ bool AssimpViewer::Update(float frame_time)
 		case AssimpViewer::FS_MODEL_LOADED_FAILED:
 			ImGui::OpenPopup("Model Load Failed");
 			break;
+
+		case AssimpViewer::FS_MODEL_SAVE_DIRECTORY_INVALID:
+			ImGui::OpenPopup("Save Directory Invalid. Set Base Directory");
 		default:
 			break;
 		}
@@ -190,11 +233,38 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
 		const char* chosenPath = NULL;
 		
 		if (file_command_ == FC_SAVE_MODEL)
-			chosenPath = file_dlg_.saveFileDialog(open_file_triggered, file_dlg_.getLastDirectory(), NULL, ".scn");
-		else if(file_command_ == FC_LOAD_TEXTURES_DIRECTORY)
-            chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, file_dlg_.getLastDirectory());             // see other dialog types and the full list of arguments for advanced usage
-        else
-			chosenPath = file_dlg_.chooseFileDialog(open_file_triggered, file_dlg_.getLastDirectory());             // see other dialog types and the full list of arguments for advanced usage
+		{
+			if (save_directory_.length() == 0)
+				save_directory_ = file_dlg_.getLastDirectory();
+			chosenPath = file_dlg_.saveFileDialog(open_file_triggered, save_directory_.c_str(), NULL, ".scn");
+		}
+		else if (file_command_ == FC_LOAD_TEXTURES_DIRECTORY)
+		{
+			if (load_textures_directory_.length() == 0)
+				load_textures_directory_ = file_dlg_.getLastDirectory();
+			chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, load_textures_directory_.c_str());
+		}
+		else if (file_command_ == FC_SET_BASE_DIRECTORY)
+		{
+			if (base_save_directory_.length() == 0)
+				base_save_directory_ = file_dlg_.getLastDirectory();
+			chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, base_save_directory_.c_str());
+		}
+		else if(file_command_ == FC_LOAD_ANIMATION)
+		{
+			if (open_anim_directory_.length() == 0)
+				open_anim_directory_ = file_dlg_.getLastDirectory();
+			chosenPath = file_dlg_.chooseFileDialog(open_file_triggered, open_anim_directory_.c_str());
+		}
+		else if (file_command_ == FC_SAVE_ANIMATION)
+		{
+			if (save_anim_directory_.length() == 0)
+				save_anim_directory_ = file_dlg_.getLastDirectory();
+			chosenPath = file_dlg_.saveFileDialog(open_file_triggered, save_anim_directory_.c_str(), NULL, ".scn");
+		}
+		else
+			chosenPath = file_dlg_.chooseFileDialog(open_file_triggered, open_directory_.c_str());
+
 
         if (strlen(file_dlg_.getChosenPath()) > 0)
         {
@@ -204,59 +274,51 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
                 case FC_NONE:break;
                 case FC_LOAD_MODEL:
                 {
-                    MainMenuBarFileOpen();
+					open_directory_ = file_dlg_.getLastDirectory();
+					load_textures_directory_ = open_directory_;
+                    MainMenuBarFileOpen(file_dlg_.getChosenPath(), open_directory_.c_str());
                 }
                 break;
 
                 case FC_LOAD_TEXTURE:
                 {
-                                                                                                                    if(open_texture_num_ != -1)
-                    {
-                        auto texture_map = scene_assets_->textures_map.begin();
-                        advance(texture_map, open_texture_num_);
-
-                        open_texture_num_ = -1;
-
-                        gef::StringId new_texture_id = scene_assets_->string_id_table.Add(std::string(file_dlg_.getChosenPath()));
-
-                        // get old texture filename
-                        gef::StringId old_texture_id = texture_map->first;
-                        std::string old_texture_filename;
-                        scene_assets_->string_id_table.Find(old_texture_id, old_texture_filename);
-
-                        // reassign material texture maps from old texture to new one
-                        std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
-
-                        old_to_new_texture_filename[old_texture_id] = new_texture_id;
-                        ReassignMaterialTextures(old_to_new_texture_filename);
-
-                        // go through all materials and load textures that match the
-                        // new texture filename
-                        auto material_data = scene_assets_->material_data.begin();
-                        for (size_t material_num = 0; material_num < scene_assets_->material_data.size(); ++material_num)
-                        {
-                            gef::StringId material_texture_id = gef::GetStringId(material_data->diffuse_texture);
-
-                            if(material_texture_id == new_texture_id)
-                                LoadTexture(material_data->diffuse_texture.c_str(), material_num);
-                            material_data++;
-                        }                    }
-
-//                    LoadTexture(file_dlg_.getChosenPath(), open_material_num_);
+					LoadSelectedTexture();
                 }
                 break;
 
 				case FC_SAVE_MODEL:
 				{
+					save_directory_ = file_dlg_.getLastDirectory();
 					MainMenuBarFileSave();
 				}
 				break;
 
                 case FC_LOAD_TEXTURES_DIRECTORY:
                 {
+					load_textures_directory_ = file_dlg_.getLastDirectory();
                     MainMenuBarFileLoadTexturesDirectory();
                 }
                 break;
+
+				case FC_SET_BASE_DIRECTORY:
+				{
+					MainMenuBarSetBaseDirectory();
+				}
+				break;
+
+				case FC_LOAD_ANIMATION:
+				{
+					open_anim_directory_ = file_dlg_.getLastDirectory();
+					MainMenuBarFileOpenAnimation(file_dlg_.getChosenPath());
+				}
+				break;
+
+				case FC_SAVE_ANIMATION:
+				{
+					save_anim_directory_ = file_dlg_.getLastDirectory();
+					MainMenuBarFileSaveAnimation();
+				}
+				break;
 
             }
 
@@ -269,6 +331,42 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
             file_dialog_active_ = false;
         }
     }
+}
+
+void AssimpViewer::LoadSelectedTexture()
+{
+	if (open_texture_num_ != -1)
+	{
+		auto texture_map = scene_assets_->textures_map.begin();
+		advance(texture_map, open_texture_num_);
+
+		open_texture_num_ = -1;
+
+		gef::StringId new_texture_id = scene_assets_->string_id_table.Add(std::string(file_dlg_.getChosenPath()));
+
+		// get old texture filename
+		gef::StringId old_texture_id = texture_map->first;
+		std::string old_texture_filename;
+		scene_assets_->string_id_table.Find(old_texture_id, old_texture_filename);
+
+		// reassign material texture maps from old texture to new one
+		std::map<gef::StringId, gef::StringId> old_to_new_texture_filename;
+
+		old_to_new_texture_filename[old_texture_id] = new_texture_id;
+		ReassignMaterialTextures(old_to_new_texture_filename);
+
+		// go through all materials and load textures that match the
+		// new texture filename
+		auto material_data = scene_assets_->material_data.begin();
+		for (size_t material_num = 0; material_num < scene_assets_->material_data.size(); ++material_num)
+		{
+			gef::StringId material_texture_id = gef::GetStringId(material_data->diffuse_texture);
+
+			if (material_texture_id == new_texture_id)
+				LoadTexture(material_data->diffuse_texture.c_str(), material_num);
+			material_data++;
+		}
+	}
 }
 
 void AssimpViewer::LoadTexture(const char *texture_file_path, int material_num)
@@ -353,6 +451,13 @@ void AssimpViewer::LoadTextures(const char *texture_directory)
 
 void AssimpViewer::SaveTextures()
 {
+	// make texture path relative to base directory
+	std::string save_directory = file_dlg_.getLastDirectory();
+	std::string texture_directory;
+	
+	if(base_save_directory_.length() < save_directory.length())
+		texture_directory = save_directory.substr(base_save_directory_.length() + 1);
+
 	// init DevIL. This needs to be done only once per application
 	ilInit();
 	int texture_num = 0;
@@ -368,6 +473,9 @@ void AssimpViewer::SaveTextures()
 			std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
 			texture_filename += ".png";
 
+
+			if(texture_directory.length() > 0)
+				texture_filename = texture_directory + "/" + texture_filename;
 
 			gef::StringId new_texture_filename_id = scene_assets_->string_id_table.Add(texture_filename.c_str());
 			old_to_new_texture_filename[src_texture_filename_id] = new_texture_filename_id;
@@ -397,7 +505,7 @@ void AssimpViewer::SaveTextures()
 			// save image as png
 			if (srcImageID != 0)
 			{
-				std::string texture_filename_fullpath = file_dlg_.getLastDirectory() + std::string("/") + texture_filename;
+				std::string texture_filename_fullpath = base_save_directory_ + "/" + texture_filename;
 				ilSaveImage(texture_filename_fullpath.c_str());
 
 				// finished with source image
@@ -441,6 +549,18 @@ void AssimpViewer::ReassignMaterialTextures(const std::map<gef::StringId, gef::S
 	}
 }
 
+void AssimpViewer::RenderPose(const gef::SkeletonPose& pose, float size)
+{
+	for (int bone_num = 0; bone_num < pose.skeleton()->joint_count(); ++bone_num)
+	{
+		gef::Matrix44 bone_transform = pose.global_pose()[bone_num];
+
+		gef::Matrix44 scale_matrix;
+		scale_matrix.Scale(gef::Vector4(size, size, size));
+		renderer_3d_->DrawMesh(*primitive_builder_->GetDefaultCubeMesh(), scale_matrix*bone_transform);
+	}
+}
+
 std::string AssimpViewer::ExtractImageFilename(std::string &src_filename, std::string &extension)
 {
 	bool extension_processed = false;
@@ -465,19 +585,34 @@ std::string AssimpViewer::ExtractImageFilename(std::string &src_filename, std::s
 	return filename;
 }
 
-void AssimpViewer::MainMenuBarFileOpen()
+void AssimpViewer::MainMenuBarFileOpen(const char* filepath, const char* texture_directory)
 {
 
 	gef::Scene* new_assets = new gef::Scene();
-	bool import_success = loader_->ReadAssets(file_dlg_.getChosenPath(), new_assets, &platform_);
+	bool import_success = loader_->ReadAssets(filepath, new_assets, &platform_);
 
 	if (import_success)
 	{
+		// reset pose in the anim player
+		anim_player_.set_clip(nullptr);
+		anim_player_.Update(0.0f, gef::SkeletonPose());
+
 		// delete previously loaded assets
 		delete scene_assets_;
-		scene_assets_ = nullptr;
-
 		scene_assets_ = new_assets;
+
+		// check to see if there is a skeleton in the the scene file
+		// if so, pull out the bind pose and create an array of matrices
+		// that will be used to store the bone transformations
+		if (scene_assets_->skeletons.size() > 0)
+		{
+			gef::Skeleton* skeleton = scene_assets_->skeletons.front();
+			bind_pose_.CreateBindPose(skeleton);
+			bone_matrices_.resize(skeleton->joints().size());
+			anim_player_.Update(0.0f, bind_pose_);
+		}
+
+
 		scene_assets_->CreateMaterials(platform_);
 
 		// go through materials and try and load textures from model folder
@@ -487,7 +622,7 @@ void AssimpViewer::MainMenuBarFileOpen()
 			open_material_num_ = material_num;
 			if (material_data->diffuse_texture.length() > 0)
 			{
-				std::string texture_filepath = file_dlg_.getLastDirectory() + std::string("/") + material_data->diffuse_texture;
+				std::string texture_filepath = texture_directory + std::string("/") + material_data->diffuse_texture;
                 LoadTexture(texture_filepath.c_str(), open_material_num_);
                 open_material_num_ = -1;
 			}
@@ -515,12 +650,24 @@ void AssimpViewer::MainMenuBarFileSave()
 {
 	if (scene_assets_)
 	{
-		const char* save_file_path = file_dlg_.getChosenPath();
+		std::string save_file_path = file_dlg_.getChosenPath();
 
-		// saving textures must be done before the scene is written as it overwrites texture filenames
-		SaveTextures();
 
-		scene_assets_->WriteSceneToFile(platform_, save_file_path);
+		if (base_save_directory_.length() == 0)
+			base_save_directory_ = save_directory_;
+
+		// make sure file path is under the base directory
+		if (save_file_path.compare(0, base_save_directory_.size(), base_save_directory_) == 0)
+		{
+			// saving textures must be done before the scene is written as it overwrites texture filenames
+			SaveTextures();
+
+			scene_assets_->WriteSceneToFile(platform_, save_file_path.c_str());
+		}
+		else
+		{
+			file_command_status_ = FS_MODEL_SAVE_DIRECTORY_INVALID;
+		}
 	}
 }
 
@@ -528,9 +675,63 @@ void AssimpViewer::MainMenuBarFileLoadTexturesDirectory()
 {
     if(scene_assets_)
     {
-        const char* textures_directory = file_dlg_.getLastDirectory();
+        const char* textures_directory = load_textures_directory_.c_str();
         LoadTextures(textures_directory);
     }
+}
+
+void AssimpViewer::MainMenuBarSetBaseDirectory()
+{
+	base_save_directory_ = file_dlg_.getLastDirectory();
+}
+
+void AssimpViewer::MainMenuBarFileOpenAnimation(const char* filepath)
+{
+
+	gef::Scene* new_assets = new gef::Scene();
+	bool import_success = loader_->ReadAnimation(filepath, new_assets);
+
+	if (import_success)
+	{
+		// delete previously loaded assets
+		delete anim_assets_;
+		anim_assets_ = nullptr;
+		anim_assets_ = new_assets;
+
+		if (anim_assets_->animations.size() > 0)
+		{
+			anim_player_.set_clip(anim_assets_->animations.cbegin()->second);
+			anim_player_.set_looping(true);
+			anim_player_.set_anim_time(0.0f);
+		}
+
+		file_command_status_ = FS_ANIMATION_LOADED_SUCCESS;
+	}
+	else
+	{
+		// import failed, throw away new assets
+		delete new_assets;
+		new_assets = nullptr;
+
+		file_command_status_ = FS_ANIMATION_LOADED_FAILED;
+	}
+
+}
+
+void AssimpViewer::MainMenuBarFileSaveAnimation()
+{
+	if (anim_assets_)
+	{
+		std::string save_file_path = file_dlg_.getChosenPath();
+		if (base_save_directory_.length() == 0)
+			base_save_directory_ = save_anim_directory_;
+
+		// make sure file path is under the base directory
+		if (save_file_path.compare(0, base_save_directory_.size(), base_save_directory_) == 0)
+			anim_assets_->WriteSceneToFile(platform_, save_file_path.c_str());
+		else
+			file_command_status_ = FS_MODEL_SAVE_DIRECTORY_INVALID;
+	}
 }
 
 void AssimpViewer::MainMenuBar(bool &running, bool &file_command_triggered)
@@ -539,40 +740,15 @@ void AssimpViewer::MainMenuBar(bool &running, bool &file_command_triggered)
     {
         if(ImGui::BeginMenu("File"))
         {
-            bool open_triggered = ImGui::MenuItem("Open", "Ctrl+O", file_dialog_active_, !file_dialog_active_);
-
-            if(open_triggered)
-            {
-                if(!file_dialog_active_)
-                {
-                    file_command_triggered = open_triggered;
-                    file_dialog_active_ = true;
-                    file_command_ = FC_LOAD_MODEL;
-                }
-            }
-
-
-			bool save_triggered = ImGui::MenuItem("Save", "Ctrl+S", file_dialog_active_, !file_dialog_active_);
-			if (save_triggered)
-			{
-				if (!file_dialog_active_)
-				{
-					file_command_triggered = save_triggered;
-					file_dialog_active_ = true;
-					file_command_ = FC_SAVE_MODEL;
-				}
-			}
-
-            bool load_textures_triggered = ImGui::MenuItem("Load Textures Directory", nullptr, file_dialog_active_, !file_dialog_active_);
-            if (load_textures_triggered)
-            {
-                if (!file_dialog_active_)
-                {
-                    file_command_triggered = load_textures_triggered;
-                    file_dialog_active_ = true;
-                    file_command_ = FC_LOAD_TEXTURES_DIRECTORY;
-                }
-            }
+			AddFileMenuItem(file_command_triggered, "Open", "Ctrl+O", FC_LOAD_MODEL);
+			AddFileMenuItem(file_command_triggered, "Save", "Ctrl+S", FC_SAVE_MODEL);
+			ImGui::Separator();
+			AddFileMenuItem(file_command_triggered, "Open Animation", nullptr, FC_LOAD_ANIMATION);
+			AddFileMenuItem(file_command_triggered, "Save Animation", nullptr, FC_SAVE_ANIMATION);
+			ImGui::Separator();
+			AddFileMenuItem(file_command_triggered, "Load Textures Directory", nullptr, FC_LOAD_TEXTURES_DIRECTORY);
+			AddFileMenuItem(file_command_triggered, "Set Save Base Directory", nullptr, FC_SET_BASE_DIRECTORY);
+			ImGui::Separator();
 
             if(ImGui::MenuItem("Exit"))
             {
@@ -583,14 +759,29 @@ void AssimpViewer::MainMenuBar(bool &running, bool &file_command_triggered)
             ImGui::EndMenu();
         }
 
-        if(ImGui::BeginMenu("Window"))
-        {
-            ImGui::Checkbox("Textures", &textures_window_visible_);
-            ImGui::EndMenu();
-        }
+        //if(ImGui::BeginMenu("Window"))
+        //{
+        //    ImGui::Checkbox("Textures", &textures_window_visible_);
+        //    ImGui::EndMenu();
+        //}
 
         ImGui::EndMainMenuBar();
     }
+}
+
+bool AssimpViewer::AddFileMenuItem(bool& file_command_triggered, const char* item_text, const char* shortcut, FILE_COMMAND file_command)
+{
+	bool item_triggered = ImGui::MenuItem(item_text, shortcut, file_dialog_active_, !file_dialog_active_);
+	if (item_triggered)
+	{
+		if (!file_dialog_active_)
+		{
+			file_command_triggered = item_triggered;
+			file_dialog_active_ = true;
+			file_command_ = file_command;
+		}
+	}
+	return file_command_triggered;
 }
 
 void AssimpViewer::MeshesMenu() const
@@ -612,9 +803,21 @@ void AssimpViewer::ModelMenu() const
 {
 	ImGui::Begin("Model");
 
+	if (scene_assets_->mesh_data.size() > 0)
+	{
+		int index_count = 0;
+
+		for (auto primitive : scene_assets_->mesh_data.begin()->primitives)
+		{
+			index_count += primitive->num_indices;
+		}
+
+		ImGui::Text("Tri count: %d", index_count / 3);
+	}
+
 	ImGui::Text("AABB min: (%.2f, %.2f, %.2f)", scene_aabb_.min_vtx().x(), scene_aabb_.min_vtx().y(), scene_aabb_.min_vtx().z());
 	ImGui::Text("AABB max: (%.2f, %.2f, %.2f)", scene_aabb_.max_vtx().x(), scene_aabb_.max_vtx().y(), scene_aabb_.max_vtx().z());
-//	ImGui::Text("camera eye: (%.2f, %.2f, %.2f)", camera_eye_.x(), camera_eye_.y(), camera_eye_.z());
+	//	ImGui::Text("camera eye: (%.2f, %.2f, %.2f)", camera_eye_.x(), camera_eye_.y(), camera_eye_.z());
 //	ImGui::Text("camera lookat: (%.2f, %.2f, %.2f)", camera_lookat_.x(), camera_lookat_.y(), camera_lookat_.z());
 
 	ImGui::End();
@@ -763,8 +966,33 @@ void AssimpViewer::Render()
             gef::Matrix44 transform;
             transform.SetIdentity();
 
-            renderer_3d_->DrawMesh(*mesh, transform);
-        }
+			bool mesh_drawn = false;
+			if (scene_assets_->skeletons.size() > 0)
+			{
+				if ((*mesh).vertex_buffer())
+				{
+					if (mesh->vertex_buffer()->vertex_byte_size() == sizeof(gef::Mesh::SkinnedVertex))
+					{
+						gef::Skeleton* skeleton = scene_assets_->skeletons.front();
+						std::vector<gef::Matrix44>::const_iterator pose_matrix_iter = anim_player_.pose().global_pose().cbegin();
+						std::vector<gef::Joint>::const_iterator joint_iter = skeleton->joints().begin();
+
+						for (std::vector<gef::Matrix44>::iterator bone_matrix_iter = bone_matrices_.begin(); bone_matrix_iter != bone_matrices_.end(); ++bone_matrix_iter, ++joint_iter, ++pose_matrix_iter)
+							*bone_matrix_iter = (joint_iter->inv_bind_pose * *pose_matrix_iter);
+
+						gef::MeshInstance mesh_instance;
+						mesh_instance.set_mesh(mesh);
+						renderer_3d_->DrawSkinnedMesh(mesh_instance, bone_matrices_);
+						mesh_drawn = true;
+
+						RenderPose(anim_player_.pose(), 2.0f);
+					}
+				}
+			}
+
+			if(!mesh_drawn)
+				renderer_3d_->DrawMesh(*mesh, transform);
+		}
     }
 
     renderer_3d_->End();
@@ -792,6 +1020,9 @@ void AssimpViewer::DrawHUD()
 	if(font_)
 	{
 		// display frame rate
+		font_->RenderText(sprite_renderer_, gef::Vector4(1170.0f, 636.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "anim: %.2f", anim_player_.anim_time());
+
+
 		font_->RenderText(sprite_renderer_, gef::Vector4(1170.0f, 686.0f, -0.9f), 1.0f, 0xffffffff, gef::TJ_LEFT, "FPS: %.1f", fps_);
 	}
 }
@@ -874,6 +1105,7 @@ void AssimpViewer::FrameScene()
 
     orbit_camera_.set_eye(camera_eye_);
     orbit_camera_.set_lookat(camera_lookat_);
+	orbit_camera_.set_up(camera_up_);
 }
 
 gef::Texture *AssimpViewer::CreateTexture(const std::string &image_filename)
@@ -925,5 +1157,3 @@ gef::Texture *AssimpViewer::CreateTexture(const std::string &image_filename)
 
     return texture;
 }
-
-
