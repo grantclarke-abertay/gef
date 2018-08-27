@@ -16,6 +16,7 @@ namespace gef
 		virtual void CleanUp() = 0;
 		virtual bool Update(float ticks) = 0;
 		virtual void Render() = 0;
+		virtual void PostFrameEnd() {};
 
 		inline Platform& platform() { return platform_; }
 

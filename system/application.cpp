@@ -52,6 +52,7 @@ void Application::Run()
 				platform_.PreRender();
 				Render();
 				platform_.PostRender();
+				PostFrameEnd();
 			}
 
 			previous_frame_time = platform_.GetFrameTime();
