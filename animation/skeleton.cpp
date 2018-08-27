@@ -97,6 +97,8 @@ namespace gef
 	{
 		if(skeleton)
 		{
+			local_pose_.clear();
+			global_pose_.clear();
 			for(UInt32 jointNum=0;jointNum<skeleton->joints().size();jointNum++)
 			{
 				Matrix44 local_matrix;
@@ -180,6 +182,9 @@ namespace gef
 			inv_local_joint_orient.SetTranslation(gef::Vector4(0.f, 0.f, 0.f));
 			joint_pose.Set(inv_local_joint_orient * joint_pose.GetMatrix());
 #endif
+		
+		
+//			break;
 		}
 
 		if(updateGlobalPose)
