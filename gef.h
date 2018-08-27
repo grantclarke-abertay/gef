@@ -15,8 +15,8 @@ typedef unsigned char UInt8;
 
 
 // MACROS
-#define DeleteNull(x) if(x != NULL) { delete x; x = NULL; }
-#define DeleteArrayNull(x) if(x != NULL) { delete[] x; x = NULL; }
-#define ReleaseNull(x) if(x != NULL) { x->Release(); x = NULL; }
+#define DeleteNull(x) if(x != nullptr) { delete x; x = nullptr; }
+#define DeleteArrayNull(x) if(x != nullptr) { delete[] x; x = nullptr; }
+#define ReleaseNull(x) if(x != nullptr) { x->Release(); x = nullptr; }
 
 #endif // _ABFW_FRAMEWORK_H
