@@ -67,12 +67,14 @@ namespace gef
 		inline const Material* override_material() const { return override_material_; }
 
 		static Renderer3D* Create(Platform& platform);
-		bool clear_render_target_enabled() const { return clear_render_target_enabled_; }
-		void set_clear_render_target_enabled(bool val) { clear_render_target_enabled_ = val; }
-		bool clear_depth_buffer_enabled() const { return clear_depth_buffer_enabled_; }
-		void set_clear_depth_buffer_enabled(bool val) { clear_depth_buffer_enabled_ = val; }
-		bool clear_stencil_buffer_enabled() const { return clear_stencil_buffer_enabled_; }
-		void set_clear_stencil_buffer_enabled(bool val) { clear_stencil_buffer_enabled_ = val; }
+		inline bool clear_render_target_enabled() const { return clear_render_target_enabled_; }
+		inline void set_clear_render_target_enabled(bool val) { clear_render_target_enabled_ = val; }
+		inline bool clear_depth_buffer_enabled() const { return clear_depth_buffer_enabled_; }
+		inline void set_clear_depth_buffer_enabled(bool val) { clear_depth_buffer_enabled_ = val; }
+		inline bool clear_stencil_buffer_enabled() const { return clear_stencil_buffer_enabled_; }
+		inline void set_clear_stencil_buffer_enabled(bool val) { clear_stencil_buffer_enabled_ = val; }
+		inline float fov() const { return fov_; }
+		inline void set_fov(float val) { fov_ = val; }
 	protected:
 		Renderer3D(Platform& platform);
 		void CalculateInverseWorldTransposeMatrix();
@@ -84,7 +86,7 @@ namespace gef
 		Matrix44 world_matrix_;
 		Shader* shader_;
 		Default3DShader default_shader_;
-//		Default3DSkinningShader default_skinned_mesh_shader_;
+		Default3DSkinningShader default_skinned_mesh_shader_;
 		Default3DShaderData default_shader_data_;
 		SkinnedMeshShaderData default_skinned_mesh_shader_data_;
 		const Material* override_material_;
@@ -94,6 +96,8 @@ namespace gef
 		bool clear_render_target_enabled_;
 		bool clear_depth_buffer_enabled_;
 		bool clear_stencil_buffer_enabled_;
+
+		float fov_;
 	};
 }
 #endif // _GEF_RENDERER_3D_H
