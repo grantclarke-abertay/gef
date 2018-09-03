@@ -846,6 +846,10 @@ void AssimpViewer::LoadOptionsMenu() const
     if (ImGui::Checkbox("Fix Z-up", &rotate_90_xaxis))
         loader_->set_rotate_90_xaxis(rotate_90_xaxis);
 
+	bool ignore_skinning = loader_->ignore_skinning();
+	if (ImGui::Checkbox("Ignore skinning data", &ignore_skinning))
+		loader_->set_ignore_skinning(ignore_skinning);
+
 	ImGui::End();
 }
 

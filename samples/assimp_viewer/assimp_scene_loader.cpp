@@ -80,6 +80,7 @@ AssimpSceneLoader::AssimpSceneLoader()
 	, make_left_handed_(false)
 	, generate_normals_(false)
 	, rotate_90_xaxis_(false)
+	, ignore_skinning_(false)
 {
 
 }
@@ -212,7 +213,7 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	output_scene_->mesh_data.push_back(gef::MeshData());
 	output_scene_->mesh_data.back().vertex_data.num_vertices = num_vertices;
 
-	if (skinned_mesh)
+	if (skinned_mesh && !ignore_skinning_)
 	{
 		output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::SkinnedVertex);
 		output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::SkinnedVertex[num_vertices];
@@ -358,8 +359,17 @@ void AssimpSceneLoader::SampleAnim(float anim_time_secs, gef::Skeleton* skeleton
 	BoneTransform(anim_time_secs, joint_transforms, const_cast<aiScene*>(assimp_anim_scene_), animation, skeleton);
 
 
+	gef::Matrix44 rotateX;
+	rotateX.SetIdentity();
+	if (rotate_90_xaxis_)
+		rotateX.RotationX(gef::DegToRad(-90.0f));
+
+
+
 	for (int joint_num = 0; joint_num < skeleton->joint_count(); ++joint_num)
 	{
+		joint_transforms[joint_num] = joint_transforms[joint_num] * rotateX;
+
 		const gef::Matrix44& bone_world_transform = joint_transforms[joint_num];
 
 		gef::Matrix44 parent_bone_transform;
@@ -412,6 +422,17 @@ void AssimpSceneLoader::ProcessSkeletons()
 				{
 					BoneInfo bone_info;
 					set_gef_matrix_from_ai_matrix(bone_info.BoneOffset, bone->mOffsetMatrix);
+
+					if (rotate_90_xaxis_)
+					{
+						gef::Matrix44 rotateX;
+						rotateX.RotationX(gef::DegToRad(-90.0f));
+
+						gef::Matrix44 world_bone_transform;
+						world_bone_transform.Inverse(bone_info.BoneOffset);
+						bone_info.BoneOffset.Inverse(world_bone_transform * rotateX);
+					}
+
 					bone_info_[bone_name] = bone_info;
 				}
 			}
@@ -477,6 +498,8 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 	gef::Matrix44 mesh_transform;
 	mesh_transform.SetIdentity();
 
+	bool skinned = mesh->HasBones();
+
 	if(rotate_90_xaxis_)
 	{
 		mesh_transform.RotationX(gef::DegToRad(-90.0f));
@@ -489,10 +512,10 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 	int weightsByteOffset = 0;
 	int bonesByteOffset = 0;
 
-	bool skinned = mesh->HasBones();
+
 //	skinned = false;
 
-	if (skinned)
+	if (skinned && !ignore_skinning_)
 	{
 		sizeofVertex = sizeof(gef::Mesh::SkinnedVertex);
 		posByteOffset = 0;
@@ -541,7 +564,7 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 		memcpy(vertex_data + normalByteOffset, &normal, sizeof(float) * 3);
 		memcpy(vertex_data + uvByteOffset, &uv, sizeof(float) * 2);
 
-		if (mesh->HasBones())
+		if (mesh->HasBones() && !ignore_skinning_)
 		{
 			// zero out bone and skin data
 			memset(vertex_data + bonesByteOffset, 0, sizeof(UInt8) * 4);

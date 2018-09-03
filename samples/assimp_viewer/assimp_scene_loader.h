@@ -89,6 +89,9 @@ public:
     inline void set_rotate_90_xaxis(bool val) {
         rotate_90_xaxis_ = val;
     }
+
+	inline bool ignore_skinning() const { return ignore_skinning_; }
+	inline void set_ignore_skinning(bool val) { ignore_skinning_ = val; }
 protected:
 	gef::Scene* output_scene_;
 	gef::Scene* output_anim_scene_;
@@ -103,6 +106,7 @@ protected:
 	bool make_left_handed_;
 	bool generate_normals_;
     bool rotate_90_xaxis_;
+	bool ignore_skinning_;
 
 	std::map<std::string, BoneInfo> bone_info_;
 	std::map<int, std::string> joint_num_to_names_;
