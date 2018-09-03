@@ -92,7 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..;..\..\..\..\tools\fbx2scn;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;C:\Program Files %28x86%29\zlib\include;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\..\..\tools\fbx2scn;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;..\..\..\..\..\zlib;C:\Program Files\Autodesk\FBX\FBX SDK\2016.1.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -126,7 +126,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;C:\Program Files %28x86%29\zlib\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\..\..;C:\Program Files %28x86%29\Assimp\include;..\..\..\..\..\DevIL Windows SDK\include;..\..\..\..\..\zlib</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

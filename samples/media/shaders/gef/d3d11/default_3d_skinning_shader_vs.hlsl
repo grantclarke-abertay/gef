@@ -5,7 +5,7 @@ cbuffer MatrixBuffer
 {
 	matrix wvp;
 	matrix world;
-	matrix invworld;
+//	matrix invworld;
 	float4 light_position[NUM_LIGHTS];
 	matrix bone_matrices[NUM_MATRICES];
 };
@@ -61,7 +61,7 @@ void VS( in VertexInput input,
 	world_position += input.blendweights.w*mul(input.position, bone_matrices[indices.w]);
 	world_normal += input.blendweights.w*mul(normal, bone_matrices[indices.w]);
 
-    normal = mul(world_normal, invworld);
+    normal = mul(world_normal, world);
     output.normal = normalize(normal.xyz);
 	
     output.position = mul(world_position, wvp);	

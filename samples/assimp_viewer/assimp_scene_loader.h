@@ -23,63 +23,24 @@ class GameObject;
 //struct aiScene;
 //struct aiMesh;
 
-#define NUM_BONES_PER_VEREX 4
 
-struct VertexBoneData
-{
-	unsigned int IDs[NUM_BONES_PER_VEREX];
-	float Weights[NUM_BONES_PER_VEREX];
-
-	VertexBoneData()
-	{
-		Reset();
-	};
-
-	void Reset()
-	{
-		memset(IDs, 0, sizeof(unsigned int)*NUM_BONES_PER_VEREX);
-		memset(Weights, 0, sizeof(float)*NUM_BONES_PER_VEREX);
-	}
-
-//	void AddBoneData(unsigned int BoneID, float Weight);
-};
 
 struct BoneInfo
 {
 	gef::Matrix44 BoneOffset;
 	gef::Matrix44 FinalTransformation;
 
+	std::string ParentBoneName;
+	aiMesh* Mesh;
+	int gef_joint_num;
+
 	BoneInfo()
 	{
 		BoneOffset.SetZero();
 		FinalTransformation.SetZero();
+		Mesh = nullptr;
+		gef_joint_num = -1;
 	}
-};
-
-struct MeshBones
-{
-	MeshBones();
-
-	void LoadBones(/*unsigned int MeshIndex,*/ const aiMesh* pMesh/*, std::vector<VertexBoneData>& Bones*/);
-	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-	void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-	void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-	unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const gef::Matrix44& ParentTransform, aiScene* animation_scene, aiAnimation* animation);
-	void BoneTransform(float TimeInSeconds, std::vector<gef::Matrix44>& Transforms, aiScene* animation_scene, aiAnimation* animation);
-	unsigned int FindParentBoneIndex(aiNode* bone_node);
-
-	std::string FindBoneName(unsigned int bone_index);
-	aiNode* FindBoneNode(aiNode* root_node, unsigned int bone_index);
-
-	std::map<std::string, unsigned int> m_BoneMapping; // maps a bone name to its index
-	std::map<unsigned int, int> m_JointMapping; // maps assimp bone index to gef joint index
-	unsigned int m_NumBones;
-	std::vector<BoneInfo> m_BoneInfo;
-	gef::Matrix44 m_GlobalInverseTransform;
 };
 
 class AssimpSceneLoader
@@ -90,19 +51,20 @@ public:
 	bool ReadAssets(const char* filename, gef::Scene* scene, gef::Platform* platform);
 	bool ReadAnimation(const char* filename, gef::Scene* scene);
 
-	void ProcessAnimation(unsigned int anim_num, MeshBones* mesh_bones, gef::Skeleton* skeleton);
+	void ProcessAnimation(unsigned int anim_num, gef::Skeleton* skeleton);
 
-	void SampleAnim(MeshBones* mesh_bones, float anim_time_secs, gef::Skeleton* skeleton, float start_time, std::vector<gef::TransformAnimNode *> anim_nodes, aiAnimation* animation);
+	void SampleAnim(float anim_time_secs, gef::Skeleton* skeleton, float start_time, std::vector<gef::TransformAnimNode *> anim_nodes, aiAnimation* animation);
 
 	void ProcessSkeletons();
-	bool IsABone(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes);
-	aiNode* FindBoneNode(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes);
-
-	aiNode* FindParentBoneNode(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes);
-
-	void BuildSkeletonBones(aiNode* node, MeshBones& mesh_bones, int parent_joint_index, gef::Skeleton* skeleton);
 
 	void Close();
+
+	void AddBone(gef::Skeleton* skeleton, std::string& parent_bone_name, int parent_bone_index);
+
+
+	void BoneTransform(float TimeInSeconds, std::vector<gef::Matrix44>& Transforms, aiScene* animation_scene, aiAnimation* animation, gef::Skeleton* skeleton);
+	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const gef::Matrix44& ParentTransform, aiScene* animation_scene, aiAnimation* animation);
+
 
 	inline const gef::Aabb &get_scene_aabb() const
 	{
@@ -142,10 +104,8 @@ protected:
 	bool generate_normals_;
     bool rotate_90_xaxis_;
 
-	std::vector<MeshBones*> mesh_bones_;
-
-
-
+	std::map<std::string, BoneInfo> bone_info_;
+	std::map<int, std::string> joint_num_to_names_;
 public:
 
 
@@ -156,8 +116,13 @@ protected:
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data);
 	gef::MaterialData ProcessMaterial(aiMaterial* material, const aiScene* scene, const char* name);
 
-
-
+	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+	void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+	void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+	unsigned int FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	unsigned int FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	unsigned int FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
 };
 
 #endif // ifndef _ASSIMP_SCENE_LOADER_H

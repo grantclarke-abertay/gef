@@ -13,6 +13,8 @@
 #include <assimp/postprocess.h>
 #include <maths/math_utils.h>
 
+#include <iostream>
+
 #define aisgl_min(x,y) (x<y?x:y)
 #define aisgl_max(x,y) (y>x?y:x)
 
@@ -89,9 +91,8 @@ AssimpSceneLoader::~AssimpSceneLoader()
 
 void AssimpSceneLoader::Close()
 {
-	for (auto mesh_bones : mesh_bones_)
-		delete mesh_bones;
-	mesh_bones_.clear();
+	bone_info_.clear();
+	joint_num_to_names_.clear();
 
 	assimp_scene_ = nullptr;
 	assimp_anim_scene_ = nullptr;
@@ -100,15 +101,54 @@ void AssimpSceneLoader::Close()
 	importer_ = nullptr;
 }
 
+void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_bone_name, int parent_bone_index)
+{
+	// go through all bones and add bones that have the same parent
+	int prev_num_joints = skeleton->joint_count();
+
+	for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
+	{
+		std::string bone_name = bone_info_mapping->first;
+		BoneInfo& bone_info = bone_info_mapping->second;
+
+		if (parent_bone_name.compare(bone_info.ParentBoneName) == 0)
+		{
+			gef::Joint joint;
+
+			joint.name_id = output_scene_->string_id_table.Add(bone_name);
+			joint.inv_bind_pose = bone_info.BoneOffset;
+			joint.parent = parent_bone_index;
+
+			bone_info.gef_joint_num = skeleton->joint_count();
+			joint_num_to_names_[skeleton->joint_count()] = bone_name;
+			skeleton->AddJoint(joint);
+
+			// special case, if this is a root bone, stop searching as we only want one root per skeleton
+			if (parent_bone_index == -1)
+				break;
+		}
+	}
+
+	int curr_num_joints = skeleton->joint_count();
+
+	// now go through all newly add joints and add their children
+	for (int joint_num = prev_num_joints; joint_num < curr_num_joints; ++joint_num)
+	{
+		int parent_joint_num = joint_num;
+		std::string parent_bone_name = joint_num_to_names_[parent_joint_num];
+
+		AddBone(skeleton, parent_bone_name, parent_joint_num);
+	}
+}
+
 bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef::Platform* platform)
 {
 	if (!scene || !platform)
 		return false;
 	
-	// clear out old mesh bones
-	for (auto mesh_bones : mesh_bones_)
-		delete mesh_bones;
-	mesh_bones_.clear();
+	// clear out previous bone mapping data
+	bone_info_.clear();
+	joint_num_to_names_.clear();
 
 	importer_ = new Assimp::Importer;
 
@@ -120,10 +160,16 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	if (make_left_handed_)
 		import_flags |= aiProcess_MakeLeftHanded;
 
-    if(generate_normals_)
-        import_flags |= aiProcess_GenSmoothNormals;
+	// import file with no post processing
+	assimp_scene_ = importer_->ReadFile(filename, 0);
 
-	assimp_scene_ = importer_->ReadFile(filename, import_flags);
+	// generate normals force before doing anything else
+	if(generate_normals_)
+		importer_->ApplyPostProcessing(aiProcess_GenSmoothNormals);
+
+	// do all other post processing
+	importer_->ApplyPostProcessing(import_flags);
+
 
 	if (!assimp_scene_)
 		return false;
@@ -145,20 +191,15 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	// see if there is a skeleton in the imported scene
 	ProcessSkeletons();
 
-
-
-
 	int num_vertices = 0;
 	bool skinned_mesh = false;
 
-
-
-//	int num_meshes = assimp_scene_->mNumMeshes;
+	int num_meshes = assimp_scene_->mNumMeshes;
 
 	// just take first mesh at the moment
-	int num_meshes = assimp_scene_->mNumMeshes > 0 ? 1 : 0;
+//	int num_meshes = assimp_scene_->mNumMeshes > 0 ? 1 : 0;
 
-	for (unsigned int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+	for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
 	{
 		num_vertices += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
 
@@ -182,21 +223,15 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 		output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::Vertex[num_vertices];
 	}
 
-	for (unsigned int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+	for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
 	{
 		ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back(), start_vertex);
 		start_vertex += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
 	}
 	scene_aabb_ = output_scene_->mesh_data.back().aabb;
 
-
-
-
-
-
 	delete importer_;
 	importer_ = nullptr;
-
 
 	return true;
 }
@@ -224,9 +259,8 @@ bool AssimpSceneLoader::ReadAnimation(const char* filename, gef::Scene* scene)
 
 	for (unsigned int anim_num = 0; anim_num < assimp_anim_scene_->mNumAnimations; ++anim_num)
 	{
-		// process animation on first mesh at the moment
-		if((mesh_bones_.size() > 0) && (output_scene_->skeletons.size() > 0))
-			ProcessAnimation(anim_num, mesh_bones_[0], output_scene_->skeletons.front());
+		if (output_scene_->skeletons.size() > 0)
+			ProcessAnimation(anim_num, output_scene_->skeletons.front());
 	}
 
 	delete importer_;
@@ -236,7 +270,7 @@ bool AssimpSceneLoader::ReadAnimation(const char* filename, gef::Scene* scene)
 	return true;
 }
 
-void AssimpSceneLoader::ProcessAnimation(unsigned int anim_num, MeshBones* mesh_bones, gef::Skeleton* skeleton)
+void AssimpSceneLoader::ProcessAnimation(unsigned int anim_num, gef::Skeleton* skeleton)
 {
 	aiAnimation* src_anim = assimp_anim_scene_->mAnimations[anim_num];
 	gef::Animation* output_anim = new gef::Animation();
@@ -250,7 +284,7 @@ void AssimpSceneLoader::ProcessAnimation(unsigned int anim_num, MeshBones* mesh_
 
 	// create transform nodes for each bone
 	std::vector<gef::TransformAnimNode*> anim_nodes;
-	for (int bone_num = 0; bone_num < mesh_bones->m_NumBones; ++bone_num)
+	for (int bone_num = 0; bone_num < skeleton->joint_count(); ++bone_num)
 	{
 		gef::TransformAnimNode* output_node = new gef::TransformAnimNode();
 
@@ -263,38 +297,38 @@ void AssimpSceneLoader::ProcessAnimation(unsigned int anim_num, MeshBones* mesh_
 
 	// sample animation every 1/60th second
 	float tick_in_secs = 1.0f / 30.0f;
-	float anim_duration_in_secs = src_anim->mDuration/src_anim->mTicksPerSecond;
+	float anim_duration_in_secs = (float)src_anim->mDuration/(float)src_anim->mTicksPerSecond;
 
 	// go through all the anim channels and find the smallest and largest key time
 	// this will be used as the start and end time
 	float start_time = FLT_MAX;
 	float end_time = -FLT_MAX;
 
-	for (int channel_num = 0; channel_num < src_anim->mNumChannels; ++channel_num)
+	for (unsigned int channel_num = 0; channel_num < src_anim->mNumChannels; ++channel_num)
 	{
 		aiNodeAnim* node_anim = src_anim->mChannels[channel_num];
 
-		for (int poskey_num=0; poskey_num < node_anim->mNumPositionKeys; ++poskey_num)
+		for (unsigned int poskey_num=0; poskey_num < node_anim->mNumPositionKeys; ++poskey_num)
 		{
-			float time = node_anim->mPositionKeys[poskey_num].mTime;
+			float time = (float)node_anim->mPositionKeys[poskey_num].mTime;
 			if (time < start_time)
 				start_time = time;
 			if (time > end_time)
 				end_time = time;
 		}
 
-		for (int rotkey_num = 0; rotkey_num < node_anim->mNumRotationKeys; ++rotkey_num)
+		for (unsigned int rotkey_num = 0; rotkey_num < node_anim->mNumRotationKeys; ++rotkey_num)
 		{
-			float time = node_anim->mRotationKeys[rotkey_num].mTime;
+			float time = (float)node_anim->mRotationKeys[rotkey_num].mTime;
 			if (time < start_time)
 				start_time = time;
 			if (time > end_time)
 				end_time = time;
 		}
 
-		for (int sclkey_num = 0; sclkey_num < node_anim->mNumScalingKeys; ++sclkey_num)
+		for (unsigned int sclkey_num = 0; sclkey_num < node_anim->mNumScalingKeys; ++sclkey_num)
 		{
-			float time = node_anim->mScalingKeys[sclkey_num].mTime;
+			float time = (float)node_anim->mScalingKeys[sclkey_num].mTime;
 			if (time < start_time)
 				start_time = time;
 			if (time > end_time)
@@ -302,51 +336,37 @@ void AssimpSceneLoader::ProcessAnimation(unsigned int anim_num, MeshBones* mesh_
 		}
 	}
 
-	anim_duration_in_secs = (end_time - start_time) / src_anim->mTicksPerSecond;
-	float start_time_in_secs = start_time / src_anim->mTicksPerSecond;
-	float end_time_in_secs = end_time / src_anim->mTicksPerSecond;
+	anim_duration_in_secs = (end_time - start_time) / (float)src_anim->mTicksPerSecond;
+	float start_time_in_secs = start_time / (float)src_anim->mTicksPerSecond;
+	float end_time_in_secs = end_time / (float)src_anim->mTicksPerSecond;
 
 	output_anim->set_start_time(0.0f);
 	output_anim->set_end_time(anim_duration_in_secs);
 	output_anim->CalculateDuration();
 
 	for (float anim_time_secs = start_time_in_secs; anim_time_secs < end_time_in_secs; anim_time_secs += tick_in_secs)
-		SampleAnim(mesh_bones, anim_time_secs, skeleton, start_time, anim_nodes, src_anim);
+		SampleAnim(anim_time_secs, skeleton, start_time, anim_nodes, src_anim);
 
 	// add keys for end time
-	SampleAnim(mesh_bones, end_time_in_secs, skeleton, start_time, anim_nodes, src_anim);
+	SampleAnim(end_time_in_secs, skeleton, start_time, anim_nodes, src_anim);
 
 }
 
-void AssimpSceneLoader::SampleAnim(MeshBones* mesh_bones, float anim_time_secs, gef::Skeleton* skeleton, float start_time, std::vector<gef::TransformAnimNode *> anim_nodes, aiAnimation* animation)
+void AssimpSceneLoader::SampleAnim(float anim_time_secs, gef::Skeleton* skeleton, float start_time, std::vector<gef::TransformAnimNode *> anim_nodes, aiAnimation* animation)
 {
-	std::vector<gef::Matrix44> bone_transforms;
-	mesh_bones->BoneTransform(anim_time_secs, bone_transforms, const_cast<aiScene*>(assimp_anim_scene_), animation);
+	std::vector<gef::Matrix44> joint_transforms(skeleton->joint_count());
+	BoneTransform(anim_time_secs, joint_transforms, const_cast<aiScene*>(assimp_anim_scene_), animation, skeleton);
 
-	assert(mesh_bones->m_NumBones == skeleton->joint_count());
 
-	std::vector<gef::Matrix44> joint_transforms;
-	joint_transforms.resize(bone_transforms.size());
-
-	for (int bone_num = 0; bone_num < mesh_bones->m_NumBones; ++bone_num)
+	for (int joint_num = 0; joint_num < skeleton->joint_count(); ++joint_num)
 	{
-		int joint_num = mesh_bones->m_JointMapping[bone_num];
-		joint_transforms[joint_num] = bone_transforms[bone_num];
-	}
-
-
-
-	for (int bone_num = 0; bone_num < mesh_bones->m_NumBones; ++bone_num)
-	{
-		const gef::Matrix44& bone_world_transform = joint_transforms[bone_num];
-
-		int joint_num = mesh_bones->m_JointMapping[bone_num];
+		const gef::Matrix44& bone_world_transform = joint_transforms[joint_num];
 
 		gef::Matrix44 parent_bone_transform;
-		if (skeleton->joint(bone_num).parent == -1)
+		if (skeleton->joint(joint_num).parent == -1)
 			parent_bone_transform.SetIdentity();
 		else
-			parent_bone_transform = joint_transforms[skeleton->joint(bone_num).parent];
+			parent_bone_transform = joint_transforms[skeleton->joint(joint_num).parent];
 
 		gef::Matrix44 inv_parent_bone_transform;
 		inv_parent_bone_transform.AffineInverse(parent_bone_transform);
@@ -368,7 +388,7 @@ void AssimpSceneLoader::SampleAnim(MeshBones* mesh_bones, float anim_time_secs, 
 		pos_key.time = anim_time_secs;
 		pos_key.value = translation;
 
-		gef::TransformAnimNode* anim_node = anim_nodes[bone_num];
+		gef::TransformAnimNode* anim_node = anim_nodes[joint_num];
 		anim_node->rotation_keys().push_back(rot_key);
 		anim_node->translation_keys().push_back(pos_key);
 	}
@@ -382,98 +402,71 @@ void AssimpSceneLoader::ProcessSkeletons()
 		aiMesh* mesh = assimp_scene_->mMeshes[mesh_num];
 		if (mesh->HasBones())
 		{
-			MeshBones* mesh_bones = new MeshBones();
-			mesh_bones_.push_back(mesh_bones);
-			mesh_bones->LoadBones(mesh);
-
-			gef::Skeleton* skeleton = new gef::Skeleton();
-			BuildSkeletonBones(assimp_scene_->mRootNode, *mesh_bones, -1, skeleton);
-			output_scene_->skeletons.push_back(skeleton);
-		}
-		else
-		{
-			mesh_bones_.push_back(nullptr);
-		}
-	}
-}
-
-bool AssimpSceneLoader::IsABone(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes)
-{
-	bool result = false;
-
-	if (node)
-		result = bone_nodes.find(node->mName.C_Str()) != bone_nodes.end();
-
-	return result;
-}
-
-
-aiNode* AssimpSceneLoader::FindBoneNode(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes)
-{
-	aiNode* result = nullptr;
-
-	if (node)
-	{
-		if (IsABone(node, bone_nodes))
-			result = node;
-		else
-		{
-			for (unsigned int child_num = 0; child_num < node->mNumChildren ; child_num++)
+			for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
 			{
-				aiNode* child_node = node->mChildren[child_num];
-				result = FindBoneNode(child_node, bone_nodes);
-				if (result != nullptr)
-					break;
+				aiBone* bone = mesh->mBones[bone_num];
+
+				// add all bones
+				std::string bone_name(bone->mName.data);
+				if (bone_info_.find(bone_name) == bone_info_.end())
+				{
+					BoneInfo bone_info;
+					set_gef_matrix_from_ai_matrix(bone_info.BoneOffset, bone->mOffsetMatrix);
+					bone_info_[bone_name] = bone_info;
+				}
+			}
+
+			// find parent bones
+			{
+				for (auto bone_info = bone_info_.begin(); bone_info != bone_info_.end(); ++bone_info)
+				{
+					std::string bone_name = bone_info->first;
+
+					// find bone in scene
+					aiNode* node = assimp_scene_->mRootNode->FindNode(bone_name.c_str());
+					if (node)
+					{
+						bool parent_found = false;
+						aiNode* parent_node = node->mParent;
+						while (parent_node && !parent_found)
+						{
+							std::string parent_bone_name(parent_node->mName.data);
+
+							auto parent_bone_info = bone_info_.find(parent_bone_name);
+							if (parent_bone_info != bone_info_.end())
+							{
+								bone_info->second.ParentBoneName = parent_bone_name;
+								parent_found = true;
+							}
+							else
+								parent_node = parent_node->mParent;
+						}
+					}
+				}
+			}
+
+			// construct skeletons
+			{
+				for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
+				{
+					std::string bone_name = bone_info_mapping->first;
+					BoneInfo& bone_info = bone_info_mapping->second;
+					std::string parent_bone_name = bone_info.ParentBoneName;
+
+					if (parent_bone_name.size() == 0)
+					{
+						// we have a root bone
+						gef::Skeleton* skeleton = new gef::Skeleton;
+						AddBone(skeleton, parent_bone_name, -1);
+						output_scene_->skeletons.push_back(skeleton);
+					}
+				}
 			}
 		}
 	}
-
-	return result;
 }
 
-aiNode* AssimpSceneLoader::FindParentBoneNode(aiNode* node, const std::map<std::string, aiBone*>& bone_nodes)
-{
-	aiNode* result = nullptr;
 
-	if (node)
-	{
-		if (node->mParent)
-		{
-			if (IsABone(node->mParent, bone_nodes))
-				result = node->mParent;
-			else
-				result = FindParentBoneNode(node->mParent, bone_nodes);
-		}
-	}
-
-	return result;
-}
-
-void AssimpSceneLoader::BuildSkeletonBones(aiNode* node, MeshBones& mesh_bones, int parent_joint_index, gef::Skeleton* skeleton)
-{
-	if (mesh_bones.m_BoneMapping.find(node->mName.data) != mesh_bones.m_BoneMapping.end())
-	{
-		// create joint
-		gef::Joint joint;
-
-		joint.name_id = output_scene_->string_id_table.Add(node->mName.data);
-		joint.parent = parent_joint_index;
-
-		int bone_index = mesh_bones.m_BoneMapping[node->mName.data];
-		joint.inv_bind_pose = mesh_bones.m_BoneInfo[bone_index].BoneOffset;
-		skeleton->AddJoint(joint);
-
-		parent_joint_index = skeleton->joints().size()-1;
-		mesh_bones.m_JointMapping[bone_index] = parent_joint_index;
-	}
-
-	for (size_t child_num = 0; child_num < node->mNumChildren; ++child_num)
-	{
-		aiNode* child_node = node->mChildren[child_num];
-		BuildSkeletonBones(child_node, mesh_bones, parent_joint_index, skeleton);
-	}
-
-}
 
 void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex)
 {
@@ -560,6 +553,7 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 
 	if (skinned)
 	{
+		// only supporting a single skeleton in the scene at the moment
 		gef::Skeleton* skeleton = output_scene_->skeletons.front();
 		for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
 		{
@@ -739,42 +733,9 @@ gef::MaterialData AssimpSceneLoader::ProcessMaterial(aiMaterial* material, const
 	return material_data;
 }
 
-MeshBones::MeshBones()
-	: m_NumBones(0)
-{
-	m_GlobalInverseTransform.SetIdentity();
-}
-
-void MeshBones::LoadBones(/*unsigned int MeshIndex, */const aiMesh* pMesh/*, std::vector<VertexBoneData>& Bones*/)
-{
-	for (unsigned int i = 0; i < pMesh->mNumBones; i++) {
-		unsigned int BoneIndex = 0;
-		std::string BoneName(pMesh->mBones[i]->mName.data);
-
-		if (m_BoneMapping.find(BoneName) == m_BoneMapping.end()) {
-			// Allocate an index for a new bone
-			BoneIndex = m_NumBones;
-			m_NumBones++;
-			BoneInfo bi;
-			m_BoneInfo.push_back(bi);
-			set_gef_matrix_from_ai_matrix(m_BoneInfo[BoneIndex].BoneOffset, pMesh->mBones[i]->mOffsetMatrix);
 
 
-			m_BoneMapping[BoneName] = BoneIndex;
-		}
-		else {
-			BoneIndex = m_BoneMapping[BoneName];
-		}
-
-		//for (unsigned int j = 0; j < pMesh->mBones[i]->mNumWeights; j++) {
-		//	unsigned int VertexID = m_Entries[MeshIndex].BaseVertex + pMesh->mBones[i]->mWeights[j].mVertexId;
-		//	float Weight = pMesh->mBones[i]->mWeights[j].mWeight;
-		//	Bones[VertexID].AddBoneData(BoneIndex, Weight);
-		//}
-	}
-}
-
-unsigned int MeshBones::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+unsigned int AssimpSceneLoader::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	for (unsigned int i = 0; i < pNodeAnim->mNumPositionKeys - 1; i++) {
 		if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
@@ -786,7 +747,7 @@ unsigned int MeshBones::FindPosition(float AnimationTime, const aiNodeAnim* pNod
 }
 
 
-unsigned int MeshBones::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+unsigned int AssimpSceneLoader::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumRotationKeys > 0);
 
@@ -800,7 +761,7 @@ unsigned int MeshBones::FindRotation(float AnimationTime, const aiNodeAnim* pNod
 }
 
 
-unsigned int MeshBones::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+unsigned int AssimpSceneLoader::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumScalingKeys > 0);
 
@@ -814,7 +775,7 @@ unsigned int MeshBones::FindScaling(float AnimationTime, const aiNodeAnim* pNode
 }
 
 
-void MeshBones::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void AssimpSceneLoader::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	if (pNodeAnim->mNumPositionKeys == 1) {
 		Out = pNodeAnim->mPositionKeys[0].mValue;
@@ -837,7 +798,7 @@ void MeshBones::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, c
 }
 
 
-void MeshBones::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void AssimpSceneLoader::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	// we need at least two values to interpolate...
 	if (pNodeAnim->mNumRotationKeys == 1) {
@@ -861,7 +822,7 @@ void MeshBones::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime,
 }
 
 
-void MeshBones::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void AssimpSceneLoader::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	if (pNodeAnim->mNumScalingKeys == 1) {
 		Out = pNodeAnim->mScalingKeys[0].mValue;
@@ -884,7 +845,44 @@ void MeshBones::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, co
 }
 
 
-void MeshBones::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const gef::Matrix44& ParentTransform, aiScene* animation_scene, aiAnimation* animation)
+
+
+const aiNodeAnim* AssimpSceneLoader::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
+{
+	if (pAnimation)
+	{
+		for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
+			const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+
+			if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
+				return pNodeAnim;
+			}
+		}
+	}
+
+	return NULL;
+}
+
+void AssimpSceneLoader::BoneTransform(float TimeInSeconds, std::vector<gef::Matrix44>& Transforms, aiScene* animation_scene, aiAnimation* animation, gef::Skeleton* skeleton)
+{
+	gef::Matrix44 Identity;
+	Identity.SetIdentity();
+
+	float TicksPerSecond = 0.0f;
+	if (animation)
+		TicksPerSecond = (float)animation->mTicksPerSecond;
+
+	float TimeInTicks = TimeInSeconds * TicksPerSecond;
+	float AnimationTime = TimeInTicks;
+
+	ReadNodeHeirarchy(AnimationTime, animation_scene->mRootNode, Identity, animation_scene, animation);
+
+	for (int i = 0; i < skeleton->joint_count(); i++) {
+		Transforms[i] = bone_info_[joint_num_to_names_[i]].FinalTransformation;
+	}
+}
+
+void AssimpSceneLoader::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const gef::Matrix44& ParentTransform, aiScene* animation_scene, aiAnimation* animation)
 {
 	std::string NodeName(pNode->mName.data);
 
@@ -901,123 +899,33 @@ void MeshBones::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, cons
 		CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
 		gef::Matrix44 ScalingM;
 		ScalingM.Scale(gef::Vector4(Scaling.x, Scaling.y, Scaling.z));
-		//ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
 
 		// Interpolate rotation and generate rotation transformation matrix
 		aiQuaternion RotationQ;
 		CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);
-		//Matrix4f RotationM = Matrix4f(RotationQ.GetMatrix());
+
 		gef::Matrix44 RotationM;
 		RotationM.Rotation(gef::Quaternion(RotationQ.x, RotationQ.y, RotationQ.z, RotationQ.w));
 
 		// Interpolate translation and generate translation transformation matrix
 		aiVector3D Translation;
 		CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-		//Matrix4f TranslationM;
+
 		gef::Matrix44 TranslationM;
 		TranslationM.SetIdentity();
 		TranslationM.SetTranslation(gef::Vector4(Translation.x, Translation.y, Translation.z));
 
 		// Combine the above transformations
-//		NodeTransformation = TranslationM * RotationM * ScalingM;
 		NodeTransformation = ScalingM * RotationM * TranslationM;
 	}
 
-	gef::Matrix44 GlobalTransformation =  NodeTransformation * ParentTransform;
+	gef::Matrix44 GlobalTransformation = NodeTransformation * ParentTransform;
 
-	if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
-		unsigned int BoneIndex = m_BoneMapping[NodeName];
-//		m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation /** m_BoneInfo[BoneIndex].BoneOffset*/;
-		m_BoneInfo[BoneIndex].FinalTransformation = GlobalTransformation;
+	if (bone_info_.find(NodeName) != bone_info_.end()) {
+		bone_info_.find(NodeName)->second.FinalTransformation = GlobalTransformation;
 	}
 
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
 		ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation, animation_scene, animation);
 	}
-}
-
-
-void MeshBones::BoneTransform(float TimeInSeconds, std::vector<gef::Matrix44>& Transforms, aiScene* animation_scene, aiAnimation* animation)
-{
-	gef::Matrix44 Identity;
-	Identity.SetIdentity();
-
-	float TicksPerSecond = 0.0f;
-	if(animation)
-		TicksPerSecond = animation->mTicksPerSecond;
-
-	float TimeInTicks = TimeInSeconds * TicksPerSecond;
-	float AnimationTime = TimeInTicks;
-	
-	//if (animation_scene && (animation_scene->mNumAnimations > 0))
-	//	AnimationTime = fmod(TimeInTicks, (float)animation_scene->mAnimations[0]->mDuration);
-
-	ReadNodeHeirarchy(AnimationTime, animation_scene->mRootNode, Identity, animation_scene, animation);
-
-	Transforms.resize(m_NumBones);
-
-	for (unsigned int i = 0; i < m_NumBones; i++) {
-		Transforms[i] = m_BoneInfo[i].FinalTransformation;
-	}
-}
-
-
-const aiNodeAnim* MeshBones::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
-{
-	if (pAnimation)
-	{
-		for (unsigned int i = 0; i < pAnimation->mNumChannels; i++) {
-			const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
-
-			if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
-				return pNodeAnim;
-			}
-		}
-	}
-
-	return NULL;
-}
-
-std::string MeshBones::FindBoneName(unsigned int bone_index)
-{
-	std::string bone_name = "";
-
-	for (auto bone_mapping : m_BoneMapping)
-	{
-		if (bone_mapping.second == bone_index)
-		{
-			bone_name = bone_mapping.first;
-			break;
-		}
-	}
-
-	return bone_name;
-}
-
-
-unsigned int MeshBones::FindParentBoneIndex(aiNode* bone_node)
-{
-	unsigned int parent_bone_index = 0xffffffff;
-
-	if (bone_node && bone_node->mParent)
-		if (m_BoneMapping.find(bone_node->mParent->mName.data) != m_BoneMapping.end())
-			parent_bone_index = m_BoneMapping[bone_node->mParent->mName.data];
-		else
-			parent_bone_index = FindParentBoneIndex(bone_node->mParent);
-
-	return parent_bone_index;
-}
-
-aiNode* MeshBones::FindBoneNode(aiNode* root_node, unsigned int bone_index)
-{
-	aiNode* bone_node = nullptr;
-
-	if (root_node)
-	{
-		std::string bone_name = FindBoneName(bone_index);
-		if (bone_name.size() > 0)
-			bone_node = root_node->FindNode(bone_name.c_str());
-	}
-
-	return bone_node;
 }

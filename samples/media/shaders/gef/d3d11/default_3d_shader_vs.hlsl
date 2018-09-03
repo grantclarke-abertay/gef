@@ -4,7 +4,7 @@ cbuffer MatrixBuffer
 {
 	matrix wvp;
 	matrix world;
-	matrix invworld;
+//	matrix invworld;
    float4 light_position[NUM_LIGHTS];
 };
 
@@ -35,7 +35,7 @@ void VS( in VertexInput input,
     output.uv = input.uv;
 
     float4 normal = float4(input.normal, 0);
-    normal = mul(normal, invworld);
+    normal = mul(normal, world);
     output.normal = normalize(normal.xyz);
 
     float4 world_position = mul(input.position, world);

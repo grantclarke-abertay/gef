@@ -65,12 +65,15 @@ void AssimpViewer::Init()
 	loader_ = new AssimpSceneLoader();
 	loader_->set_flip_winding_order(true);
 
+	// FOR TESTING
+
+	//loader_->set_generate_normals(true);
 	//MainMenuBarFileOpen(
-	//	"D:\\Development\\gef_abertay\\samples\\animation_playback\\assets\\y_bot.fbx",
+	//	"D:\\development\\gef\\samples\\media\\assets\\projet dreadnaught\\Runtime\\Libraries\\Character\\40k\\SPACE MARINE\\dreadnaught 2013.obj",
 	//	"D:\\Development\\gef_abertay\\samples\\animation_playback\\assets");
 
 	//anim_assets_ = new gef::Scene();
-	//loader_->ReadAnimation("D:\\Development\\gef_abertay\\samples\\animation_playback\\assets\\running_inPlace.fbx", anim_assets_);
+	//loader_->ReadAnimation("idle.fbx", anim_assets_);
 	//if (anim_assets_->animations.size() > 0)
 	//{
 	//	anim_player_.set_clip(anim_assets_->animations.cbegin()->second);
@@ -985,7 +988,7 @@ void AssimpViewer::Render()
 						renderer_3d_->DrawSkinnedMesh(mesh_instance, bone_matrices_);
 						mesh_drawn = true;
 
-						RenderPose(anim_player_.pose(), 2.0f);
+//						RenderPose(anim_player_.pose(), 2.0f);
 					}
 				}
 			}

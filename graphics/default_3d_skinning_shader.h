@@ -32,7 +32,7 @@ namespace gef
 		{
 			Matrix44 wvp;
 			Matrix44 world;
-			Matrix44 invworld;
+//			Matrix44 invworld;
 			Vector4 ambient_light_colour;
 			Vector4 light_position[MAX_NUM_POINT_LIGHTS];
 			Vector4 light_colour[MAX_NUM_POINT_LIGHTS];
@@ -60,7 +60,7 @@ namespace gef
 
 		Int32 wvp_matrix_variable_index_;
 		Int32 world_matrix_variable_index_;
-		Int32 invworld_matrix_variable_index_;
+//		Int32 invworld_matrix_variable_index_;
 		Int32 light_position_variable_index_;
 		Int32 bone_matrices_variable_index_;
 
