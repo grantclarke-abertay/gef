@@ -104,6 +104,10 @@ void AssimpSceneLoader::Close()
 
 void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_bone_name, int parent_bone_index)
 {
+	static int level = 0;
+	level++;
+
+
 	// go through all bones and add bones that have the same parent
 	int prev_num_joints = skeleton->joint_count();
 
@@ -123,10 +127,6 @@ void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_b
 			bone_info.gef_joint_num = skeleton->joint_count();
 			joint_num_to_names_[skeleton->joint_count()] = bone_name;
 			skeleton->AddJoint(joint);
-
-			// special case, if this is a root bone, stop searching as we only want one root per skeleton
-			if (parent_bone_index == -1)
-				break;
 		}
 	}
 
@@ -138,8 +138,15 @@ void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_b
 		int parent_joint_num = joint_num;
 		std::string parent_bone_name = joint_num_to_names_[parent_joint_num];
 
+		for (int i = 0; i < level; i++)
+			std::cout << "  ";
+		std::cout << parent_bone_name << std::endl;
+
+
 		AddBone(skeleton, parent_bone_name, parent_joint_num);
 	}
+
+	level--;
 }
 
 bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef::Platform* platform)
@@ -416,6 +423,8 @@ void AssimpSceneLoader::ProcessSkeletons()
 			{
 				aiBone* bone = mesh->mBones[bone_num];
 
+				std::cout << "mesh: " << mesh_num << " bone: " << bone_num << " name: " << bone->mName.data << std::endl;
+
 				// add all bones
 				std::string bone_name(bone->mName.data);
 				if (bone_info_.find(bone_name) == bone_info_.end())
@@ -436,54 +445,74 @@ void AssimpSceneLoader::ProcessSkeletons()
 					bone_info_[bone_name] = bone_info;
 				}
 			}
+		}
+	}
 
-			// find parent bones
+	// find parent bones
+	{
+		for (auto bone_info = bone_info_.begin(); bone_info != bone_info_.end(); ++bone_info)
+		{
+			std::string bone_name = bone_info->first;
+
+			// find bone in scene
+			aiNode* node = assimp_scene_->mRootNode->FindNode(bone_name.c_str());
+			if (node)
 			{
-				for (auto bone_info = bone_info_.begin(); bone_info != bone_info_.end(); ++bone_info)
+				bool parent_found = false;
+				aiNode* parent_node = node->mParent;
+				while (parent_node && !parent_found)
 				{
-					std::string bone_name = bone_info->first;
+					std::string parent_bone_name(parent_node->mName.data);
 
-					// find bone in scene
-					aiNode* node = assimp_scene_->mRootNode->FindNode(bone_name.c_str());
-					if (node)
+					auto parent_bone_info = bone_info_.find(parent_bone_name);
+					if (parent_bone_info != bone_info_.end())
 					{
-						bool parent_found = false;
-						aiNode* parent_node = node->mParent;
-						while (parent_node && !parent_found)
-						{
-							std::string parent_bone_name(parent_node->mName.data);
-
-							auto parent_bone_info = bone_info_.find(parent_bone_name);
-							if (parent_bone_info != bone_info_.end())
-							{
-								bone_info->second.ParentBoneName = parent_bone_name;
-								parent_found = true;
-							}
-							else
-								parent_node = parent_node->mParent;
-						}
+						bone_info->second.ParentBoneName = parent_bone_name;
+						parent_found = true;
 					}
-				}
-			}
-
-			// construct skeletons
-			{
-				for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
-				{
-					std::string bone_name = bone_info_mapping->first;
-					BoneInfo& bone_info = bone_info_mapping->second;
-					std::string parent_bone_name = bone_info.ParentBoneName;
-
-					if (parent_bone_name.size() == 0)
-					{
-						// we have a root bone
-						gef::Skeleton* skeleton = new gef::Skeleton;
-						AddBone(skeleton, parent_bone_name, -1);
-						output_scene_->skeletons.push_back(skeleton);
-					}
+					else
+						parent_node = parent_node->mParent;
 				}
 			}
 		}
+	}
+
+	// construct skeletons
+	{
+		gef::Skeleton* skeleton = new gef::Skeleton;
+
+		gef::Joint joint;
+
+		joint.name_id = output_scene_->string_id_table.Add("gef_root");
+		joint.inv_bind_pose.SetIdentity();
+		joint.parent = -1;
+		skeleton->AddJoint(joint);
+
+
+		for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
+		{
+			std::string bone_name = bone_info_mapping->first;
+			BoneInfo& bone_info = bone_info_mapping->second;
+			std::string parent_bone_name = bone_info.ParentBoneName;
+
+			// find first bone at the top of the skeleton
+			// this may not be the actually root if no vertices
+			// are attached to the root
+			if (parent_bone_name.size() == 0)
+			{
+				AddBone(skeleton, parent_bone_name, 0);
+				break;
+			}
+		}
+
+		if(skeleton->joint_count() > 1)
+			output_scene_->skeletons.push_back(skeleton);
+		else
+		{
+			delete skeleton;
+			skeleton = nullptr;
+		}
+
 	}
 }
 
@@ -630,86 +659,6 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(start_vertex+face.mIndices[j]);
 	}
-
-	gef::PrimitiveData* primitive_data = new gef::PrimitiveData();
-	primitive_data->index_byte_size = sizeof(unsigned int);
-	primitive_data->type = gef::TRIANGLE_LIST;
-	primitive_data->num_indices = (Int32)indices.size();
-	primitive_data->indices = new unsigned int[primitive_data->num_indices];
-
-	// find name id of material
-	if (mesh->mMaterialIndex >= 0)
-	{
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		std::list<gef::MaterialData>::iterator material_data_iter = output_scene_->material_data.begin();
-		std::advance(material_data_iter, mesh->mMaterialIndex);
-		primitive_data->material_name_id = material_data_iter->name_id;
-	}
-	else
-		primitive_data->material_name_id = 0;
-
-
-	memcpy(primitive_data->indices, &indices[0], primitive_data->num_indices * primitive_data->index_byte_size);
-	mesh_data.primitives.push_back(primitive_data);
-}
-
-
-void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data)
-{
-	// Data to fill
-	std::vector<gef::Mesh::Vertex> vertices;
-	std::vector<unsigned int> indices;
-//	std::vector<Texture> textures;
-
-	//if (mesh->mMaterialIndex >= 0)
-	//{
-	//	aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-
-	//	if (textype.empty()) textype = determineTextureType(scene, mat);
-	//}
-
-	// Walk through each of the mesh's vertices
-	gef::Aabb aabb;
-
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-	{
-		gef::Mesh::Vertex vertex;
-
-		vertex.px = mesh->mVertices[i].x;
-		vertex.py = mesh->mVertices[i].y;
-		vertex.pz = mesh->mVertices[i].z;
-
-		if (mesh->mTextureCoords[0])
-		{
-			vertex.u = (float)mesh->mTextureCoords[0][i].x;
-			vertex.v = -(float)mesh->mTextureCoords[0][i].y;
-		}
-
-		if (mesh->HasNormals())
-		{
-			vertex.nx = mesh->mNormals[i].x;
-			vertex.ny = mesh->mNormals[i].y;
-			vertex.nz = mesh->mNormals[i].z;
-		}
-
-		vertices.push_back(vertex);
-
-		aabb.Update(gef::Vector4(vertex.px, vertex.py, vertex.pz));
-	}
-
-	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-	{
-		aiFace face = mesh->mFaces[i];
-
-		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			indices.push_back(face.mIndices[j]);
-	}
-
-	mesh_data.vertex_data.vertex_byte_size = sizeof(gef::Mesh::Vertex);
-	mesh_data.vertex_data.num_vertices = mesh->mNumVertices;
-	mesh_data.vertex_data.vertices = new gef::Mesh::Vertex[mesh_data.vertex_data.num_vertices];
-	mesh_data.aabb = aabb;
-	memcpy(mesh_data.vertex_data.vertices, &vertices[0], mesh_data.vertex_data.num_vertices * mesh_data.vertex_data.vertex_byte_size);
 
 	gef::PrimitiveData* primitive_data = new gef::PrimitiveData();
 	primitive_data->index_byte_size = sizeof(unsigned int);

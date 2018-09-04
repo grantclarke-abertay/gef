@@ -117,7 +117,6 @@ public:
 protected:
 
 	void ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex);
-	void ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data);
 	gef::MaterialData ProcessMaterial(aiMaterial* material, const aiScene* scene, const char* name);
 
 	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
