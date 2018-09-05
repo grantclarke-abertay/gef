@@ -1,6 +1,7 @@
 #include "assimp_scene_loader.h"
 #include <graphics/mesh.h>
 #include <graphics/scene.h>
+#include <graphics/default_3d_skinning_shader.h>
 #include <animation/animation.h>
 #include <animation/skeleton.h>
 #include <system/platform.h>
@@ -104,9 +105,8 @@ void AssimpSceneLoader::Close()
 
 void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_bone_name, int parent_bone_index)
 {
-	static int level = 0;
-	level++;
-
+//	static int level = 0;
+//	level++;
 
 	// go through all bones and add bones that have the same parent
 	int prev_num_joints = skeleton->joint_count();
@@ -138,15 +138,15 @@ void AssimpSceneLoader::AddBone(gef::Skeleton * skeleton, std::string & parent_b
 		int parent_joint_num = joint_num;
 		std::string parent_bone_name = joint_num_to_names_[parent_joint_num];
 
-		for (int i = 0; i < level; i++)
-			std::cout << "  ";
-		std::cout << parent_bone_name << std::endl;
+		//for (int i = 0; i < level; i++)
+		//	std::cout << "  ";
+		//std::cout << parent_bone_name << std::endl;
 
 
 		AddBone(skeleton, parent_bone_name, parent_joint_num);
 	}
 
-	level--;
+//	level--;
 }
 
 bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef::Platform* platform)
@@ -199,44 +199,90 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	// see if there is a skeleton in the imported scene
 	ProcessSkeletons();
 
-	int num_vertices = 0;
-	bool skinned_mesh = false;
+
+	bool single_mesh = false;
 
 	int num_meshes = assimp_scene_->mNumMeshes;
 
 	// just take first mesh at the moment
-//	int num_meshes = assimp_scene_->mNumMeshes > 0 ? 1 : 0;
+	//	int num_meshes = assimp_scene_->mNumMeshes > 0 ? 1 : 0;
 
-	for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+	if (single_mesh)
 	{
-		num_vertices += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
+		int num_vertices = 0;
+		bool skinned_mesh = false;
 
-		if (assimp_scene_->mMeshes[mesh_num]->HasBones())
-			skinned_mesh = true;
-	}
 
-	// create meshes
-	int start_vertex = 0;
-	output_scene_->mesh_data.push_back(gef::MeshData());
-	output_scene_->mesh_data.back().vertex_data.num_vertices = num_vertices;
 
-	if (skinned_mesh && !ignore_skinning_)
-	{
-		output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::SkinnedVertex);
-		output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::SkinnedVertex[num_vertices];
+		for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+		{
+			num_vertices += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
+
+			if (output_scene_->skeletons.size() > 0)
+			{
+				if (assimp_scene_->mMeshes[mesh_num]->HasBones())
+					skinned_mesh = true;
+			}
+		}
+
+		// create meshes
+		int start_vertex = 0;
+		output_scene_->mesh_data.push_back(gef::MeshData());
+		output_scene_->mesh_data.back().vertex_data.num_vertices = num_vertices;
+
+		if (skinned_mesh && !ignore_skinning_)
+		{
+			output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::SkinnedVertex);
+			output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::SkinnedVertex[num_vertices];
+		}
+		else
+		{
+			output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::Vertex);
+			output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::Vertex[num_vertices];
+		}
+
+		for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+		{
+			ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back(), start_vertex);
+			start_vertex += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
+		}
+		scene_aabb_ = output_scene_->mesh_data.back().aabb;
 	}
 	else
 	{
-		output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::Vertex);
-		output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::Vertex[num_vertices];
+		for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
+		{
+			bool skinned_mesh = false;
+			int num_vertices = assimp_scene_->mMeshes[mesh_num]->mNumVertices;
+
+
+			if (output_scene_->skeletons.size() > 0 && !ignore_skinning_)
+			{
+				if (assimp_scene_->mMeshes[mesh_num]->HasBones())
+					skinned_mesh = true;
+			}
+
+			output_scene_->mesh_data.push_back(gef::MeshData());
+			output_scene_->mesh_data.back().vertex_data.num_vertices = num_vertices;
+
+			if (skinned_mesh)
+			{
+				output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::SkinnedVertex);
+				output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::SkinnedVertex[num_vertices];
+			}
+			else
+			{
+				output_scene_->mesh_data.back().vertex_data.vertex_byte_size = sizeof(gef::Mesh::Vertex);
+				output_scene_->mesh_data.back().vertex_data.vertices = new gef::Mesh::Vertex[num_vertices];
+			}
+
+			ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back(), 0);
+
+			scene_aabb_.Update(output_scene_->mesh_data.back().aabb.min_vtx());
+			scene_aabb_.Update(output_scene_->mesh_data.back().aabb.max_vtx());
+		}
 	}
 
-	for (int mesh_num = 0; mesh_num < num_meshes; ++mesh_num)
-	{
-		ProcessMesh(assimp_scene_->mMeshes[mesh_num], assimp_scene_, output_scene_->mesh_data.back(), start_vertex);
-		start_vertex += assimp_scene_->mMeshes[mesh_num]->mNumVertices;
-	}
-	scene_aabb_ = output_scene_->mesh_data.back().aabb;
 
 	delete importer_;
 	importer_ = nullptr;
@@ -423,7 +469,7 @@ void AssimpSceneLoader::ProcessSkeletons()
 			{
 				aiBone* bone = mesh->mBones[bone_num];
 
-				std::cout << "mesh: " << mesh_num << " bone: " << bone_num << " name: " << bone->mName.data << std::endl;
+				//std::cout << "mesh: " << mesh_num << " bone: " << bone_num << " name: " << bone->mName.data << std::endl;
 
 				// add all bones
 				std::string bone_name(bone->mName.data);
@@ -505,14 +551,20 @@ void AssimpSceneLoader::ProcessSkeletons()
 			}
 		}
 
-		if(skeleton->joint_count() > 1)
-			output_scene_->skeletons.push_back(skeleton);
-		else
+		if((skeleton->joint_count() <= 1) || (skeleton->joint_count() > MAX_NUM_BONE_MATRICES))
 		{
+			if (skeleton->joint_count() > MAX_NUM_BONE_MATRICES)
+			{
+				std::cerr << "ERROR: skeleton bone count (" << skeleton->joint_count() <<
+					") exceeds GEF bone maximum(" << MAX_NUM_BONE_MATRICES <<
+					"). Skeleton removed." << std::endl;
+			}
+
 			delete skeleton;
 			skeleton = nullptr;
 		}
-
+		else
+			output_scene_->skeletons.push_back(skeleton);
 	}
 }
 
@@ -527,7 +579,7 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 	gef::Matrix44 mesh_transform;
 	mesh_transform.SetIdentity();
 
-	bool skinned = mesh->HasBones();
+	bool skinned = mesh->HasBones() && !ignore_skinning_ && (output_scene_->skeletons.size() > 0);
 
 	if(rotate_90_xaxis_)
 	{
@@ -541,10 +593,7 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 	int weightsByteOffset = 0;
 	int bonesByteOffset = 0;
 
-
-//	skinned = false;
-
-	if (skinned && !ignore_skinning_)
+	if (skinned)
 	{
 		sizeofVertex = sizeof(gef::Mesh::SkinnedVertex);
 		posByteOffset = 0;
@@ -593,7 +642,7 @@ void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::Mes
 		memcpy(vertex_data + normalByteOffset, &normal, sizeof(float) * 3);
 		memcpy(vertex_data + uvByteOffset, &uv, sizeof(float) * 2);
 
-		if (mesh->HasBones() && !ignore_skinning_)
+		if (skinned)
 		{
 			// zero out bone and skin data
 			memset(vertex_data + bonesByteOffset, 0, sizeof(UInt8) * 4);
@@ -850,7 +899,10 @@ void AssimpSceneLoader::BoneTransform(float TimeInSeconds, std::vector<gef::Matr
 	ReadNodeHeirarchy(AnimationTime, animation_scene->mRootNode, Identity, animation_scene, animation);
 
 	for (int i = 0; i < skeleton->joint_count(); i++) {
-		Transforms[i] = bone_info_[joint_num_to_names_[i]].FinalTransformation;
+		if (joint_num_to_names_[i].size() > 0)
+			Transforms[i] = bone_info_[joint_num_to_names_[i]].FinalTransformation;
+		else
+			Transforms[i] = Identity;
 	}
 }
 
