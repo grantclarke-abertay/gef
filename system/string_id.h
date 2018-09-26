@@ -15,6 +15,7 @@ namespace gef
 	public:
 		StringId Add(const std::string& text);
 		bool Find(const UInt32 string_id, std::string& result);
+		bool Remove(StringId string_id);
 
 		const std::map<StringId, std::string>& table() const { return table_; }
 	private:

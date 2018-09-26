@@ -27,6 +27,20 @@ namespace gef
 			return false;
 	}
 
+	bool StringIdTable::Remove(StringId string_id)
+	{
+		bool found = false;
+
+		std::map<StringId, std::string>::iterator iter = table_.find(string_id);
+		if (iter != table_.end())
+		{
+			table_.erase(iter);
+			found = true;
+		}
+
+		return found;
+	}
+
 	StringId GetStringId(const std::string& text)
 	{
 		return CRC::GetICRC(text.c_str());
