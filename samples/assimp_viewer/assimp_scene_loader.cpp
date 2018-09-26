@@ -160,7 +160,7 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 
 	importer_ = new Assimp::Importer;
 
-	unsigned int import_flags = aiProcess_Triangulate;
+	unsigned int import_flags = aiProcess_Triangulate | aiProcess_LimitBoneWeights;
 
 	if (flip_winding_order_)
 		import_flags |= aiProcess_FlipWindingOrder;
@@ -200,7 +200,7 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	ProcessSkeletons();
 
 
-	bool single_mesh = false;
+	bool single_mesh = true;
 
 	int num_meshes = assimp_scene_->mNumMeshes;
 
@@ -288,6 +288,346 @@ bool AssimpSceneLoader::ReadAssets(const char* filename, gef::Scene* scene, gef:
 	importer_ = nullptr;
 
 	return true;
+}
+
+void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex)
+{
+	// Data to fill
+	std::vector<gef::Mesh::Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	gef::Matrix44 mesh_transform;
+	mesh_transform.SetIdentity();
+
+	bool gef_mesh_skinned = (mesh_data.vertex_data.vertex_byte_size == sizeof(gef::Mesh::SkinnedVertex)) && !ignore_skinning_ && (output_scene_->skeletons.size() > 0);
+
+	bool assimp_mesh_skinned = mesh->HasBones() && !ignore_skinning_ && (output_scene_->skeletons.size() > 0);
+
+	if (rotate_90_xaxis_)
+	{
+		mesh_transform.RotationX(gef::DegToRad(-90.0f));
+	}
+
+	int sizeofVertex = 0;
+	int posByteOffset = 0;
+	int normalByteOffset = 0;
+	int uvByteOffset = 0;
+	int weightsByteOffset = 0;
+	int bonesByteOffset = 0;
+
+	if (gef_mesh_skinned)
+	{
+		sizeofVertex = sizeof(gef::Mesh::SkinnedVertex);
+		posByteOffset = 0;
+		normalByteOffset = 12;
+		bonesByteOffset = 24;
+		weightsByteOffset = 28;
+		uvByteOffset = 44;
+	}
+	else
+	{
+		sizeofVertex = sizeof(gef::Mesh::Vertex);
+		posByteOffset = 0;
+		normalByteOffset = 12;
+		uvByteOffset = 24;
+	}
+	mesh_data.vertex_data.vertex_byte_size = sizeofVertex;
+
+
+	// Walk through each of the mesh's vertices
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+	{
+		UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + i) * sizeofVertex;
+
+		gef::Vector4 position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+		gef::Vector2 uv(0.0f, 0.0f);
+		gef::Vector4 normal(0.0f, 0.0f, 0.0f);
+
+		if (rotate_90_xaxis_)
+			position = position.Transform(mesh_transform);
+
+		if (mesh->mTextureCoords[0])
+		{
+			uv.x = (float)mesh->mTextureCoords[0][i].x;
+			uv.y = -(float)mesh->mTextureCoords[0][i].y;
+		}
+
+		if (mesh->HasNormals())
+		{
+			normal.set_value(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+
+			if (rotate_90_xaxis_)
+				normal = normal.Transform(mesh_transform);
+		}
+
+		memcpy(vertex_data + posByteOffset, &position, sizeof(float) * 3);
+		memcpy(vertex_data + normalByteOffset, &normal, sizeof(float) * 3);
+		memcpy(vertex_data + uvByteOffset, &uv, sizeof(float) * 2);
+
+		if (gef_mesh_skinned)
+		{
+			// zero out bone and skin data
+			memset(vertex_data + bonesByteOffset, 0, sizeof(UInt8) * 4);
+			memset(vertex_data + weightsByteOffset, 0, sizeof(float) * 4);
+		}
+
+		mesh_data.aabb.Update(gef::Vector4(position));
+	}
+
+	if (gef_mesh_skinned)
+	{
+		// only supporting a single skeleton in the scene at the moment
+		gef::Skeleton* skeleton = output_scene_->skeletons.front();
+
+
+		if (assimp_mesh_skinned)
+		{
+			for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
+			{
+				const aiBone* src_bone = mesh->mBones[bone_num];
+
+
+				for (size_t weight_num = 0; weight_num < src_bone->mNumWeights; weight_num++)
+				{
+					aiVertexWeight& weight = src_bone->mWeights[weight_num];
+
+					UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + weight.mVertexId) * sizeofVertex;
+
+					gef::StringId joint_id = gef::GetStringId(src_bone->mName.C_Str());
+					int joint_index = skeleton->FindJointIndex(joint_id);
+
+					if (joint_index != -1)
+					{
+						// TODO Check number of influences
+
+						// go through current influences and find first 0 weight to replace
+						const int kMaxBoneInfluences = 4;
+
+						float* weights = (float*)(vertex_data + weightsByteOffset);
+						UInt8* bone_indices = vertex_data + bonesByteOffset;
+						for (int influence_num = 0; influence_num < kMaxBoneInfluences; influence_num++)
+						{
+							if (*weights == 0.0f)
+							{
+								*weights = weight.mWeight;
+								*bone_indices = joint_index;
+								break;
+							}
+							else
+							{
+								weights++;
+								bone_indices++;
+							}
+						}
+					}
+				}
+			}
+
+			//// normalise weights
+			//for (size_t vertex_num = 0; vertex_num < mesh->mNumVertices; ++vertex_num)
+			//{
+			//	UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + vertex_num) * sizeofVertex;
+			//	float* weights = (float*)(vertex_data + weightsByteOffset);
+
+
+			//	float weight_sum = weights[0] + weights[1] + weights[2] + weights[3];
+			//	if (weight_sum > 0.0f)
+			//	{
+			//		weights[0] /= weight_sum;
+			//		weights[1] /= weight_sum;
+			//		weights[2] /= weight_sum;
+			//		weights[3] /= weight_sum;
+			//	}
+
+			//}
+		}
+		else
+		{
+			// gef mesh is being built as a skinned mesh, but no skin data in the imported mesh
+			// just skin all vertices to root bone just now
+			for (size_t vertex_num = 0; vertex_num < mesh->mNumVertices; ++vertex_num)
+			{
+				UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + vertex_num) * sizeofVertex;
+				float* weights = (float*)(vertex_data + weightsByteOffset);
+//				UInt8* bone_indices = vertex_data + bonesByteOffset;
+
+				weights[0] = 1.0f;
+				weights[1] = 0.0f;
+				weights[2] = 0.0f;
+				weights[3] = 0.0f;
+
+				//bone_indices[0] = 0;
+				//bone_indices[1] = 0;
+				//bone_indices[2] = 0;
+				//bone_indices[3] = 0;
+			}
+		}
+
+
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+	{
+		aiFace face = mesh->mFaces[i];
+
+		for (unsigned int j = 0; j < face.mNumIndices; j++)
+			indices.push_back(start_vertex + face.mIndices[j]);
+	}
+
+	gef::PrimitiveData* primitive_data = new gef::PrimitiveData();
+	primitive_data->index_byte_size = sizeof(unsigned int);
+	primitive_data->type = gef::TRIANGLE_LIST;
+	primitive_data->num_indices = (Int32)indices.size();
+	primitive_data->indices = new unsigned int[primitive_data->num_indices];
+
+	// find name id of material
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		std::list<gef::MaterialData>::iterator material_data_iter = output_scene_->material_data.begin();
+		std::advance(material_data_iter, mesh->mMaterialIndex);
+		primitive_data->material_name_id = material_data_iter->name_id;
+	}
+	else
+		primitive_data->material_name_id = 0;
+
+
+	memcpy(primitive_data->indices, &indices[0], primitive_data->num_indices * primitive_data->index_byte_size);
+	mesh_data.primitives.push_back(primitive_data);
+}
+
+gef::MaterialData AssimpSceneLoader::ProcessMaterial(aiMaterial* material, const aiScene* scene, const char* name)
+{
+	gef::MaterialData material_data;
+
+	material_data.name_id = gef::GetStringId(name);
+
+	if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+	{
+		aiString str;
+		material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
+		material_data.diffuse_texture = str.C_Str();
+	}
+	else
+		material_data.diffuse_texture = "";
+
+	aiColor3D diffuse_colour(1.f, 1.f, 1.f);
+	material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_colour);
+
+	material_data.colour = gef::Colour(diffuse_colour.r, diffuse_colour.g, diffuse_colour.b).GetABGR();
+
+	return material_data;
+}
+
+void AssimpSceneLoader::ProcessSkeletons()
+{
+	// go through all meshes and find out which ones have bones attached to them
+	for (size_t mesh_num = 0; mesh_num < assimp_scene_->mNumMeshes; mesh_num++)
+	{
+		aiMesh* mesh = assimp_scene_->mMeshes[mesh_num];
+		if (mesh->HasBones())
+		{
+			for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
+			{
+				aiBone* bone = mesh->mBones[bone_num];
+
+				//std::cout << "mesh: " << mesh_num << " bone: " << bone_num << " name: " << bone->mName.data << std::endl;
+
+				// add all bones
+				std::string bone_name(bone->mName.data);
+				if (bone_info_.find(bone_name) == bone_info_.end())
+				{
+					BoneInfo bone_info;
+					set_gef_matrix_from_ai_matrix(bone_info.BoneOffset, bone->mOffsetMatrix);
+
+					if (rotate_90_xaxis_)
+					{
+						gef::Matrix44 rotateX;
+						rotateX.RotationX(gef::DegToRad(-90.0f));
+
+						gef::Matrix44 world_bone_transform;
+						world_bone_transform.Inverse(bone_info.BoneOffset);
+						bone_info.BoneOffset.Inverse(world_bone_transform * rotateX);
+					}
+
+					bone_info_[bone_name] = bone_info;
+				}
+			}
+		}
+	}
+
+	// find parent bones
+	{
+		for (auto bone_info = bone_info_.begin(); bone_info != bone_info_.end(); ++bone_info)
+		{
+			std::string bone_name = bone_info->first;
+
+			// find bone in scene
+			aiNode* node = assimp_scene_->mRootNode->FindNode(bone_name.c_str());
+			if (node)
+			{
+				bool parent_found = false;
+				aiNode* parent_node = node->mParent;
+				while (parent_node && !parent_found)
+				{
+					std::string parent_bone_name(parent_node->mName.data);
+
+					auto parent_bone_info = bone_info_.find(parent_bone_name);
+					if (parent_bone_info != bone_info_.end())
+					{
+						bone_info->second.ParentBoneName = parent_bone_name;
+						parent_found = true;
+					}
+					else
+						parent_node = parent_node->mParent;
+				}
+			}
+		}
+	}
+
+	// construct skeletons
+	{
+		gef::Skeleton* skeleton = new gef::Skeleton;
+
+		gef::Joint joint;
+
+		joint.name_id = output_scene_->string_id_table.Add("gef_root");
+		joint.inv_bind_pose.SetIdentity();
+		joint.parent = -1;
+		skeleton->AddJoint(joint);
+
+
+		for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
+		{
+			std::string bone_name = bone_info_mapping->first;
+			BoneInfo& bone_info = bone_info_mapping->second;
+			std::string parent_bone_name = bone_info.ParentBoneName;
+
+			// find first bone at the top of the skeleton
+			// this may not be the actually root if no vertices
+			// are attached to the root
+			if (parent_bone_name.size() == 0)
+			{
+				AddBone(skeleton, parent_bone_name, 0);
+				break;
+			}
+		}
+
+		if ((skeleton->joint_count() <= 1) || (skeleton->joint_count() > MAX_NUM_BONE_MATRICES))
+		{
+			if (skeleton->joint_count() > MAX_NUM_BONE_MATRICES)
+			{
+				std::cerr << "ERROR: skeleton bone count (" << skeleton->joint_count() <<
+					") exceeds GEF bone maximum(" << MAX_NUM_BONE_MATRICES <<
+					"). Skeleton removed." << std::endl;
+			}
+
+			delete skeleton;
+			skeleton = nullptr;
+		}
+		else
+			output_scene_->skeletons.push_back(skeleton);
+	}
 }
 
 bool AssimpSceneLoader::ReadAnimation(const char* filename, gef::Scene* scene)
@@ -432,7 +772,7 @@ void AssimpSceneLoader::SampleAnim(float anim_time_secs, gef::Skeleton* skeleton
 			parent_bone_transform = joint_transforms[skeleton->joint(joint_num).parent];
 
 		gef::Matrix44 inv_parent_bone_transform;
-		inv_parent_bone_transform.AffineInverse(parent_bone_transform);
+		inv_parent_bone_transform.Inverse(parent_bone_transform);
 
 		gef::Matrix44 local_bone_transform = bone_world_transform * inv_parent_bone_transform;
 
@@ -443,318 +783,27 @@ void AssimpSceneLoader::SampleAnim(float anim_time_secs, gef::Skeleton* skeleton
 		gef::Vector4 translation;
 		translation = local_bone_transform.GetTranslation();
 
+		gef::Vector4 scale;
+		scale = local_bone_transform.GetScale();
+
 		gef::QuaternionKey rot_key;
 		rot_key.time = anim_time_secs - start_time;
 		rot_key.value = rotation;
 
 		gef::Vector3Key pos_key;
-		pos_key.time = anim_time_secs;
+		pos_key.time = anim_time_secs - start_time;
 		pos_key.value = translation;
+
+		gef::Vector3Key scl_key;
+		scl_key.time = anim_time_secs - start_time;
+		scl_key.value = scale;
 
 		gef::TransformAnimNode* anim_node = anim_nodes[joint_num];
 		anim_node->rotation_keys().push_back(rot_key);
 		anim_node->translation_keys().push_back(pos_key);
+		anim_node->scale_keys().push_back(scl_key);
 	}
 }
-
-void AssimpSceneLoader::ProcessSkeletons()
-{
-	// go through all meshes and find out which ones have bones attached to them
-	for (size_t mesh_num = 0; mesh_num < assimp_scene_->mNumMeshes; mesh_num++)
-	{
-		aiMesh* mesh = assimp_scene_->mMeshes[mesh_num];
-		if (mesh->HasBones())
-		{
-			for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
-			{
-				aiBone* bone = mesh->mBones[bone_num];
-
-				//std::cout << "mesh: " << mesh_num << " bone: " << bone_num << " name: " << bone->mName.data << std::endl;
-
-				// add all bones
-				std::string bone_name(bone->mName.data);
-				if (bone_info_.find(bone_name) == bone_info_.end())
-				{
-					BoneInfo bone_info;
-					set_gef_matrix_from_ai_matrix(bone_info.BoneOffset, bone->mOffsetMatrix);
-
-					if (rotate_90_xaxis_)
-					{
-						gef::Matrix44 rotateX;
-						rotateX.RotationX(gef::DegToRad(-90.0f));
-
-						gef::Matrix44 world_bone_transform;
-						world_bone_transform.Inverse(bone_info.BoneOffset);
-						bone_info.BoneOffset.Inverse(world_bone_transform * rotateX);
-					}
-
-					bone_info_[bone_name] = bone_info;
-				}
-			}
-		}
-	}
-
-	// find parent bones
-	{
-		for (auto bone_info = bone_info_.begin(); bone_info != bone_info_.end(); ++bone_info)
-		{
-			std::string bone_name = bone_info->first;
-
-			// find bone in scene
-			aiNode* node = assimp_scene_->mRootNode->FindNode(bone_name.c_str());
-			if (node)
-			{
-				bool parent_found = false;
-				aiNode* parent_node = node->mParent;
-				while (parent_node && !parent_found)
-				{
-					std::string parent_bone_name(parent_node->mName.data);
-
-					auto parent_bone_info = bone_info_.find(parent_bone_name);
-					if (parent_bone_info != bone_info_.end())
-					{
-						bone_info->second.ParentBoneName = parent_bone_name;
-						parent_found = true;
-					}
-					else
-						parent_node = parent_node->mParent;
-				}
-			}
-		}
-	}
-
-	// construct skeletons
-	{
-		gef::Skeleton* skeleton = new gef::Skeleton;
-
-		gef::Joint joint;
-
-		joint.name_id = output_scene_->string_id_table.Add("gef_root");
-		joint.inv_bind_pose.SetIdentity();
-		joint.parent = -1;
-		skeleton->AddJoint(joint);
-
-
-		for (auto bone_info_mapping = bone_info_.begin(); bone_info_mapping != bone_info_.end(); ++bone_info_mapping)
-		{
-			std::string bone_name = bone_info_mapping->first;
-			BoneInfo& bone_info = bone_info_mapping->second;
-			std::string parent_bone_name = bone_info.ParentBoneName;
-
-			// find first bone at the top of the skeleton
-			// this may not be the actually root if no vertices
-			// are attached to the root
-			if (parent_bone_name.size() == 0)
-			{
-				AddBone(skeleton, parent_bone_name, 0);
-				break;
-			}
-		}
-
-		if((skeleton->joint_count() <= 1) || (skeleton->joint_count() > MAX_NUM_BONE_MATRICES))
-		{
-			if (skeleton->joint_count() > MAX_NUM_BONE_MATRICES)
-			{
-				std::cerr << "ERROR: skeleton bone count (" << skeleton->joint_count() <<
-					") exceeds GEF bone maximum(" << MAX_NUM_BONE_MATRICES <<
-					"). Skeleton removed." << std::endl;
-			}
-
-			delete skeleton;
-			skeleton = nullptr;
-		}
-		else
-			output_scene_->skeletons.push_back(skeleton);
-	}
-}
-
-
-
-void AssimpSceneLoader::ProcessMesh(aiMesh* mesh, const aiScene* scene, gef::MeshData& mesh_data, int start_vertex)
-{
-	// Data to fill
-	std::vector<gef::Mesh::Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	gef::Matrix44 mesh_transform;
-	mesh_transform.SetIdentity();
-
-	bool skinned = mesh->HasBones() && !ignore_skinning_ && (output_scene_->skeletons.size() > 0);
-
-	if(rotate_90_xaxis_)
-	{
-		mesh_transform.RotationX(gef::DegToRad(-90.0f));
-	}
-
-	int sizeofVertex = 0;
-	int posByteOffset = 0;
-	int normalByteOffset = 0;
-	int uvByteOffset = 0;
-	int weightsByteOffset = 0;
-	int bonesByteOffset = 0;
-
-	if (skinned)
-	{
-		sizeofVertex = sizeof(gef::Mesh::SkinnedVertex);
-		posByteOffset = 0;
-		normalByteOffset = 12;
-		bonesByteOffset = 24;
-		weightsByteOffset = 28;
-		uvByteOffset = 44;
-	}
-	else
-	{
-		sizeofVertex = sizeof(gef::Mesh::Vertex);
-		posByteOffset = 0;
-		normalByteOffset = 12;
-		uvByteOffset = 24;
-	}
-	mesh_data.vertex_data.vertex_byte_size = sizeofVertex;
-
-
-	// Walk through each of the mesh's vertices
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-	{
-		UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + i) * sizeofVertex;
-
-		gef::Vector4 position(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-		gef::Vector2 uv(0.0f, 0.0f);
-		gef::Vector4 normal(0.0f, 0.0f, 0.0f);
-
-		if(rotate_90_xaxis_)
-			position = position.Transform(mesh_transform);
-
-		if (mesh->mTextureCoords[0])
-		{
-			uv.x = (float)mesh->mTextureCoords[0][i].x;
-			uv.y = -(float)mesh->mTextureCoords[0][i].y;
-		}
-
-		if (mesh->HasNormals())
-		{
-			normal.set_value(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-
-			if(rotate_90_xaxis_)
-				normal = normal.Transform(mesh_transform);
-		}
-
-		memcpy(vertex_data + posByteOffset, &position, sizeof(float) * 3);
-		memcpy(vertex_data + normalByteOffset, &normal, sizeof(float) * 3);
-		memcpy(vertex_data + uvByteOffset, &uv, sizeof(float) * 2);
-
-		if (skinned)
-		{
-			// zero out bone and skin data
-			memset(vertex_data + bonesByteOffset, 0, sizeof(UInt8) * 4);
-			memset(vertex_data + weightsByteOffset, 0, sizeof(float) * 4);
-		}
-
-		mesh_data.aabb.Update(gef::Vector4(position));
-	}
-
-	if (skinned)
-	{
-		// only supporting a single skeleton in the scene at the moment
-		gef::Skeleton* skeleton = output_scene_->skeletons.front();
-		for (unsigned int bone_num = 0; bone_num < mesh->mNumBones; ++bone_num)
-		{
-			const aiBone* src_bone = mesh->mBones[bone_num];
-
-			src_bone->mName;
-
-			src_bone->mOffsetMatrix;
-
-			for (size_t weight_num = 0; weight_num < src_bone->mNumWeights; weight_num++)
-			{
-				aiVertexWeight& weight = src_bone->mWeights[weight_num];
-
-				UInt8* vertex_data = ((UInt8*)mesh_data.vertex_data.vertices) + (start_vertex + weight.mVertexId) * sizeofVertex;
-
-				gef::StringId joint_id = gef::GetStringId(src_bone->mName.C_Str());
-				int joint_index = skeleton->FindJointIndex(joint_id);
-
-				if (joint_index != -1)
-				{
-					// TODO Check number of influences
-
-					// go through current influences and find first 0 weight to replace
-					const int kMaxBoneInfluences = 4;
-
-					float* weights = (float*)(vertex_data + weightsByteOffset);
-					UInt8* bone_indices = vertex_data + bonesByteOffset;
-					for (int influence_num = 0; influence_num < kMaxBoneInfluences; influence_num++)
-					{
-						if (*weights == 0.0f)
-						{
-							*weights = weight.mWeight;
-							*bone_indices = joint_index;
-							break;
-						}
-						else
-						{
-							weights++;
-							bone_indices++;
-						}
-					}
-				}
-			}
-		}
-	}
-
-	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-	{
-		aiFace face = mesh->mFaces[i];
-
-		for (unsigned int j = 0; j < face.mNumIndices; j++)
-			indices.push_back(start_vertex+face.mIndices[j]);
-	}
-
-	gef::PrimitiveData* primitive_data = new gef::PrimitiveData();
-	primitive_data->index_byte_size = sizeof(unsigned int);
-	primitive_data->type = gef::TRIANGLE_LIST;
-	primitive_data->num_indices = (Int32)indices.size();
-	primitive_data->indices = new unsigned int[primitive_data->num_indices];
-
-	// find name id of material
-	if (mesh->mMaterialIndex >= 0)
-	{
-		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		std::list<gef::MaterialData>::iterator material_data_iter = output_scene_->material_data.begin();
-		std::advance(material_data_iter, mesh->mMaterialIndex);
-		primitive_data->material_name_id = material_data_iter->name_id;
-	}
-	else
-		primitive_data->material_name_id = 0;
-
-
-	memcpy(primitive_data->indices, &indices[0], primitive_data->num_indices * primitive_data->index_byte_size);
-	mesh_data.primitives.push_back(primitive_data);
-}
-
-gef::MaterialData AssimpSceneLoader::ProcessMaterial(aiMaterial* material, const aiScene* scene, const char* name)
-{
-	gef::MaterialData material_data;
-
-	material_data.name_id = gef::GetStringId(name);
-
-	if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-	{
-		aiString str;
-		material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-		material_data.diffuse_texture = str.C_Str();
-	}
-	else
-		material_data.diffuse_texture = "";
-
-	aiColor3D diffuse_colour(1.f, 1.f, 1.f);
-	material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse_colour);
-
-	material_data.colour = gef::Colour(diffuse_colour.r, diffuse_colour.g, diffuse_colour.b).GetABGR();
-
-	return material_data;
-}
-
-
 
 unsigned int AssimpSceneLoader::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
@@ -766,7 +815,6 @@ unsigned int AssimpSceneLoader::FindPosition(float AnimationTime, const aiNodeAn
 
 	return pNodeAnim->mNumPositionKeys - 2;
 }
-
 
 unsigned int AssimpSceneLoader::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
@@ -781,7 +829,6 @@ unsigned int AssimpSceneLoader::FindRotation(float AnimationTime, const aiNodeAn
 	return pNodeAnim->mNumRotationKeys - 2;
 }
 
-
 unsigned int AssimpSceneLoader::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	assert(pNodeAnim->mNumScalingKeys > 0);
@@ -794,7 +841,6 @@ unsigned int AssimpSceneLoader::FindScaling(float AnimationTime, const aiNodeAni
 
 	return pNodeAnim->mNumScalingKeys-2;
 }
-
 
 void AssimpSceneLoader::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
@@ -817,7 +863,6 @@ void AssimpSceneLoader::CalcInterpolatedPosition(aiVector3D& Out, float Animatio
 	aiVector3D Delta = End - Start;
 	Out = Start + Factor * Delta;
 }
-
 
 void AssimpSceneLoader::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
@@ -842,7 +887,6 @@ void AssimpSceneLoader::CalcInterpolatedRotation(aiQuaternion& Out, float Animat
 	Out = Out.Normalize();
 }
 
-
 void AssimpSceneLoader::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
 {
 	if (pNodeAnim->mNumScalingKeys == 1) {
@@ -864,9 +908,6 @@ void AssimpSceneLoader::CalcInterpolatedScaling(aiVector3D& Out, float Animation
 	aiVector3D Delta = End - Start;
 	Out = Start + Factor * Delta;
 }
-
-
-
 
 const aiNodeAnim* AssimpSceneLoader::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
 {

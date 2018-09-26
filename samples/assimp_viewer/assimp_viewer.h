@@ -68,7 +68,7 @@ private:
 	void DrawHUD();
     void SetupLights();
     void SetupCamera();
-    void FrameScene();
+    void FrameScene(const gef::Aabb& aabb);
 
 
 	gef::Renderer3D* renderer_3d_;
@@ -92,7 +92,8 @@ private:
 	gef::Scene* scene_assets_;
 	gef::Scene* anim_assets_;
 	gef::Aabb scene_aabb_;
-    OrbitCamera orbit_camera_;
+	gef::Aabb skeleton_aabb_;
+	OrbitCamera orbit_camera_;
 
     FILE_COMMAND file_command_;
 	FILE_COMMAND_STATUS file_command_status_;
@@ -129,11 +130,13 @@ private:
 
 	void LoadOptionsMenu() const;
 
+	void DirectoryPopup() const;
+
 	gef::Texture* CreateTexture(const std::string& texture_filepath);
 
     void MainMenuBar(bool &running, bool &file_command_triggered);
 
-	bool AddFileMenuItem(bool& file_command_triggered, const char* item_text, const char* shortcut, FILE_COMMAND file_command);
+	bool AddFileMenuItem(bool& file_command_triggered, const char* item_text, const char* shortcut, FILE_COMMAND file_command, bool enabled = true);
 
     void OpenFileDialog(bool open_file_triggered);
 
@@ -144,6 +147,9 @@ private:
 	void MainMenuBarFileLoadTexturesDirectory();
 	void MainMenuBarSetBaseDirectory();
 	void MainMenuBarFileOpenAnimation(const char* filepath);
+
+	void FrameSkeleton();
+
 	void MainMenuBarFileSaveAnimation();
 
     void LoadTexture(const char *texture_file_path, int material_num);
