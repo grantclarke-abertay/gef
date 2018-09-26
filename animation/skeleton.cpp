@@ -83,7 +83,7 @@ namespace gef
 				else
 				{
 					Matrix44 inv_parent_matrix;
-					inv_parent_matrix.AffineInverse(global_pose_matrices[joint.parent]);
+					inv_parent_matrix.Inverse(global_pose_matrices[joint.parent]);
 					local_pose_matrix = global_pose_matrix * inv_parent_matrix;
 				}
 
@@ -107,7 +107,7 @@ namespace gef
 				const Joint& joint = skeleton->joints()[jointNum];
 				if(joint.parent == -1)
 				{
-					local_matrix.AffineInverse(joint.inv_bind_pose);
+					local_matrix.Inverse(joint.inv_bind_pose);
 					global_bind_matrix = local_matrix;
 				}
 				else
@@ -115,7 +115,7 @@ namespace gef
 					const Joint& parent_joint = skeleton->joints()[joint.parent];
 					Matrix44 invParentMatrix = parent_joint.inv_bind_pose;
 
-					global_bind_matrix.AffineInverse(joint.inv_bind_pose);
+					global_bind_matrix.Inverse(joint.inv_bind_pose);
 					local_matrix = global_bind_matrix*invParentMatrix;
 				}
 
@@ -151,7 +151,7 @@ namespace gef
 						joint_pose.set_scale(transform_node->GetScale(time));
 					else
 						joint_pose.set_scale(bind_pose.local_pose()[joint_index].scale());
-					joint_pose.set_scale(gef::Vector4(1.f, 1.f, 1.f));
+//					joint_pose.set_scale(gef::Vector4(1.f, 1.f, 1.f));
 
 					// rotation
 					if(transform_node->rotation_keys().size() > 0.f)
