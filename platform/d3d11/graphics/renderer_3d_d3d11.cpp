@@ -160,6 +160,8 @@ namespace gef
 		platform_d3d.device_context()->RSSetState(default_render_state_);
 		platform_d3d.device_context()->OMSetBlendState(default_blend_state_, NULL, 0xffffffff);
 		platform_d3d.device_context()->OMSetDepthStencilState(default_depth_stencil_state_, 0);
+
+		platform_d3d.device_context()->GSSetShader(nullptr, nullptr, 0u);
 	}
 
 	void Renderer3DD3D11::End()
