@@ -96,9 +96,6 @@ hwnd_(NULL)
 		width_ = screen_width;
 		height_ = screen_height;
 
-		screen_width  += (UInt32)GetSystemMetrics(SM_CXSIZEFRAME)*2;
-		screen_height += (UInt32)GetSystemMetrics(SM_CXSIZEFRAME)*2+(UInt32)GetSystemMetrics(SM_CYCAPTION);
-
 		// Place the window in the middle of the screen.
 		if((UInt32)GetSystemMetrics(SM_CXSCREEN) < screen_width)
 			wnd_pos_x = 0;
@@ -119,10 +116,22 @@ hwnd_(NULL)
 	}
 	else
 	{
+		DWORD style = WS_OVERLAPPEDWINDOW;
+		RECT r;
+		r.top = 0;
+		r.bottom = screen_height;
+		r.left = 0;
+		r.right = screen_width;
+		AdjustWindowRect(&r, style, FALSE);
+
 		hwnd_ = CreateWindowEx(WS_EX_APPWINDOW, application_name_, application_name_, 
-			WS_OVERLAPPEDWINDOW,
-			wnd_pos_x, wnd_pos_y, screen_width, screen_height, NULL, NULL, hinstance_, NULL);
+			style,
+			wnd_pos_x, wnd_pos_y, r.right - r.left, r.bottom - r.top, NULL, NULL, hinstance_, NULL);
 	}
+
+	RECT rect;
+	::GetClientRect(hwnd_, &rect);
+
 
 	HRESULT hres = SetWindowText(hwnd_, application_name_);
 
