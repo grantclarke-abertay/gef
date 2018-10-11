@@ -506,7 +506,11 @@ gef::MaterialData AssimpSceneLoader::ProcessMaterial(aiMaterial* material, const
 	{
 		aiString str;
 		material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-		material_data.diffuse_texture = str.C_Str();
+
+		std::string src_texture_filename = str.C_Str();
+		std::string extension;
+		std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
+		material_data.diffuse_texture = texture_filename+extension;
 	}
 	else
 		material_data.diffuse_texture = "";
@@ -993,4 +997,28 @@ void AssimpSceneLoader::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNo
 	for (unsigned int i = 0; i < pNode->mNumChildren; i++) {
 		ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation, animation_scene, animation);
 	}
+}
+
+std::string AssimpSceneLoader::ExtractImageFilename(std::string &src_filename, std::string &extension)
+{
+	bool extension_processed = false;
+	std::string filename;
+	for (auto filename_char = src_filename.rbegin(); filename_char != src_filename.rend(); filename_char++)
+	{
+		if (!extension_processed)
+		{
+			extension = std::string(1, *filename_char) + extension;
+
+			if (*filename_char == '.')
+				extension_processed = true;
+		}
+		else
+		{
+			if (*filename_char == '\\' || *filename_char == '/')
+				break;
+
+			filename = std::string(1, *filename_char) + filename;
+		}
+	}
+	return filename;
 }

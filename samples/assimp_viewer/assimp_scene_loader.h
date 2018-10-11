@@ -65,6 +65,9 @@ public:
 	void BoneTransform(float TimeInSeconds, std::vector<gef::Matrix44>& Transforms, aiScene* animation_scene, aiAnimation* animation, gef::Skeleton* skeleton);
 	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const gef::Matrix44& ParentTransform, aiScene* animation_scene, aiAnimation* animation);
 
+	static std::string ExtractImageFilename(std::string &src_filename, std::string &extension);
+
+
 
 	inline const gef::Aabb &get_scene_aabb() const
 	{

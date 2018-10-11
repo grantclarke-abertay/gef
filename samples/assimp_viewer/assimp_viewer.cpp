@@ -330,8 +330,9 @@ void AssimpViewer::OpenFileDialog(bool open_file_triggered)
 		else if (file_command_ == FC_SET_BASE_DIRECTORY)
 		{
 			if (base_save_directory_.length() == 0)
-				base_save_directory_ = file_dlg_.getLastDirectory();
-			chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, base_save_directory_.c_str());
+				chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, file_dlg_.getLastDirectory());
+			else
+				chosenPath = file_dlg_.chooseFolderDialog(open_file_triggered, base_save_directory_.c_str());
 		}
 		else if(file_command_ == FC_LOAD_ANIMATION)
 		{
@@ -509,7 +510,7 @@ void AssimpViewer::LoadTextures(const char *texture_directory)
 
 		std::string src_texture_filename = material_data->diffuse_texture;
 		std::string extension;
-		std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
+		std::string texture_filename = AssimpSceneLoader::ExtractImageFilename(src_texture_filename, extension);
 		texture_filename = std::string(texture_directory) + "/" + texture_filename + extension;
 		material_data->diffuse_texture = texture_filename;
 
@@ -537,7 +538,7 @@ void AssimpViewer::SaveTextures()
 
 		if (material_data.diffuse_texture.size() > 0)
 		{
-			std::string texture_filename = ExtractImageFilename(src_texture_filename, extension);
+			std::string texture_filename = AssimpSceneLoader::ExtractImageFilename(src_texture_filename, extension);
 			texture_filename += ".png";
 
 
@@ -563,7 +564,8 @@ void AssimpViewer::SaveTextures()
 				ilEnable(IL_ORIGIN_SET);
 				ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
 				// load  the image
-				success = ilLoadImage((ILstring)(src_texture_filename).c_str());
+				std::string texture_filepath = load_textures_directory_ + std::string("/") + src_texture_filename;
+				success = ilLoadImage((ILstring)(texture_filepath).c_str());
 				// check to see if everything went OK
 				if (!success)
 				{
@@ -628,30 +630,6 @@ void AssimpViewer::RenderPose(const gef::SkeletonPose& pose, float size)
 		scale_matrix.Scale(gef::Vector4(size, size, size));
 		renderer_3d_->DrawMesh(*primitive_builder_->GetDefaultCubeMesh(), scale_matrix*bone_transform);
 	}
-}
-
-std::string AssimpViewer::ExtractImageFilename(std::string &src_filename, std::string &extension)
-{
-	bool extension_processed = false;
-	std::string filename;
-    for (auto filename_char = src_filename.rbegin(); filename_char != src_filename.rend(); filename_char++)
-	{
-		if (!extension_processed)
-		{
-			extension = std::string(1, *filename_char) + extension;
-
-			if (*filename_char == '.')
-				extension_processed = true;
-		}
-		else
-		{
-			if (*filename_char == '\\' || *filename_char == '/')
-				break;
-
-			filename = std::string(1, *filename_char) + filename;
-		}
-	}
-	return filename;
 }
 
 void AssimpViewer::MainMenuBarFileOpen(const char* filepath, const char* texture_directory)
