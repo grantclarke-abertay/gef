@@ -46,6 +46,12 @@ namespace gef
 
 	Mesh* Scene::CreateMesh(Platform& platform, const MeshData& mesh_data, const bool read_only)
 	{
+		return CreateMesh(platform, mesh_data, &materials_map, read_only);
+	}
+
+
+	Mesh* Scene::CreateMesh(Platform& platform, const MeshData& mesh_data, std::map<gef::StringId, Material*>* materials_map, const bool read_only)
+	{
 		Mesh* mesh = new Mesh(platform);
 		mesh->set_aabb(mesh_data.aabb);
 		mesh->set_bounding_sphere(gef::Sphere(mesh->aabb()));
@@ -61,9 +67,9 @@ namespace gef
 			primitive->set_type((*prim_iter)->type);
 			primitive->InitIndexBuffer(platform, (*prim_iter)->indices, (*prim_iter)->num_indices, (*prim_iter)->index_byte_size, read_only);
 
-			if ((*prim_iter)->material_name_id != 0)
+			if (materials_map && (*prim_iter)->material_name_id != 0)
 			{
-				primitive->set_material(materials_map[(*prim_iter)->material_name_id]);
+				primitive->set_material((*materials_map)[(*prim_iter)->material_name_id]);
 			}
 
 			//if((*prim_iter)->material)

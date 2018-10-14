@@ -22,6 +22,7 @@ namespace gef
 		~Scene();
 
 		Mesh* CreateMesh(Platform& platform, const MeshData& mesh_data, const bool read_only = true);
+		static Mesh* CreateMesh(Platform& platform, const MeshData& mesh_data, std::map<gef::StringId, Material*>* materials_map, const bool read_only = true);
 		void CreateMeshes(Platform& platform, const bool read_only = true);
 		void CreateMaterials(const Platform& platform);
 
