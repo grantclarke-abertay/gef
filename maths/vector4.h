@@ -4,6 +4,9 @@
 
 namespace gef
 {
+	class Matrix33;
+	class Matrix44;
+
 class Vector4
 {
 public:
@@ -29,13 +32,13 @@ public:
 	float Length() const;
 	float DotProduct(const Vector4& _vec) const;
 	const Vector4 CrossProduct(const Vector4& _vec) const;
-	const Vector4 Transform(const class Matrix44& _mat) const;
-	const Vector4 TransformNoTranslation(const class Matrix44& _mat) const;
-	const Vector4 Transform(const class Matrix33& _mat) const;
-	const Vector4 TransformCM(const class Matrix33& _mat) const;
+	const Vector4 Transform(const Matrix44& _mat) const;
+	const Vector4 TransformNoTranslation(const Matrix44& _mat) const;
+	const Vector4 Transform(const Matrix33& _mat) const;
+	const Vector4 TransformCM(const Matrix33& _mat) const;
 	void Lerp(const Vector4& start, const Vector4& end, const float time);
 
-	const Vector4 TransformW(const class Matrix44& _mat) const;
+	const Vector4 TransformW(const Matrix44& _mat) const;
 	const Vector4 CrossProduct3(const Vector4& v2, const Vector4& v3) const;
 
 
