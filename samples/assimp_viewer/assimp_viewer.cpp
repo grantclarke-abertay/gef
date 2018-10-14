@@ -550,12 +550,10 @@ void AssimpViewer::SaveTextures()
 			scene_assets_->string_id_table.Add(material_data.diffuse_texture);
 
 			unsigned int srcImageID = 0;
-
+			ILboolean load_success = false;
 
 			// load source image
 			{
-				ILboolean success;
-
 				// generate an image name
 				ilGenImages(1, &srcImageID);
 				// bind it
@@ -565,18 +563,19 @@ void AssimpViewer::SaveTextures()
 				ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
 				// load  the image
 				std::string texture_filepath = load_textures_directory_ + std::string("/") + src_texture_filename;
-				success = ilLoadImage((ILstring)(texture_filepath).c_str());
+				load_success = ilLoadImage((ILstring)(texture_filepath).c_str());
 				// check to see if everything went OK
-				if (!success)
+				if (!load_success)
 				{
 					ilDeleteImages(1, &srcImageID);
 				}
 			}
 
 			// save image as png
-			if (srcImageID != 0)
+			if (srcImageID != 0 && load_success)
 			{
 				std::string texture_filename_fullpath = base_save_directory_ + "/" + texture_filename;
+				ilEnable(IL_FILE_OVERWRITE);
 				ilSaveImage(texture_filename_fullpath.c_str());
 
 				// finished with source image
