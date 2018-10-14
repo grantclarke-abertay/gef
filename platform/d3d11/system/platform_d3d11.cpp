@@ -108,6 +108,13 @@ namespace gef
 
 	void PlatformD3D11::Release()
 	{
+		if (default_texture_)
+		{
+			RemoveTexture(default_texture_);
+			delete default_texture_;
+			default_texture_ = NULL;
+		}
+
 		ReleaseNull(screenshot_texture_);
 		ReleaseNull(depth_stencil_view_);
 		ReleaseNull(depth_stencil_);
@@ -115,13 +122,6 @@ namespace gef
 		ReleaseNull(back_buffer_);
 		ReleaseDeviceAndSwapChain();
 		DeleteNull(window_);
-
-		if (default_texture_)
-		{
-			RemoveTexture(default_texture_);
-			delete default_texture_;
-			default_texture_ = NULL;
-		}
 	}
 
 	bool PlatformD3D11::InitDeviceAndSwapChain(bool fullscreen)
@@ -191,7 +191,7 @@ namespace gef
 
 		UINT create_device_flags = 0;
 	#ifdef _DEBUG
-		//create_device_flags |= D3D11_CREATE_DEVICE_DEBUG;
+		create_device_flags |= D3D11_CREATE_DEVICE_DEBUG;
 	#endif
 
 		D3D_DRIVER_TYPE driver_types[] =
@@ -242,8 +242,10 @@ namespace gef
 				break;
 		}
     
-		if SUCCEEDED( hresult )
+		if SUCCEEDED(hresult)
+		{
 			return true;
+		}
 		else
 		{
 			Release();
@@ -264,9 +266,14 @@ namespace gef
 
 		ReleaseNull(swap_chain_);
 #ifdef _DEBUG
-//		ID3D11Debug *debugDev = NULL;
-//		device_->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debugDev));
-//		debugDev->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+		if (0)
+		{
+			ID3D11Debug* debug;
+			device_->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&debug));
+			debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+			debug->Release();
+			debug = NULL;
+		}
 #endif
 		ReleaseNull(device_);
 	}

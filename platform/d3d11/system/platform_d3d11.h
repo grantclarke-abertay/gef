@@ -63,6 +63,10 @@ namespace gef
 		const char* GetShaderDirectory() const;
 		const char* GetShaderFileExtension() const;
 
+		ID3D11RenderTargetView* GetRenderTargetView() const;
+		ID3D11DepthStencilView* GetDepthStencilView() const;
+
+
 		inline ID3D11Device* device() const { return device_; } 
 		inline ID3D11DeviceContext* device_context() const { return device_context_; }
 		inline WindowWin32* window() const { return window_; }
@@ -71,8 +75,6 @@ namespace gef
 		inline HWND top_level_hwnd() const { return top_level_hwnd_; }
 		inline IDXGISwapChain* swap_chain() const { return swap_chain_; }
 	private:
-		ID3D11RenderTargetView* GetRenderTargetView() const;
-		ID3D11DepthStencilView* GetDepthStencilView() const;
 
 		void Release();
 		bool InitDeviceAndSwapChain(bool fullscreen);
