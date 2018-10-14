@@ -48,48 +48,4 @@ namespace gef
 		ID3D11DepthStencilState* always_depth_stencil_state_;
 	};
 }
-
-
-/*
-namespace gef
-{
-	class Platform;
-	class MeshInstance;
-	class ShaderD3D11;
-	class TextureD3D11;
-	class Material;
-
-	class Renderer3DD3D11 : public Renderer3D
-	{
-	public:
-		Renderer3DD3D11(Platform& platform);
-		~Renderer3DD3D11();
-		void CleanUp();
-
-		void Begin(bool clear);
-		void End();
-		void DrawMesh(const class MeshInstance& mesh_instance);
-		void SetFillMode(FillMode fill_mode);
-		void SetDepthTest(DepthTest depth_test);
-		void DrawPrimitive(const  MeshInstance& mesh_instance, Int32 primitive_index, Int32 num_indices);
-
-
-		void ClearZBuffer();
-
-		inline const Material* current_material() const {return current_material_; }
-	private:
-		ID3D11RasterizerState* default_render_state_;
-		ID3D11RasterizerState* wireframe_render_state_;
-		ID3D11BlendState* default_blend_state_;
-		TextureD3D11* default_texture_;
-
-		ID3D11DepthStencilState* default_depth_stencil_state_;
-		ID3D11DepthStencilState* always_depth_stencil_state_;
-
-		const Material* current_material_;
-
-		static const D3D11_PRIMITIVE_TOPOLOGY Renderer3DD3D11::primitive_types[NUM_PRIMITIVE_TYPES];
-	};
-}
-*/
 #endif // _GEF_RENDERER_3D_D3D_H
