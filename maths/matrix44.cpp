@@ -282,6 +282,13 @@ namespace gef
 		return Vector4(scale_x.Length(), scale_y.Length(), scale_z.Length());
 	}
 
+	void Matrix44::Translate(const gef::Vector4& translation)
+	{
+		SetIdentity();
+		SetTranslation(translation);
+	}
+
+
 	void Matrix44::SetTranslation(const Vector4& _trans)
 	{
 		values_[3].set_x(_trans.x());

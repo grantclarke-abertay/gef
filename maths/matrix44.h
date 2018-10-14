@@ -119,6 +119,8 @@ namespace gef
 		/// @return The scale values for the xyz axes.
 		Vector4 GetScale() const;
 
+		void Translate(const gef::Vector4& translation);
+
 		/// @brief Set the elements in the matrix that represent the translation.
 		/// @param[in] trans	The translation.
 		/// @note This function only overwrites the elements where the translation is stored. All other elements remain unaltered.
