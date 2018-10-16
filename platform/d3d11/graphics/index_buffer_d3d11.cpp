@@ -91,7 +91,16 @@ namespace gef
 		{
 			// Set index buffer
 			const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform);
-			platform_d3d.device_context()->IASetIndexBuffer( index_buffer_, format_, 0 );
+			Bind(platform_d3d.device_context());
+		}
+	}
+
+	void IndexBufferD3D11::Bind(ID3D11DeviceContext* context) const
+	{
+		if (index_buffer_)
+		{
+			// Set index buffer
+			context->IASetIndexBuffer(index_buffer_, format_, 0);
 		}
 	}
 

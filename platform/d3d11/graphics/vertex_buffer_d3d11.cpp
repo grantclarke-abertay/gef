@@ -97,13 +97,18 @@ namespace gef
 	void VertexBufferD3D11::Bind(const Platform& platform) const
 	{
 		const PlatformD3D11& platform_d3d = static_cast<const PlatformD3D11&>(platform);
-		UINT stride = vertex_byte_size_;
-		UINT offset = 0;
-		platform_d3d.device_context()->IASetVertexBuffers(0, 1, &vertex_buffer_, &stride, &offset);
+		Bind(platform_d3d.device_context());
 	}
 
 	void VertexBufferD3D11::Unbind(const Platform& platform) const
 	{
 		// don't need to unbind buffer?
+	}
+
+	void VertexBufferD3D11::Bind(ID3D11DeviceContext* context) const
+	{
+		UINT stride = vertex_byte_size_;
+		UINT offset = 0;
+		context->IASetVertexBuffers(0, 1, &vertex_buffer_, &stride, &offset);
 	}
 }

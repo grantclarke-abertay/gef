@@ -16,6 +16,8 @@ namespace gef
 
 		void Bind(const Platform& platform) const;
 		void Unbind(const Platform& platform) const;
+
+		void Bind(ID3D11DeviceContext* context) const;
 	private:
 		ID3D11Buffer* vertex_buffer_;
 	};
