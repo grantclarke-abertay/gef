@@ -209,6 +209,9 @@ namespace gef
 			*(((float*)&values_[row]) + column) = value;
 		}
 
+	public:
+		static const Matrix44 kIdentity;
+
 	protected:
 		/// The matrix is stored as 4 rows of Vectors
 		Vector4 values_[4];

@@ -55,6 +55,10 @@ namespace gef
 
 		void CreateBindPose(const Skeleton* const skeleton);
 		void CleanUp();
+		inline void SetGlobalJointTransform(int joint_num, const gef::Matrix44&& xform)
+		{
+			global_pose_[joint_num] = xform;
+		}
 
 		inline std::vector<JointPose>& local_pose()
 		{

@@ -7,6 +7,15 @@
 
 namespace gef
 {
+	static float identity_values[] =
+	{
+		1.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	const Matrix44 Matrix44::kIdentity(identity_values);
 
 	Matrix44::Matrix44(const float *m)
 	{
