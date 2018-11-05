@@ -25,6 +25,15 @@ namespace gef
 		values_[3] = new_w;
 	}
 
+	inline Vector4::Vector4(float* values, int num_values)
+	{
+		for (int i = 0; i < num_values; ++i)
+			values_[i] = values[i];
+		for (int i = num_values; i < 4; ++i)
+			values_[i] = 0;
+
+	}
+
 
 
 	inline const Vector4 Vector4::operator-(const Vector4& _vec) const

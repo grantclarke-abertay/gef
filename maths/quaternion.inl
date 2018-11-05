@@ -13,7 +13,13 @@ inline Quaternion::Quaternion(float new_x, float new_y, float new_z, float new_w
 {
 }
 
-
+inline Quaternion::Quaternion(const float* values)
+{
+	x = values[0];
+	y = values[1];
+	z = values[2];
+	w = values[3];
+}
 
 
 inline float Quaternion::LengthSquared() const
