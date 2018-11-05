@@ -31,6 +31,8 @@ namespace gef
 		/// @return The transformed AABB.
 		const Aabb Transform(const Matrix44& transform_matrix) const;
 
+		bool IsPointInside(const Vector4& point) const;
+
 		/// @brief Sets the minimum bounds of the AABB.
 		/// @param[in] min_vtx		The minimum bounds.
 		inline void set_min_vtx(const Vector4& min_vtx) { min_vtx_ = min_vtx; }

@@ -35,4 +35,10 @@ namespace gef
 
 		return result;
 	}
+
+	bool Sphere::IsPointInside(const Vector4& point) const
+	{
+		return (position() - point).LengthSqr() < (radius()*radius());
+	}
+
 }

@@ -13,6 +13,7 @@ class Quaternion
 public:
 	Quaternion();
 	Quaternion(float x, float y, float z, float w);
+	Quaternion(const float* values);
 	Quaternion(const Matrix44& matrix);
 	void SetFromMatrix(const class Matrix44& matrix);
 	const Quaternion operator * (const Quaternion& quaternion) const;

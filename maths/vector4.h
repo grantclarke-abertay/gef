@@ -15,6 +15,7 @@ public:
 	~Vector4();
 	Vector4(const float new_x, const float new_y, const float new_z);
 	Vector4(const float new_x, const float new_y, const float new_z, const float new_w);
+	Vector4(float* values, int num_values = 4);
 
 	const Vector4 operator - (const Vector4& _vec) const;
 	const Vector4 operator + (const Vector4& _vec) const;

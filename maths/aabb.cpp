@@ -70,4 +70,15 @@ namespace gef
 		return result;
 	}
 
+	bool Aabb::IsPointInside(const Vector4& point) const
+	{
+		return 
+			(point.x() > min_vtx().x()) &&
+			(point.y() > min_vtx().y()) &&
+			(point.z() > min_vtx().z()) &&
+			(point.x() < max_vtx().x()) &&
+			(point.y() < max_vtx().y()) &&
+			(point.z() < max_vtx().z());
+	}
+
 }

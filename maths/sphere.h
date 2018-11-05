@@ -42,6 +42,8 @@ namespace gef
 		/// @param[in] transform_matrix		The matrix to transform this AABB.
 		/// @return The transformed sphere.
 		const Sphere Transform(const Matrix44& transform_matrix) const;
+
+		bool IsPointInside(const Vector4& point) const;
 	private:
 
 		/// The centre position.

@@ -2,6 +2,12 @@
 
 namespace gef
 {
+	const Colour Colour::kBlack(0.0f, 0.0f, 0.0f, 1.0f);
+	const Colour Colour::kWhite(1.0f, 1.0f, 1.0f, 1.0f);
+	const Colour Colour::kRed(1.0f, 0.0f, 0.0f, 1.0f);
+	const Colour Colour::kGreen(0.0f, 1.0f, 0.0f, 1.0f);
+	const Colour Colour::kBlue(0.0f, 0.0f, 1.0f, 1.0f);
+
 	Colour::Colour()
 	{
 	}

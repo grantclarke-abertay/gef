@@ -19,6 +19,12 @@ namespace gef
 		void SetFromRGBA(const UInt32 rgba);
 		void SetFromAGBR(const UInt32 rgba);
 
+		static const Colour kBlack;
+		static const Colour kWhite;
+		static const Colour kRed;
+		static const Colour kGreen;
+		static const Colour kBlue;
+
 		float r;
 		float g;
 		float b;
