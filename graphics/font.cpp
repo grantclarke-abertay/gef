@@ -63,9 +63,11 @@ bool Font::Load(const char* font_name)
 			}
 		}
 		file->Close();
-		delete file;
-		file = NULL;
 	}
+
+	delete file;
+	file = NULL;
+
 
 
 

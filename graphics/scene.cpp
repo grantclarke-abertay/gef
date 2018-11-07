@@ -194,6 +194,8 @@ namespace gef
 
 			file->Close();
 		}
+
+		delete file;
 		return success;
 	}
 
