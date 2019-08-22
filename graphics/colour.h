@@ -24,6 +24,7 @@ namespace gef
 		static const Colour kRed;
 		static const Colour kGreen;
 		static const Colour kBlue;
+		static const Colour kYellow;
 
 		float r;
 		float g;
